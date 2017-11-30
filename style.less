@@ -1,0 +1,23 @@
+ #content-div{
+        .red{
+            height: 200px;
+            width: 200px;
+            background-color: red;
+            border-radius: 50%;
+            position: relative;
+        }
+        .circle(@color,@deg){
+            height: 200px;
+            width: 200px;
+            background-color: @color;
+            position: absolute;
+            clip:rect(0,100px,200px,0);
+            transform: rotate(@deg);
+        }
+        .blue{
+            .red;
+            .circle(blue,-90deg)
+        }
+
+
+    }
