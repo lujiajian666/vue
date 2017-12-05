@@ -11,7 +11,6 @@
 import head from '@/components/head';
 import floatRightDiv from '@/components/floatRightDiv';
 import contentDiv from "./content-div"
-import ContentDiv from "./content-div.vue";
 import footDiv from "./foot-div";
 export default {
   name: 'index',
@@ -21,7 +20,6 @@ export default {
     }
   },
   components:{
-      ContentDiv,
       "head-div":head,
       "float-right-div":floatRightDiv,
       "content-div":contentDiv,
