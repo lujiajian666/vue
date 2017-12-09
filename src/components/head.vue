@@ -38,12 +38,15 @@
           </router-link>
         </div>
         <div>
-          <div class="slide" v-on:mouseenter="slideDown" v-on:mouseleave="slideOut">
+          <router-link tag="div" class="slide" v-bind:class="isSelect('four')"
+                       v-on:mouseenter.native="slideDown"
+                       v-on:mouseleave.native="slideOut"
+                       to="/contact">
             <i class="fa fa-jsfiddle red"></i>
             <p>合作建议</p>
             <i class="fa fa-jsfiddle"></i>
             <p>合作建议 </p>
-          </div>
+          </router-link>
         </div>
       </div>
 

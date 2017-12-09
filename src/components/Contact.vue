@@ -1,0 +1,119 @@
+<template>
+    <div id="Contact">
+        <head-div select="four"></head-div>
+        <section>
+            <div class="left">
+              <p style="color: orange;font-weight: bold">投诉建议</p>
+              <ul>
+                <li :class="{select:isSelect[0]}" @click="changeSelect">投诉</li>
+                <li :class="{select:isSelect[1]}" @click="changeSelect">建议</li>
+              </ul>
+            </div>
+            <div class="right">
+              <div class="complain" v-show="isSelect[0]">
+                <div class="inputGroup">
+                  <label for="title">投诉标题</label>
+                  <input placeholder="投诉标题" id="title" name="title"/>
+                </div>
+                <div class="inputGroup">
+                  <label for="detail">具体内容</label>
+                  <textarea placeholder="请输入投诉内容" id="detail" name="detail"></textarea>
+                </div>
+                <p class="submit">提交</p>
+              </div>
+              <div class="advice" v-show="isSelect[1]">
+
+              </div>
+            </div>
+        </section>
+        <foot-div></foot-div>
+    </div>
+</template>
+
+<script>
+    import head from '@/components/head';
+    import footDiv from "./foot-div";
+    export default {
+        data() {
+            return {
+                isSelect:[true,false],
+            }
+        },
+        components:{
+            "head-div":head,
+            "foot-div":footDiv
+        },
+        methods:{
+            "changeSelect":function(){
+              if(this.isSelect[0]==true) {
+                this.isSelect.splice(0,1,false);
+                this.isSelect.splice(1,1,true);
+              }else{
+                this.isSelect.splice(0,1,true);
+                this.isSelect.splice(1,1,false);
+              }
+            }
+        }
+
+    }
+</script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped lang="less">
+   section{
+     margin: 50px 0;
+     overflow: hidden;
+     height: 600px;
+   }
+   .left {
+     float: left;
+     width: 200px;
+     text-align: center;
+     line-height: 50px;
+     font-size: 20px;
+     background-color:#eeeeee;
+     box-sizing: border-box;
+     border: 1px solid orange;
+     & ul{
+       height: 300px;
+     }
+   }
+  .select{
+    background-color:rgba(255,165,0,0.5);
+    color: white;
+  }
+  .inputGroup{
+     display: table;
+     margin-bottom: 20px;
+     &>label{
+       display: table-cell;
+       vertical-align: top;
+       width: 200px;
+     }
+     &>input{
+       width: 300px;
+     }
+     &>textarea{
+        resize: horizontal;
+        width: 400px;
+        height: 400px;
+     }
+  }
+  input,textarea{
+    vertical-align: middle;
+    display: table-cell;
+    border: 1px solid orange;
+    outline: none;
+    line-height: 15px;
+    padding: 5px 10px;
+  }
+  .submit{
+    background-color: orange;
+    color: white;
+    border-radius: 5px;
+    line-height: 30px;
+    text-align: center;
+    width: 100px;
+    margin: 0 auto;
+  }
+</style>
