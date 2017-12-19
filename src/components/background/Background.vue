@@ -1,5 +1,6 @@
 <template>
     <div id="Background">
+      <form id="form">
         <div class="inputBox">
           <div style="margin: auto;width:400px">
             <h2>用户登录</h2>
@@ -17,12 +18,14 @@
               <span>记住用户名和密码</span>
             </div>
             <div class="inputGroup">
-              <p style="background-color: orange;color: white;width: 250px;text-align: center">登录</p>
+              <p style="background-color: orange;color: white;width: 250px;text-align: center"
+                 @click="login">确认登录</p>
             </div>
 
           </div>
 
         </div>
+      </form>
     </div>
 </template>
 
@@ -39,9 +42,9 @@
         methods:{
             login:function () {
                 var data=new FormData(document.getElementById("form"))
-                $axios.post('http://localhost/vue-project-one/thinkphp5/index/index',data)
+                this.$axios.post('http://localhost/vue-project-one/thinkphp5/public/index.php?index/index/index.html',data)
                     .then(function (response) {
-                        console.log(response);
+                        console.log(response.data);
                     })
                     .catch(function (error) {
                         console.log(error);
