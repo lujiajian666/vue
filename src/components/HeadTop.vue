@@ -6,9 +6,9 @@
  --><search-div message="请输入你想要的内容"></search-div><!--
  --><div style="display: inline-block;width: 20%;
                 vertical-align: middle;box-sizing: border-box;padding-left: 10px">
-         <i class="fa fa-user" style="color: #188be9;font-size: 17.5px;vertical-align: sub"></i>
-         <span style="font-size: 12px;line-height: 17px;display: inline-block">用户中心</span><br>
-         <span style="font-size: 12px;line-height: 17px;display: inline-block">登录/注册</span>
+         <router-link to="/background" tag="i" class="fa fa-user" style="color: #188be9;font-size: 17.5px;vertical-align: sub"></router-link>
+         <router-link to="/background" tag="span" style="font-size: 12px;line-height: 17px;display: inline-block">后台入口</router-link><br>
+         <router-link to="/background" tag="span" style="font-size: 12px;line-height: 17px;display: inline-block">登录/注册</router-link>
     </div>
   </div>
 </template>

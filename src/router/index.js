@@ -4,6 +4,7 @@ import Hello from '@/components/Hello';
 import Index from '@/components/index';
 import Charts from '@/components/charts';
 import Contact from '@/components/Contact';
+import Background from '@/components/background/Background';
 
 Vue.use(Router)
 
@@ -12,6 +13,7 @@ export default new Router({
     {path: '/', name: 'Index', component: Index},
     {path: '/hello', name: 'Hello', component: Hello},
     {path: '/charts',name:'charts',component:Charts},
-    {path: '/contact',name:'contact',component:Contact}
+    {path: '/contact',name:'contact',component:Contact},
+    {path: '/background',name:'background',component:Background}
   ]
 })

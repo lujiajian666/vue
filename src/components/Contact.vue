@@ -5,8 +5,8 @@
             <div class="left">
               <p style="color: orange;font-weight: bold">投诉建议</p>
               <ul>
-                <li :class="{select:isSelect[0]}" @click="changeSelect">投诉</li>
-                <li :class="{select:isSelect[1]}" @click="changeSelect">建议</li>
+                <li :class="{select:isSelect[0]}" @click="changeSelect(0)">投诉</li>
+                <li :class="{select:isSelect[1]}" @click="changeSelect(1)">建议</li>
               </ul>
             </div>
             <div class="right">
@@ -22,7 +22,15 @@
                 <p class="submit">提交</p>
               </div>
               <div class="advice" v-show="isSelect[1]">
-
+                <div class="inputGroup">
+                  <label for="title">建议标题</label>
+                  <input placeholder="建议标题" id="title" name="title"/>
+                </div>
+                <div class="inputGroup">
+                  <label for="detail">具体内容</label>
+                  <textarea placeholder="请输入投诉内容" id="detail" name="detail"></textarea>
+                </div>
+                <p class="submit">提交</p>
               </div>
             </div>
         </section>
@@ -44,8 +52,8 @@
             "foot-div":footDiv
         },
         methods:{
-            "changeSelect":function(){
-              if(this.isSelect[0]==true) {
+            "changeSelect":function(a){
+              if(a==1) {
                 this.isSelect.splice(0,1,false);
                 this.isSelect.splice(1,1,true);
               }else{

@@ -7,6 +7,7 @@
           <router-link tag="div" class="slide" :class="isSelect('one')"
                        @mouseenter.native="slideDown"
                        @mouseleave.native="slideOut"
+                       @click.native="scrollTop"
                        to="/Hello">
             <i class="fa fa-bank red"></i>
             <p>人事查看</p>
@@ -18,6 +19,7 @@
           <router-link tag="div" class="slide" :class="isSelect('two')"
                        @mouseenter.native="slideDown"
                        @mouseleave.native="slideOut"
+                       @click.native="scrollTop"
                        to="/">
             <i class="fa fa-building red"></i>
             <p>公告通知</p>
@@ -30,6 +32,7 @@
           <router-link tag="div" class="slide" :class="isSelect('three')"
                        @mouseenter.native="slideDown"
                        @mouseleave.native="slideOut"
+                       @click.native="scrollTop"
                        to="/charts">
             <i class="fa fa-codepen red"></i>
             <p>营运报表</p>
@@ -39,8 +42,9 @@
         </div>
         <div>
           <router-link tag="div" class="slide" v-bind:class="isSelect('four')"
-                       v-on:mouseenter.native="slideDown"
-                       v-on:mouseleave.native="slideOut"
+                       @mouseenter.native="slideDown"
+                       @mouseleave.native="slideOut"
+                       @click.native="scrollTop"
                        to="/contact">
             <i class="fa fa-jsfiddle red"></i>
             <p>合作建议</p>
@@ -77,6 +81,9 @@
       isSelect: function (num) {
         if (this.select == num)
           return "red"
+      },
+      scrollTop:function(){
+        window.scrollTo(0,460);
       }
     },
     computed: {
