@@ -6,11 +6,11 @@
             <h2>用户登录</h2>
             <div class="inputGroup">
               <label>用户名/username</label><br>
-              <input type="password" name="username"><br>
+              <input  name="username"><br>
             </div>
             <div class="inputGroup">
               <label>密码/password</label><br>
-              <input name="password">
+              <input name="password" type="password">
               <span>忘记密码</span><br>
             </div>
             <div class="inputGroup">
@@ -19,7 +19,7 @@
             </div>
             <div class="inputGroup">
               <p style="background-color: orange;color: white;width: 250px;text-align: center"
-                 @click="login">确认登录</p>
+                 @click="login">登录</p>
             </div>
 
           </div>
@@ -42,9 +42,18 @@
         methods:{
             login:function () {
                 var data=new FormData(document.getElementById("form"))
-                this.$axios.post('http://localhost/vue-project-one/thinkphp5/public/index.php?index/index/index.html',data)
+                var _self=this;
+                console.log()
+                this.$axios.post('http://localhost/vue-project-one/think5/public/index.php?index/index/index',
+                  data)
                     .then(function (response) {
-                        console.log(response.data);
+                        var data=response.data;
+                        if(data.status==1){
+                            alert("登录成功")
+                            _self.$router.push({path: '/backgroundIndex'})
+                        }else{
+                            alert("账号或密码错误")
+                        }
                     })
                     .catch(function (error) {
                         console.log(error);
@@ -63,8 +72,8 @@
     left:0;
     bottom:0;
     right: 0;
-    background:url("/static/image/background/backgroudImage.jpg") no-repeat fixed center;
-    background-size: contain;
+    background:url("/static/image/background/backgroundImage.jpg") no-repeat fixed center;
+    background-size: cover;
     .input(){
       input:not([type=checkbox]){
         border: none;
@@ -78,35 +87,34 @@
 
   }
   .inputBox{
-
     position: fixed;
     top:0;
     left:0;
     right:0;
     bottom: 0;
     margin: auto;
-    height: 300px;
+    height: 500px;
     width: 700px;
     display: flex;
     .font(white,16px);
     #Background .input();
     &:after{
       content: "";
-      background:url("/static/image/background/backgroudImage.jpg") no-repeat fixed center;
-      background-size: contain;
+      background:url("/static/image/background/backgroundImage.jpg") no-repeat fixed center;
+      background-size: cover;
       position: absolute;
       top:0;
       left:0;
       right:0;
       bottom: 0;
-      opacity: 1;
-      filter: blur(7px);
+      opacity: 0.9;
+      filter: blur(15px);
       z-index: -1;
     }
     .inputGroup{
       width: 350px;
       text-align: left;
-      margin: auto;
+      margin:auto 0 auto 70px;
     }
   }
   .font(@color:white,@size:14px,@lineHeight:2){
