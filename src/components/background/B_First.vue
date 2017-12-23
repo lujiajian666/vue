@@ -1,7 +1,10 @@
 <template>
     <div id="B_First">
       <div class="title">
-         <span>研发部</span>
+         <span>研发部</span>&nbsp;&nbsp;&nbsp;
+         <span class="add" @click="add">
+             添加<i class="fa fa-plus-circle" style="text-indent: 0"></i>
+         </span>
       </div>
       <div class="content">
          <ul>
@@ -26,11 +29,16 @@
              </li>
          </ul>
       </div>
+
+      <alert-box title="lujiajian" v-show="alert" @close="close">
+
+      </alert-box>
     </div>
 </template>
 
 <script>
     import search_div from '@/components/searchDiv';
+    import alertBox from '@/components/tool/alertBox';
     export default {
         data() {
             return {
@@ -60,13 +68,19 @@
                         "jobTitle":"高级软件设计师","id":"20142005033","salary":10000
                     },
                 ],
+                alert:false
             }
         },
         components:{
-
+            "alert-box":alertBox,
         },
         methods:{
-
+            add:function(){
+               this.alert=true;
+            },
+            close:function(){
+                this.alert=false;
+            }
         }
 
     }
@@ -122,5 +136,10 @@
             right: 10px;
             .button(white,orange,60px);
         }
+    }
+    .add{
+        float: right;margin-right: 30px;text-indent: 0;
+        margin-top: 1px;
+        .button(white, #e555be,60px,inherit);
     }
 </style>
