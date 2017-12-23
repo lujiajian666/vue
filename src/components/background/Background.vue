@@ -50,6 +50,7 @@
                         var data=response.data;
                         if(data.status==1){
                             alert("登录成功")
+                            _self.$store.state.username=data.username;
                             _self.$router.push({path: '/backgroundIndex'})
                         }else{
                             alert("账号或密码错误")

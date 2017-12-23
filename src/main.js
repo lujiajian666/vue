@@ -5,6 +5,15 @@ import App from './App'
 import router from './router'
 import echarts from 'echarts'
 import axios from "axios"
+import Vuex from 'vuex'
+
+Vue.use(Vuex);
+
+const store = new Vuex.Store({
+    state: {
+        username:"",
+    },
+})
 
 Vue.prototype.$axios=axios;
 Vue.prototype.$echarts=echarts;
@@ -14,6 +23,7 @@ Vue.config.productionTip = false
 new Vue({
   el: '#app',
   router,
+  store,
   template: '<App/>',
   components: { App }
 })

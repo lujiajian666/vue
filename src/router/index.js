@@ -23,10 +23,12 @@ export default new Router({
             children: [
                 {
                     path: '',
+                    name:'B_First',
                     component: B_First
                 },
                 {
                     path: 'second',
+                    name:'B_Second',
                     component: B_Second
                 }
             ]
