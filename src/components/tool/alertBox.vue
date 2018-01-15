@@ -20,10 +20,8 @@
                         <br>
                         <select name="department">
                             <option value="0">所属部门</option>
-                            <option value="1">研发部</option>
-                            <option value="2">后勤部</option>
-                            <option value="3">行政部</option>
-                            <option value="4">人事部</option>
+                            <option v-for="value in selectDepartment"
+                                    :value="value['id']" :selected="departmentId==value['id']">{{value['name']}}</option>
                         </select>
                         <div class="pic_btn_div" id="pic_btn_div">点击上传头像</div>
                         <input class="pic_btn" type="file" name="head_img"
@@ -49,6 +47,9 @@
                jobTitle:"",
                department:"",
                head_img:"",
+               departmentId:"",
+               selectJobTitle:null,
+               selectDepartment:null
             }
         },
         components:{
@@ -115,15 +116,27 @@
           }  
         },
         created:function () {
+            var _self=this;
+           //ljj 部门选项生成
+            this.$axios.post(this.$store.state.phpUrl +'admin/background/selectDepartment')
+                .then(function (response) {
+                    var data=response.data;
+                    _self.selectDepartment=data;
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+           //ljj 默认选项填写
            var store=this.$store.state.alterMessage;
-           console.log(store)
            if(store !=null){
                this.name=store.name;
                this.jobTitle=store.job_title_id;
                this.department=store.department;
-               this.head_img=store.src
+               this.head_img=store.src;
+               this.departmentId=store.department_id;
                if(store.src!=null){
-                   $("#pic_btn_div").css("backgroundImage","url("+this.head_img+")");
+                   alert(store.src)
+                   $("#pic_btn_div").css("background-image","url("+this.head_img+")");
                }
            }
         },
