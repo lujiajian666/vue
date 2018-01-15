@@ -17,7 +17,7 @@
                            <i class="fa fa-address-card-o"></i>
                            人事管理
                        </li>
-                       <li class="hideUl" v-show="hideUl[0]">
+                       <li class="hideUl">
                            <ul>
                                <router-link tag="li" :to="{name:'B_First'}">研发部</router-link>
                                <router-link tag="li" :to="{name:'B_Second'}">后勤部</router-link>
@@ -72,7 +72,7 @@
     export default {
         data() {
             return {
-               hideUl:[false,false,false,false],
+               hideUl:[true,false,false,false],
                select:[true,false,false],
             }
         },

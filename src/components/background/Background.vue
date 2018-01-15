@@ -43,8 +43,7 @@
             login:function () {
                 var data=new FormData(document.getElementById("form"))
                 var _self=this;
-                console.log()
-                this.$axios.post('http://localhost/vue-project-one/think5/public/index.php?index/index/index',
+                this.$axios.post('http://localhost/vue-project-one/think5/public/index.php?s=admin/background/index.html',
                   data)
                     .then(function (response) {
                         var data=response.data;

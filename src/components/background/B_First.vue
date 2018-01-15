@@ -22,7 +22,7 @@
                              工资:{{p.salary}}
                          </p>
                      </div>
-                     <div class="button1">
+                     <div class="button1" @click="changeAlter($event)" :data-id="p.id">
                          修改
                      </div>
                  </div>
@@ -30,58 +30,106 @@
          </ul>
       </div>
 
-      <alert-box title="lujiajian" v-show="alert" @close="close">
+      <alert-box title="添加" v-show="alert" @close="close">
 
       </alert-box>
+      <alter-box title="修改" v-if="alter" @close="closeAlter">
+
+      </alter-box>
     </div>
 </template>
 
 <script>
     import search_div from '@/components/searchDiv';
     import alertBox from '@/components/tool/alertBox';
+    import alterBox from '@/components/tool/alertBox';
     export default {
         data() {
             return {
-                people:[
-                    {
-                     "src":"/static/image/headPic.jpg","name":"路加减","time":"2017-1-1",
-                     "jobTitle":"高级软件设计师","id":"20142005033","salary":10000
-                    },
-                    {
-                        "src":"/static/image/headPic.jpg","name":"路加减","time":"2017-1-1",
-                        "jobTitle":"高级软件设计师","id":"20142005033","salary":10000
-                    },
-                    {
-                        "src":"/static/image/headPic.jpg","name":"路加减","time":"2017-1-1",
-                        "jobTitle":"高级软件设计师","id":"20142005033","salary":10000
-                    },
-                    {
-                        "src":"/static/image/headPic.jpg","name":"路加减","time":"2017-1-1",
-                        "jobTitle":"高级软件设计师","id":"20142005033","salary":10000
-                    },
-                    {
-                        "src":"/static/image/headPic.jpg","name":"路加减","time":"2017-1-1",
-                        "jobTitle":"高级软件设计师","id":"20142005033","salary":10000
-                    },
-                    {
-                        "src":"/static/image/headPic.jpg","name":"路加减","time":"2017-1-1",
-                        "jobTitle":"高级软件设计师","id":"20142005033","salary":10000
-                    },
-                ],
-                alert:false
+                people:[],
+                alert:false,
+                alter:false,
             }
         },
         components:{
             "alert-box":alertBox,
+            "alter-box":alterBox
         },
         methods:{
-            add:function(){
+            add:function(){//ljj 显示添加框
                this.alert=true;
             },
-            close:function(){
+            close:function(){//ljj 关闭添加框
                 this.alert=false;
+            },
+            closeAlter:function(){//ljj 关闭修改框
+                this.alter=false;
+            },
+            changeAlter:function (node) {//ljj 显示修改框
+                //ljj 获得员工id
+                var id=node.currentTarget.getAttribute("data-id")
+                //ljj 根据id获取员工信息
+
+                this.getEmployee(id)
+
+            },
+            getEmployee:function (id) {
+                var data=new FormData();
+                var _self=this;
+                var returnData;
+                data.append("id",id);
+
+                this.$axios.post(this.$store.state.phpUrl +'admin/background/getEmployeeById',
+                    data)
+                    .then(function (response) {
+                        var data=response.data;
+                        if(data.status==1){
+                            if(data["man"]["src"]=="" || data.man["src"] == null){
+                                data["man"]["src"]="/static/image/headPic.jpg";
+                            }else{
+                                data["man"]["src"]=_self.$store.state.imgUrl+data.man["src"];
+                            }
+                            //ljj 记录信息
+                            _self.$store.state.alterMessage=data["man"];
+                            //ljj 显示
+                            _self.alter=true;
+                        }else{
+                            console.log("加载失败")
+                        }
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
             }
+        },
+        created:function () {
+            var _self=this;
+            var data=new FormData();
+            data.append("department",1);
+
+
+            this.$axios.post(this.$store.state.phpUrl +'admin/background/getEmployee',
+                data)
+                .then(function (response) {
+                    var data=response.data;
+                    if(data.status==1){
+                        _self.people=data.people;
+                        _self.people.forEach(function (value,index,array) {
+                            if(value["src"]=="" || value["src"] == null){
+                                value["src"]="/static/image/headPic.jpg";
+                            }else{
+                                value["src"]=_self.$store.state.imgUrl+value["src"];
+                            }
+                        })
+                    }else{
+                        console.log("加载失败")
+                    }
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
         }
+
 
     }
 </script>
@@ -128,6 +176,7 @@
         background-size: contain;
         &>img{
             height: 100%;
+            width: 150px;
             margin-right: 20px;
         }
         &>.button1{

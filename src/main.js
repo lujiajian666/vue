@@ -12,7 +12,9 @@ Vue.use(Vuex);
 const store = new Vuex.Store({
     state: {
         username:"",
-    },
+        phpUrl:"http://localhost/vue-project-one/think5/public/index.php?s=",
+        imgUrl:"http://localhost/vue-project-one/think5/public"
+    }
 })
 
 Vue.prototype.$axios=axios;
