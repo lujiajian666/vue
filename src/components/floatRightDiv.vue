@@ -1,7 +1,7 @@
 <template>
   <div id="floatRigntDiv">
     <ul>
-      <li @mouseenter="show(0)" @mouseleave="hide(0)" v-show="pWord=='收起'">
+        <li @mouseenter="show(0)" @mouseleave="hide(0)" >
         <div>
           <i class="fa fa-send"></i>
           <p>写信</p>
@@ -25,7 +25,7 @@
           </ul>
         </div>
       </li>
-      <li @mouseenter="show(1)" @mouseleave="hide(1)" v-show="pWord=='收起'">
+        <li @mouseenter="show(1)" @mouseleave="hide(1)" >
         <div>
           <i class="fa fa-question"></i>
           <p>常见问题</p>
@@ -63,7 +63,7 @@
           </ul>
         </div>
       </li>
-      <li @mouseenter="show(2)" @mouseleave="hide(2)" v-show="pWord=='收起'">
+        <li @mouseenter="show(2)" @mouseleave="hide(2)" >
         <div>
           <i class="fa fa-android"></i>
           <p>AI客服</p>
@@ -87,13 +87,13 @@
           </ul>
         </div>
       </li>
-      <li @click="top" v-show="pWord=='收起'">
+        <li @click="top" >
         <div style="border-bottom: none">
           <i class="fa  fa-chevron-up"></i>
           <p>回到顶部</p>
         </div>
       </li>
-      <li>
+        <li>
         <div style="background-color: #188be9;color: white;transition:1s" :class="pClass" @click="putAway">
           <p>{{pWord}}</p>
         </div>
@@ -103,8 +103,6 @@
 </template>
 
 <script>
-  import head from '@/components/head'
-
   export default {
     name: 'floatRigntDiv',
     data() {
@@ -131,9 +129,18 @@
          if(this.pClass=="lay_out"){
             this.pWord="展开";
             this.pClass="put_away";
+
+            //ljj 前四个li上滑
+           console.log( $("#floatRigntDiv"))
+           $("#floatRigntDiv>ul>li:not(:last-of-type)").animate({height:0},1000,function () {
+               $(this).css("overflow","hidden")
+           })
          }else{
            this.pWord="收起";
            this.pClass="lay_out";
+           $("#floatRigntDiv>ul>li:not(:last-of-type)").animate({height:"80px"},1000,function () {
+             $(this).css("overflow","visible")
+           })
          }
       }
     }
@@ -143,6 +150,8 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="less">
+
+
   .lay_out{
     height: 30px;
     line-height: 30px;
@@ -172,6 +181,7 @@
     right: 50px;
     top: 120px;
     z-index: 10;
+
   }
 
   ul {
