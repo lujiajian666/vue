@@ -1,6 +1,5 @@
 <template>
     <div id="AlertBox">
-        <form id="form">
         <div id="shadow"></div>
         <div id="content">
             <header>
@@ -8,6 +7,7 @@
                 <i class="fa fa-close" @click="close"></i>
             </header>
             <main>
+                <form id="form">
                 <div class="inputGroup" style="display:flex;height: 250px">
                     <div style="position: relative;padding-left: 100px;margin: auto;">
                         <input placeholder="姓名" name="name" :value="name"><br>
@@ -23,19 +23,20 @@
                             <option v-for="value in selectDepartment"
                                     :value="value['id']" :selected="departmentId==value['id']">{{value['name']}}</option>
                         </select>
-                        <div class="pic_btn_div" id="pic_btn_div">点击上传头像</div>
+                        <div class="pic_btn_div" id="pic_btn_div" :style="{'background-image':'url('+head_img+')'}">点击上传头像</div>
                         <input class="pic_btn" type="file" name="head_img"
                                 @change="changePic($event,'pic_btn_div')">
                         <p class="pic_btn_p"
                            @click="submit">确定</p>
                     </div>
                 </div>
+                </form>
             </main>
             <footer>
 
             </footer>
         </div>
-        </form>
+
     </div>
 </template>
 
@@ -43,6 +44,7 @@
     export default {
         data() {
             return {
+               id:"",
                name:"",
                jobTitle:"",
                department:"",
@@ -98,22 +100,33 @@
                   }
               }
           },
-          submit:function () {
+          submit:function (node) {
               //ljj 清空alterMessage,防止alter和alert的显示混淆（用的都是这个单页面组件）
               this.$store.state.alterMessage=null;
               //ljj 上传
-              var data=new FormData(document.getElementById("form"));
               var _self=this;
-              this.$axios.post('http://localhost/vue-project-one/think5/public/' +
-                  'index.php?s=admin/background/addEmployee',
-                  data)
+              //ljj url生成
+              var url=this.$store.state.phpUrl;
+              var data=new FormData(document.getElementById("form"));
+              if(this.id!=null){//ljj 修改,修改的时候有两个id为form的元素
+                 url=url+'admin/background/editEmployee';
+                 data.append("id",this.id);
+              }else{//ljj 上传,上传的时候只有一个id为form的元素
+                 url=url+'admin/background/addEmployee'
+              }
+              this.$axios.post(url,data)
                   .then(function (response) {
                       var data=response.data;
-                      if(data.status==1){
+                      if(data.status==1) {
                           alert("添加成功")
                           _self.close();
+                          location.reload()
+                      }else if(data.status==2){
+                          alert("修改成功")
+                          _self.close();
+                          location.reload()
                       }else{
-                          alert("添加失败")
+                          alert("操作失败")
                       }
                   })
                   .catch(function (error) {
@@ -135,15 +148,12 @@
            //ljj 默认选项填写
            var store=this.$store.state.alterMessage;
            if(store !=null){
+               this.id=store.id;
                this.name=store.name;
                this.jobTitle=store.job_title_id;
                this.department=store.department;
                this.head_img=store.src;
                this.departmentId=store.department_id;
-               if(store.src!=null){
-                   alert(store.src)
-                   $("#pic_btn_div").css("background-image","url("+this.head_img+")");
-               }
            }
         },
         props:["title"]

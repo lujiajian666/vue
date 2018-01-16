@@ -30,7 +30,7 @@
          </ul>
       </div>
 
-      <alert-box title="添加" v-show="alert" @close="close">
+      <alert-box title="添加" v-if="alert" @close="close">
 
       </alert-box>
       <alter-box title="修改" v-if="alter" @close="closeAlter">
