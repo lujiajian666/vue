@@ -4,11 +4,11 @@
     <div id="item">
       <div id="itemBar">
         <div>
-          <router-link tag="div" class="slide" :class="isSelect('one')"
+          <router-link tag="div" class="slide" :class="isSelect(1)"
                        @mouseenter.native="slideDown"
                        @mouseleave.native="slideOut"
-                       @click.native="scrollTop"
-                       to="/Hello">
+                       @click.native="scrollTop(1)"
+                       to="/employee">
             <i class="fa fa-bank red"></i>
             <p>人事查看</p>
             <i class="fa fa-bank"></i>
@@ -16,10 +16,10 @@
           </router-link>
         </div>
         <div>
-          <router-link tag="div" class="slide" :class="isSelect('two')"
+          <router-link tag="div" class="slide" :class="isSelect(2)"
                        @mouseenter.native="slideDown"
                        @mouseleave.native="slideOut"
-                       @click.native="scrollTop"
+                       @click.native="scrollTop(2)"
                        to="/">
             <i class="fa fa-building red"></i>
             <p>公告通知</p>
@@ -29,10 +29,10 @@
 
         </div>
         <div>
-          <router-link tag="div" class="slide" :class="isSelect('three')"
+          <router-link tag="div" class="slide" :class="isSelect(3)"
                        @mouseenter.native="slideDown"
                        @mouseleave.native="slideOut"
-                       @click.native="scrollTop"
+                       @click.native="scrollTop(3)"
                        to="/charts">
             <i class="fa fa-codepen red"></i>
             <p>营运报表</p>
@@ -41,10 +41,10 @@
           </router-link>
         </div>
         <div>
-          <router-link tag="div" class="slide" v-bind:class="isSelect('four')"
+          <router-link tag="div" class="slide" v-bind:class="isSelect(4)"
                        @mouseenter.native="slideDown"
                        @mouseleave.native="slideOut"
-                       @click.native="scrollTop"
+                       @click.native="scrollTop(4)"
                        to="/contact">
             <i class="fa fa-jsfiddle red"></i>
             <p>合作建议</p>
@@ -65,7 +65,8 @@
     name: 'head',
     data() {
       return {
-        msg: "data"
+        msg: "data",
+        selectNum:2,
       }
     },
     components: {
@@ -79,17 +80,19 @@
         $(event.target).stop(true, true).animate({marginTop: "-120px"}, 300)
       },
       isSelect: function (num) {
-        if (this.select == num)
+        if (this.selectNum == num)
           return "red"
       },
-      scrollTop:function(){
+      scrollTop:function(num){
+        //ljj 改变选择项
+        this.selectNum=num
+        //ljj 滚动条位置往下拉一点
         window.scrollTo(0,460);
       }
     },
     computed: {
 
     },
-    props: ["select"],
   }
 </script>
 
@@ -103,6 +106,9 @@
   }
 
   .red {
+    & p{
+      color: orange !important;
+    }
     color: orange !important;
   }
 

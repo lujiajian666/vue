@@ -1,19 +1,13 @@
 <template>
-  <div id="index">
-     <head-div></head-div>
-     <float-right-div></float-right-div>
-     <router-view>
-     </router-view>
+  <div id="news">
      <foot-div></foot-div>
   </div>
 </template>
 
 <script>
-import head from '@/components/head';
-import floatRightDiv from '@/components/floatRightDiv';
 import footDiv from "./foot-div";
 export default {
-  name: 'index',
+  name: 'news',
   data () {
     return {
       msg: "data"
@@ -22,6 +16,7 @@ export default {
   components:{
       "head-div":head,
       "float-right-div":floatRightDiv,
+      "content-div":contentDiv,
       "foot-div":footDiv
   }
 

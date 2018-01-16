@@ -1,5 +1,5 @@
 <template>
-  <div id="content-div">
+  <div id="indexContent">
       <div class="left">
         <div class="topDiv" :class="{select:isSelectOne}" @mouseenter="changeSelect1">
           今日关注
@@ -288,24 +288,24 @@ export default {
    .rightItem>p{
      font-size: 14px;
    }
-   #content-div>.left{
+   #indexContent>.left{
        display: inline-block;
        width:30%;border: 1px solid #eaeaeb;
        box-sizing: border-box;vertical-align: top
    }
-   #content-div>.right{
+   #indexContent>.right{
        display: inline-block;
        width:65%;margin-left:5%;
        background-color: white;vertical-align: top
    }
-   #content-div>.right>.title{
+   #indexContent>.right>.title{
        line-height: 50px;
        text-align: left;padding-left: 20px;
        position: relative;
        color: #188be9;
        border-bottom: 1px solid #e2e2e2;
    }
-   #content-div>.right>.title:after{
+   #indexContent>.right>.title:after{
        content: '';
        position: absolute;
        bottom: -1px;
@@ -445,7 +445,7 @@ export default {
       font-size: 12px;
       text-align: right;
   }
-  #content-div{
+  #indexContent{
       background-color: #f2f2f2;
       padding: 30px 10% 50px 10%;
       height: 550px;

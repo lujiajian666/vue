@@ -1,6 +1,5 @@
 <template>
     <div id="Contact">
-        <head-div select="four"></head-div>
         <section>
             <div class="left">
               <p style="color: orange;font-weight: bold">投诉建议</p>
@@ -34,7 +33,6 @@
               </div>
             </div>
         </section>
-        <foot-div></foot-div>
     </div>
 </template>
 

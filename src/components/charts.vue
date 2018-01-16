@@ -1,13 +1,10 @@
 <template>
   <div id="index">
-    <head-div select="three"></head-div>
-    <float-right-div></float-right-div>
     <div class="content">
       <div id="myChart"  class="myChart" :style="{width: '600px', height: '400px'}"></div>
       <div id="myChart2" class="myChart" :style="{width: '600px', height: '400px'}"></div>
       <div id="myChart3" class="myChart" :style="{width: '600px', height: '400px'}"></div>
     </div>
-    <foot-div></foot-div>
   </div>
 </template>
 

@@ -1,5 +1,5 @@
 <template>
-  <div id="content-div">
+  <div id="employee">
     <div id="content_div_left">
       <ul>
         <li :class="{'select':topList[0]}" @mouseover="select(0)">研发部</li>
@@ -35,7 +35,7 @@
 
 <script>
   export default {
-    name: 'content-div',
+    name: 'employee',
     data() {
       return {
         position:0,
@@ -148,7 +148,6 @@
       opacity: 0;
     }
   }
-
   @keyframes scaleout2 {
     0% {
       transform: scale(1.0);
@@ -160,20 +159,17 @@
       opacity: 0;
     }
   }
-
   @yellow: #ffd333;
   @green: #7be92f;
-  #content-div {
-    overflow: hidden;
+  #employee {
+    width: 95%;
+    margin: auto;
     display: table;
-    width: 100%;
   }
-
   .headPic {
     height: 60px;
     width: 60px;
   }
-
   #content_div_left {
     display: table-cell;
     vertical-align: middle;
@@ -245,7 +241,6 @@
       }
     }
   }
-
   #content_div_right {
     display: table-cell;
     width: 70%;
