@@ -1,7 +1,7 @@
 <template>
   <div id="floatRigntDiv">
     <ul>
-      <li @mouseenter="show(0)" @mouseleave="hide(0)">
+      <li @mouseenter="show(0)" @mouseleave="hide(0)" v-show="pWord=='收起'">
         <div>
           <i class="fa fa-send"></i>
           <p>写信</p>
@@ -25,7 +25,7 @@
           </ul>
         </div>
       </li>
-      <li @mouseenter="show(1)" @mouseleave="hide(1)">
+      <li @mouseenter="show(1)" @mouseleave="hide(1)" v-show="pWord=='收起'">
         <div>
           <i class="fa fa-question"></i>
           <p>常见问题</p>
@@ -63,7 +63,7 @@
           </ul>
         </div>
       </li>
-      <li @mouseenter="show(2)" @mouseleave="hide(2)">
+      <li @mouseenter="show(2)" @mouseleave="hide(2)" v-show="pWord=='收起'">
         <div>
           <i class="fa fa-android"></i>
           <p>AI客服</p>
@@ -87,15 +87,15 @@
           </ul>
         </div>
       </li>
-      <li @click="top">
+      <li @click="top" v-show="pWord=='收起'">
         <div style="border-bottom: none">
           <i class="fa  fa-chevron-up"></i>
           <p>回到顶部</p>
         </div>
       </li>
-      <li @mouseenter="show" @mouseleave="hide">
-        <div style="background-color: #188be9;height: 30px;color: white;line-height: 30px">
-          <p>收起</p>
+      <li>
+        <div style="background-color: #188be9;color: white;transition:1s" :class="pClass" @click="putAway">
+          <p>{{pWord}}</p>
         </div>
       </li>
     </ul>
@@ -111,6 +111,8 @@
       return {
         msg: "data",
         hiddenDiv: {"0": false, "1": false, "2": false},
+        pClass:"lay_out",
+        pWord:"收起"
       }
     },
     methods: {
@@ -124,6 +126,15 @@
       },
       "top": function () {
         window.scrollTo(0, 0)
+      },
+      putAway:function () {
+         if(this.pClass=="lay_out"){
+            this.pWord="展开";
+            this.pClass="put_away";
+         }else{
+           this.pWord="收起";
+           this.pClass="lay_out";
+         }
       }
     }
 
@@ -132,6 +143,17 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="less">
+  .lay_out{
+    height: 30px;
+    line-height: 30px;
+  }
+  .put_away{
+    margin:0 auto;
+    height:60px;
+    line-height: 60px;
+    width:60px;
+    border-radius: 50% !important;
+  }
   .textOverflow{
     display: block;
     text-overflow: ellipsis;
