@@ -57,7 +57,10 @@
         },
         methods:{
           close:function(){
-              this.$emit("close")
+            //ljj 清空alterMessage,防止alter和alert的显示混淆（用的都是这个单页面组件）
+            this.$store.state.alterMessage=null;
+            //ljj 关闭
+            this.$emit("close")
           },
           changePic:function fileReader(node, imgNode){
               if(node.currentTarget == null || imgNode == null) {
@@ -96,6 +99,9 @@
               }
           },
           submit:function () {
+              //ljj 清空alterMessage,防止alter和alert的显示混淆（用的都是这个单页面组件）
+              this.$store.state.alterMessage=null;
+              //ljj 上传
               var data=new FormData(document.getElementById("form"));
               var _self=this;
               this.$axios.post('http://localhost/vue-project-one/think5/public/' +
@@ -113,7 +119,7 @@
                   .catch(function (error) {
                       console.log(error);
                   });
-          }  
+          }
         },
         created:function () {
             var _self=this;
