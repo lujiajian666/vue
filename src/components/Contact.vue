@@ -77,7 +77,7 @@
      text-align: center;
      line-height: 50px;
      font-size: 20px;
-     background-color:#eeeeee;
+     /*background-color:#eeeeee;*/
      box-sizing: border-box;
      border: 1px solid orange;
      & ul{

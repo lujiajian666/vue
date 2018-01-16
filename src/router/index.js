@@ -9,6 +9,7 @@ import Background from '@/components/background/Background';
 import BackgroundIndex from '@/components/background/BackgroundIndex';
 import B_First from '@/components/background/B_First';
 import B_Second from '@/components/background/B_Second';
+import News from '@/components/news';
 
 Vue.use(Router)
 
@@ -23,7 +24,7 @@ export default new Router({
             {path: '/contact', name: 'contact', component: Contact},
           ]
         },
-
+        {path: '/news', name: 'news', component: News},
         {path: '/background', name: 'background', component: Background},
         {
             path: '/backgroundIndex', name: 'backgroundIndex', component: BackgroundIndex,

@@ -12,30 +12,30 @@
                 <ul class="selectOne" v-if="isSelectOne" style="width: 100%">
                     <li>
                         <ul class="imgShow" data-not-ul>
-                            <li v-if="nowImagePoint==0">
+                            <router-link tag="li" :to="{name:'news'}" v-if="nowImagePoint==0">
                                 <img src="/static/image/2.jpg"/>
                                 <div class="item" >
                                   <p class="title limitSingleRow">看病正他妈贵看病正他妈贵看病正他妈贵</p>
                                   <p class="word limit" data-max="20">这里看病有多贵？这里看病有多贵？这里看病有多贵？这里看病有多贵？这里看病有多贵？这里看病有多贵？这里看病有多贵？这里看病有多贵？这里看病有多贵？这里看病有多贵？</p>
                                   <p class="time">2017-5-6</p>
                                 </div>
-                            </li>
-                            <li v-if="nowImagePoint==1">
+                            </router-link>
+                            <router-link tag="li" :to="{name:'news'}" v-if="nowImagePoint==1">
                                 <img src="/static/image/3.jpg"/>
                                 <div class="item">
                                     <p class="title limitSingleRow">看病正他妈贵看病正他妈贵看病正他妈贵</p>
                                     <p class="word limit" data-max="20">这里看病有多贵？这里看病有多贵？这里看病有多贵？这里看病有多贵？这里看病有多贵？这里看病有多贵？这里看病有多贵？这里看病有多贵？这里看病有多贵？这里看病有多贵？</p>
                                     <p class="time">2017-5-6</p>
                                 </div>
-                            </li>
-                            <li v-if="nowImagePoint==2">
+                            </router-link>
+                            <router-link tag="li" :to="{name:'news'}" v-if="nowImagePoint==2">
                                 <img src="/static/image/4.jpg"/>
                                 <div class="item">
                                     <p class="title limitSingleRow">看病正他妈贵看病正他妈贵看病正他妈贵</p>
                                     <p class="word limit" data-max="20">这里看病有多贵？这里看病有多贵？这里看病有多贵？这里看病有多贵？这里看病有多贵？这里看病有多贵？这里看病有多贵？这里看病有多贵？这里看病有多贵？这里看病有多贵？</p>
                                     <p class="time">2017-5-6</p>
                                 </div>
-                            </li>
+                            </router-link>
                         </ul>
                         <ul class="imgPoint" data-not-ul>
                             <li><i class="fa fa-circle"
@@ -58,35 +58,35 @@
                             </i></li>
                         </ul>
                     </li>
-                    <li>
+                    <router-link :to="{name:'news',query:{id:1}}" tag="li">
                         <div class="item">
                             <p class="word limit" data-max="20">这里看病有多贵？？？</p>
                             <p class="time">2017-5-6</p>
                         </div>
-                    </li>
-                    <li>
+                    </router-link>
+                    <router-link :to="{name:'news',query:{id:2}}" tag="li">
                         <div class="item">
                             <p class="word limit" data-max="20">这里看病有多贵？？？</p>
                             <p class="time">2017-5-6</p>
                         </div>
-                    </li>
-                    <li>
+                    </router-link>
+                    <router-link :to="{name:'news',query:{id:3}}" tag="li">
                         <div class="item">
                             <p class="word limit" data-max="20">这里看病有多贵？？？</p>
                             <p class="time">2017-5-6</p>
                         </div>
-                    </li>
-                    <li>
+                    </router-link>
+                    <router-link :to="{name:'news',query:{id:4}}" tag="li">
                         <div class="item">
                             <p class="word limit" data-max="20">这里看病有多贵？？？</p>
                             <p class="time">2017-5-6</p>
                         </div>
-                    </li>
+                    </router-link>
                 </ul>
             </transition>
             <transition name="select">
                 <ul class="selectTwo" v-if="isSelectTwo" style="width: 100%">
-                    <li>
+                    <router-link :to="{name:'news'}" tag="li">
                         <div class="item">
                             <div class="imgItem">
                                 <img src="/static/image/1.jpg" style="height: 100px"/>
@@ -96,8 +96,8 @@
                             <p class="time">2017-2-6</p>
                         </div>
                         </div>
-                    </li>
-                    <li>
+                    </router-link>
+                    <router-link :to="{name:'news'}" tag="li">
                         <div class="item">
                             <div class="imgItem">
                                 <img src="/static/image/1.jpg" style="height: 100px" />
@@ -107,7 +107,7 @@
                             <p class="time">2017-2-6</p>
                         </div>
                         </div>
-                    </li>
+                    </router-link>
                 </ul>
             </transition>
         </div>
@@ -121,26 +121,26 @@
                  @click="rightItemRight"></i>
               <transition name="rightItem">
                   <div v-show="rightShowNum==0" class="outerRightItem">
-                      <div class="rightItem"  v-for="a in rightItem[0]" >
+                      <router-link tag="div" :to="{name:'news'}" class="rightItem"  v-for="a in rightItem[0]" >
                           <img src="http://www.zjzwfw.gov.cn/picture/0/s1709211818156878798.png">
                           <p>高级职称评审与专技考试</p>
-                      </div>
+                      </router-link>
                   </div>
               </transition>
               <transition name="rightItem">
                   <div v-show="rightShowNum==1" class="outerRightItem">
-                      <div class="rightItem"  v-for="a in rightItem[1]">
+                      <router-link tag="div" :to="{name:'news'}" class="rightItem"  v-for="a in rightItem[1]">
                          <img src="http://www.zjzwfw.gov.cn/picture/0/s1705181041271102553.png">
                          <p>工商全程电子化登记平台</p>
-                      </div>
+                      </router-link>
                   </div>
               </transition>
               <transition name="rightItem">
                   <div v-show="rightShowNum==2" class="outerRightItem">
-                      <div class="rightItem"  v-for="a in rightItem[2]">
+                      <router-link tag="div" :to="{name:'news'}" class="rightItem"  v-for="a in rightItem[2]">
                           <img src="http://www.zjzwfw.gov.cn/picture/94/4a08ac6b8ca5498193288d2d9923a146.png">
                           <p>结婚登记预约</p>
-                      </div>
+                      </router-link>
                   </div>
               </transition>
 
@@ -252,6 +252,7 @@ export default {
        left: 0;
        right: 0;
        top: 0;
+       cursor: pointer;
    }
    .fa-chevron-circle-left{
        position: absolute;
