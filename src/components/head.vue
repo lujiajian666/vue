@@ -45,7 +45,7 @@
                        @mouseenter.native="slideDown"
                        @mouseleave.native="slideOut"
                        @click.native="scrollTop(4)"
-                       to="/contact">
+                       :to="{name:'contact'}">
             <i class="fa fa-jsfiddle red"></i>
             <p>合作建议</p>
             <i class="fa fa-jsfiddle"></i>

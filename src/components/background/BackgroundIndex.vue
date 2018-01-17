@@ -51,10 +51,13 @@
                        </li>
                        <li class="hideUl" v-show="hideUl[2]">
                            <ul>
-                               <li>部门1</li>
-                               <li>部门2</li>
-                               <li>部门3</li>
-                               <li>部门4</li>
+                               <li>热点服务</li>
+                               <li>今日关注</li>
+                               <li>活动新闻</li>
+                               <li>常见问题</li>
+                               <li>新手指南</li>
+                               <li>本站声明</li>
+                               <li>关于我们</li>
                            </ul>
                        </li>
                    </ul>

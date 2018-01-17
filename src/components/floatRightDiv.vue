@@ -8,20 +8,20 @@
         </div>
         <div class="hidden" v-show="hiddenDiv[0]">
           <ul>
-            <li>
+            <router-link tag="li" :to="{name:'contact',query:{anchor:0}}">
               <div class="hiddenSubDiv">
                 <i class="fa fa-exclamation-triangle"></i>
                 <br>
                 投诉
               </div>
-            </li>
-            <li>
+            </router-link>
+            <router-link tag="li" :to="{name:'contact',query:{anchor:1}}">
               <div class="hiddenSubDiv">
                 <i class="fa fa-envelope-open-o"></i>
                 <br>
                 建议
               </div>
-            </li>
+            </router-link>
           </ul>
         </div>
       </li>

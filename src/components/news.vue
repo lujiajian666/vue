@@ -44,8 +44,9 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="less">
    #content{
-     backgrou
-     min-height: 500px;
+     background:url(/static/image/seal.jpg) no-repeat  center bottom;
+     min-height: 800px;
+     position: relative;
      &>.title{
        text-align: center;
        margin:30px auto 50px auto;
@@ -55,6 +56,12 @@
        margin: auto;
        text-align: left;
        text-indent: 2em;
+     }
+     &:after{
+       content:"";
+       position: absolute;
+       left: 0;right: 0;top: -20px;
+       border-bottom: solid #eeeeee 1px;
      }
    }
    time{

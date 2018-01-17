@@ -1,9 +1,9 @@
 <template>
   <div id="index">
     <div class="content">
-      <div id="myChart"  class="myChart" :style="{width: '600px', height: '400px'}"></div>
-      <div id="myChart2" class="myChart" :style="{width: '600px', height: '400px'}"></div>
-      <div id="myChart3" class="myChart" :style="{width: '600px', height: '400px'}"></div>
+      <div id="myChart"  class="myChart" style="width: calc(50% - 25px);height: 400px;"></div>
+      <div id="myChart2" class="myChart" style="width: calc(50% - 25px);height: 400px;"></div>
+      <div id="myChart3" class="myChart" style="width: calc(50% - 25px);height: 400px;"></div>
     </div>
   </div>
 </template>
@@ -58,7 +58,7 @@
           series: [{
             name: '净利润',
             type: 'bar',
-            data: [5, 20, 36, 10, 10, 20]
+            data: [20, 36, 10, 10, 20,7]
           }]
         });
       myChart3.setOption({
@@ -71,7 +71,7 @@
           series: [{
             name: '净利润',
             type: 'bar',
-            data: [5, 20, 36, 10, 10, 20]
+            data: [5,68, 36, 4, 10, 17]
           }]
         });
     }
@@ -84,6 +84,8 @@
   .content{
     overflow: hidden;
     & >.myChart {
+
+
        margin: 30px auto;
        padding: 20px;
        box-sizing: border-box;

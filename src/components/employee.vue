@@ -252,7 +252,10 @@
     tr > td, tr > th {
       min-width: 50px;
       padding: 10px 20px;
-      border: 1px solid #ccc;
+      /*border: 1px solid #ccc;*/
+    }
+    tr:nth-child(2n){
+      background: #f0f0f0;
     }
 
   }

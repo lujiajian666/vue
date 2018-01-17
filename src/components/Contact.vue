@@ -2,14 +2,14 @@
     <div id="Contact">
         <section>
             <div class="left">
-              <p style="color: orange;font-weight: bold">投诉建议</p>
+              <p style="color: orange;font-weight: bold;border-bottom: 1px solid;margin: 0 20px;">投诉建议</p>
               <ul>
                 <li :class="{select:isSelect[0]}" @click="changeSelect(0)">投诉</li>
                 <li :class="{select:isSelect[1]}" @click="changeSelect(1)">建议</li>
               </ul>
             </div>
             <div class="right">
-              <div class="complain" v-show="isSelect[0]">
+              <div class="complain" v-if="isSelect[0]">
                 <div class="inputGroup">
                   <label for="title">投诉标题</label>
                   <input placeholder="投诉标题" id="title" name="title"/>
@@ -20,7 +20,7 @@
                 </div>
                 <p class="submit">提交</p>
               </div>
-              <div class="advice" v-show="isSelect[1]">
+              <div class="advice" v-if="isSelect[1]">
                 <div class="inputGroup">
                   <label for="title">建议标题</label>
                   <input placeholder="建议标题" id="title" name="title"/>
@@ -59,6 +59,18 @@
                 this.isSelect.splice(1,1,false);
               }
             }
+        },
+        watch:{
+              '$route' (to,from){
+              var index=this.$route.query.anchor;
+              var arr=[false,false];
+              if(typeof index!='undefined' || index!='' || typeof index!='null'){
+                arr.splice(index,1,true)
+              }else{
+                arr.splice(0,1,true)
+              }
+              this.isSelect=arr;
+            }
         }
 
     }
@@ -68,25 +80,30 @@
 <style scoped lang="less">
    section{
      margin: 50px 0;
-     overflow: hidden;
-     height: 600px;
    }
    .left {
      float: left;
      width: 200px;
      text-align: center;
-     line-height: 50px;
-     font-size: 20px;
+     line-height: 30px;
+     color: #444444;
+     /*font-size: 20px;*/
      /*background-color:#eeeeee;*/
      box-sizing: border-box;
-     border: 1px solid orange;
+     /*border: 1px solid orange;*/
      & ul{
        height: 300px;
+       text-indent: -2em
      }
    }
+   .right{
+     margin-left: 200px;
+     padding: 50px 0;
+     background-color: #eeee;
+     border-radius: 10px;
+   }
   .select{
-    background-color:rgba(255,165,0,0.5);
-    color: white;
+    color: #69c5ff;
   }
   .inputGroup{
      display: table;

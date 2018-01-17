@@ -16,6 +16,7 @@ export default {
 }
 body{
   min-width: 1000px;
+  font-family: Helvetica Neue,Helvetica,PingFang SC,Hiragino Sans GB,Microsoft YaHei,SimSun,sans-serif;
 }
 @import '/static/css/font-awesome-4.7.0/css/font-awesome.css';
 #app {

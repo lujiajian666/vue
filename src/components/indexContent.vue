@@ -113,7 +113,9 @@
         </div>
       </div><!--
    --><div class="right">
-          <div class="title">热点服务</div>
+          <div class="title">
+              热点服务
+          </div>
           <div style="height: 500px;text-align: left;position: relative;overflow: hidden">
               <i class="fa  fa-chevron-circle-left"
                  @click="rightItemLeft"></i>
@@ -121,7 +123,7 @@
                  @click="rightItemRight"></i>
               <transition name="rightItem">
                   <div v-show="rightShowNum==0" class="outerRightItem">
-                      <router-link tag="div" :to="{name:'news'}" class="rightItem"  v-for="a in rightItem[0]" >
+                      <router-link tag="div" :to="{name:'news'}" class="rightItem"  v-for="a in rightItem[0]">
                           <img src="http://www.zjzwfw.gov.cn/picture/0/s1709211818156878798.png">
                           <p>高级职称评审与专技考试</p>
                       </router-link>
@@ -219,8 +221,6 @@ export default {
           if(text.length>maxLength){
               _self.text(text.slice(0,maxLength)+"...")
           }
-
-
       })
   },
   mounted (){
