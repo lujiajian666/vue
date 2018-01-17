@@ -49,16 +49,27 @@ class Background extends Controller
     }
     public function editEmployee(){
         $post=$this->request->post();
+        //ljj先记录原来的信息
+        $manData=Db::name($this->tableEmployee)->where("id=$post[id]")->find();
+
         $picRes=upload("head_img");
         $pic=($picRes[1]==1)?$picRes[0]:"";
+
         $arr=array(
             "name"=>$post["name"],
             "job_title_id"=>$post["title"],
-            "head_img"=>$pic,
-//            "time"=>time(),
             "department_id"=>$post["department"]
         );
+        //ljj 如果有图片
+        if($pic!=""){
+            $arr["head_img"]=$pic;
+        }
+
         if(Db::name($this->tableEmployee)->where("id=$post[id]")->update($arr)){
+            //ljj 如果有图片，删除原来的图片
+            if($pic!="") {
+                @unlink("." . $manData["head_img"]);
+            }
             return json(["status"=>2]);
         }else{
             return json(["status"=>0,

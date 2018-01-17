@@ -10,20 +10,21 @@
                 <form id="form">
                 <div class="inputGroup" style="display:flex;height: 250px">
                     <div style="position: relative;padding-left: 100px;margin: auto;">
-                        <input placeholder="姓名" name="name" :value="name"><br>
+                        <input placeholder="姓名" name="name" :value="name"><span class="tips" v-show="form['name']">姓名不能为空！</span><br>
                         <select name="title">
                             <option value="0" :selected="jobTitle==0">职称</option>
                             <option value="1" :selected="jobTitle==1">经理</option>
                             <option value="2" :selected="jobTitle==3">扫地阿姨</option>
                         </select>
-
+                        <span class="tips" v-show="form['title']">职称不能为空！</span>
                         <br>
                         <select name="department">
                             <option value="0">所属部门</option>
                             <option v-for="value in selectDepartment"
                                     :value="value['id']" :selected="departmentId==value['id']">{{value['name']}}</option>
                         </select>
-                        <div class="pic_btn_div" id="pic_btn_div" :style="{'background-image':'url('+head_img+')'}">点击上传头像</div>
+                        <span class="tips" v-show="form['department']">部门不能为空！</span>
+                        <div class="pic_btn_div" id="pic_btn_div" :style="head_img_url">点击上传头像</div>
                         <input class="pic_btn" type="file" name="head_img"
                                 @change="changePic($event,'pic_btn_div')">
                         <p class="pic_btn_p"
@@ -51,11 +52,14 @@
                head_img:"",
                departmentId:"",
                selectJobTitle:null,
-               selectDepartment:null
+               selectDepartment:null,
+               form:{
+                   "name":false,
+                   "department":false,
+                   "department":false,
+                   "title":false
+               },
             }
-        },
-        components:{
-
         },
         methods:{
           close:function(){
@@ -87,7 +91,6 @@
                   reader.readAsDataURL(file);
 
                   reader.onload = function(event) {
-                      console.log(imgNode);
                       imgNode.style.backgroundImage = "url("+this.result+")";
                   }
 
@@ -103,15 +106,26 @@
           submit:function (node) {
               //ljj 清空alterMessage,防止alter和alert的显示混淆（用的都是这个单页面组件）
               this.$store.state.alterMessage=null;
-              //ljj 上传
+
               var _self=this;
+              //ljj 检查是否为空
+              var checkName=document.querySelectorAll("input[name='name']")[0].value;
+              var checkTitle=document.querySelectorAll("select[name='title']")[0].value;
+              var checkDepartment=document.querySelectorAll("select[name='department']")[0].value;
+              this.form["name"]=checkName==""?true:false;
+              this.form["title"]=checkTitle==0?true:false;
+              this.form["department"]=checkDepartment==0?true:false;
+              if(this.form["name"] || this.form["title"] || this.form["department"]){
+                  return false;
+              }
               //ljj url生成
               var url=this.$store.state.phpUrl;
               var data=new FormData(document.getElementById("form"));
-              if(this.id!=null){//ljj 修改,修改的时候有两个id为form的元素
+
+              if(this.id!=""){//ljj 修改
                  url=url+'admin/background/editEmployee';
                  data.append("id",this.id);
-              }else{//ljj 上传,上传的时候只有一个id为form的元素
+              }else{//ljj 上传
                  url=url+'admin/background/addEmployee'
               }
               this.$axios.post(url,data)
@@ -132,6 +146,12 @@
                   .catch(function (error) {
                       console.log(error);
                   });
+          }
+        },
+        computed:{
+          head_img_url:function () {
+              console.log("computed   head_img="+this.head_img)
+              return {"background-image":"url("+this.head_img+")"};
           }
         },
         created:function () {
@@ -156,6 +176,9 @@
                this.departmentId=store.department_id;
            }
         },
+        mounted:function () {
+            console.log("mounted   head_img="+this.head_img)
+        },
         props:["title"]
 
     }
@@ -163,6 +186,11 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="less">
+    .tips{
+        color: red;
+        font-weight: bold;
+        font-size: 12px;
+    }
     .pic_btn{
         top: 0;
         left: -5px;

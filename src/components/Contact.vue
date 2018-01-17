@@ -64,7 +64,7 @@
               '$route' (to,from){
               var index=this.$route.query.anchor;
               var arr=[false,false];
-              if(typeof index!='undefined' || index!='' || typeof index!='null'){
+              if(typeof index!='undefined' && index!='' && !(typeof index!='undefined' && index!=0 && !index)){
                 arr.splice(index,1,true)
               }else{
                 arr.splice(0,1,true)
