@@ -9,6 +9,7 @@ header('Access-Control-Allow-Headers:x-requested-with,content-type');// 响应�
 
 class Background extends Controller
 {
+    
     private $tableMember="member";
     private $tableEmployee="employee";
     private $tableDepartment="department";
