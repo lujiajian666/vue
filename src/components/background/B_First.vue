@@ -7,7 +7,7 @@
          </span>
       </div>
       <div class="content">
-         <ul>
+         <ul v-if="people">
              <li v-for="p in people">
                  <div class="person">
                      <img :src="p.src" style="float: left">
@@ -25,15 +25,19 @@
                      <div class="button1" @click="changeAlter($event)" :data-id="p.id">
                          修改
                      </div>
+                     <div class="button2" @click="deleteEmployeeById($event)" :data-id="p.id">删除</div>
                  </div>
              </li>
          </ul>
+         <img v-if="!people" src="/static/image/no_data.jpeg">
       </div>
 
-      <alert-box title="添加" v-if="alert" @close="close">
+      <alert-box title="添加" v-if="alert" @close="close"
+                 @change="getAllEmployee($route.query.department)">
 
       </alert-box>
-      <alter-box title="修改" v-if="alter" @close="closeAlter">
+      <alter-box title="修改" v-if="alter" @close="closeAlter"
+                 @change="getAllEmployee($route.query.department)">
 
       </alter-box>
     </div>
@@ -69,9 +73,7 @@
                 //ljj 获得员工id
                 var id=node.currentTarget.getAttribute("data-id")
                 //ljj 根据id获取员工信息
-
                 this.getEmployee(id)
-
             },
             getEmployee:function (id) {
                 var data=new FormData();
@@ -84,8 +86,8 @@
                     .then(function (response) {
                         var data=response.data;
                         if(data.status==1){
-                            if(data["man"]["src"]=="" || data.man["src"] == null){
-                                data["man"]["src"]="/static/image/headPic.jpg";
+                            if(data["man"]["src"]=="" || data["man"]["src"] == null){
+                                data["man"]["src"]="/static/image/no_data.jpeg";
                             }else{
                                 data["man"]["src"]=_self.$store.state.imgUrl+data.man["src"];
                             }
@@ -100,34 +102,73 @@
                     .catch(function (error) {
                         console.log(error);
                     });
+            },
+            getAllEmployee:function (department) {
+                var _self=this;
+                var data=new FormData();
+                data.append("department",department);
+
+
+                this.$axios.post(this.$store.state.phpUrl +'admin/background/getEmployee',
+                    data)
+                    .then(function (response) {
+                        var data=response.data;
+                        if(data.status==1){
+                            _self.people=data.people;
+                            _self.people.forEach(function (value,index,array) {
+                                if(value["src"]=="" || value["src"] == null){
+                                    value["src"]="/static/image/no_data.jpeg";
+                                }else{
+                                    value["src"]=_self.$store.state.imgUrl+value["src"];
+                                }
+                            })
+                        }else{
+                            _self.people=null;
+                        }
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            },
+            deleteEmployeeById:function (node) {
+                var _self=this;
+                var id=node.currentTarget.getAttribute("data-id");
+                var data=new FormData();
+                data.append("id",id);
+                //ljj 根据id删除员工
+                this.$axios.post(this.$store.state.phpUrl +'admin/background/deleteEmployeeById',
+                    data)
+                    .then(function (response) {
+                        var data=response.data;
+                        if(data.status==1){
+                             _self.people.forEach(function (value,index,array) {
+                                 if(value['id']==id){
+                                     console.log(array)
+                                     array.splice(index,1);
+                                     console.log(array)
+                                 }
+                                 return;
+                             })
+                        }else{
+                            alert("删除失败")
+                        }
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
             }
         },
         created:function () {
-            var _self=this;
-            var data=new FormData();
-            data.append("department",1);
-
-
-            this.$axios.post(this.$store.state.phpUrl +'admin/background/getEmployee',
-                data)
-                .then(function (response) {
-                    var data=response.data;
-                    if(data.status==1){
-                        _self.people=data.people;
-                        _self.people.forEach(function (value,index,array) {
-                            if(value["src"]=="" || value["src"] == null){
-                                value["src"]="/static/image/headPic.jpg";
-                            }else{
-                                value["src"]=_self.$store.state.imgUrl+value["src"];
-                            }
-                        })
-                    }else{
-                        console.log("加载失败")
-                    }
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
+            this.getAllEmployee(this.$route.query.department);
+        },
+        watch:{
+            '$route' (to,from){
+                var department=this.$route.query.department;
+                if(typeof department!='undefined' && department!='' &&
+                    !(typeof department!='undefined' && department!=0 && !department)){
+                    this.getAllEmployee(department)
+                }
+            }
         }
 
 
@@ -184,6 +225,12 @@
             bottom: 5px;
             right: 10px;
             .button(white,orange,60px);
+        }
+        &>.button2{
+            position: absolute;
+            bottom: 5px;
+            right: 80px;
+            .button(white,#188aef,60px)
         }
     }
     .add{

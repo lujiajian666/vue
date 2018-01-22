@@ -12,16 +12,20 @@
                     <div style="position: relative;padding-left: 100px;margin: auto;">
                         <input placeholder="姓名" name="name" :value="name"><span class="tips" v-show="form['name']">姓名不能为空！</span><br>
                         <select name="title">
-                            <option value="0" :selected="jobTitle==0">职称</option>
-                            <option value="1" :selected="jobTitle==1">经理</option>
-                            <option value="2" :selected="jobTitle==3">扫地阿姨</option>
+                            <option value="0">职称</option>
+                            <option v-for="value in selectJobTitle"
+                                    :value="value['id']" :selected="jobTitle==value['id']">
+                                {{value['title']}}
+                            </option>
                         </select>
                         <span class="tips" v-show="form['title']">职称不能为空！</span>
                         <br>
                         <select name="department">
                             <option value="0">所属部门</option>
                             <option v-for="value in selectDepartment"
-                                    :value="value['id']" :selected="departmentId==value['id']">{{value['name']}}</option>
+                                    :value="value['id']" :selected="departmentId==value['id']">
+                                {{value['name']}}
+                            </option>
                         </select>
                         <span class="tips" v-show="form['department']">部门不能为空！</span>
                         <div class="pic_btn_div" id="pic_btn_div" :style="head_img_url">点击上传头像</div>
@@ -56,7 +60,6 @@
                form:{
                    "name":false,
                    "department":false,
-                   "department":false,
                    "title":false
                },
             }
@@ -84,20 +87,15 @@
               }else {
                   // 获得文件
                   var file = node.files[0];
-
                   var reader = new FileReader();
-
                   // 将文件读取为DataUrl
                   reader.readAsDataURL(file);
-
                   reader.onload = function(event) {
                       imgNode.style.backgroundImage = "url("+this.result+")";
                   }
-
                   reader.onerror = function(event){
                       throw new Error("读取出错");
                   }
-
                   reader.onloadstart = function() {
                       console.log("读取开始");
                   }
@@ -134,11 +132,11 @@
                       if(data.status==1) {
                           alert("添加成功")
                           _self.close();
-                          location.reload()
+                          _self.$emit("change")
                       }else if(data.status==2){
                           alert("修改成功")
                           _self.close();
-                          location.reload()
+                          location.$emit("change")
                       }else{
                           alert("操作失败")
                       }
@@ -161,6 +159,15 @@
                 .then(function (response) {
                     var data=response.data;
                     _self.selectDepartment=data;
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+            //ljj 职称选项生成
+            this.$axios.post(this.$store.state.phpUrl +'admin/background/selectJobTitle')
+                .then(function (response) {
+                    var data=response.data;
+                    _self.selectJobTitle=data;
                 })
                 .catch(function (error) {
                     console.log(error);
