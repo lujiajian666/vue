@@ -107,6 +107,19 @@ class Background extends Controller
             return json(["status"=>0,"error"=>Db::name($this->tableEmployee)->getLastSql()]);
         }
     }
+    public function deleteEmployeeById(){
+        $post=$this->request->post();
+        $employeeData=Db::name($this->tableEmployee)->where("id = $post[id]")->find();
+        if($employeeData["head_img"]!="") {
+            @unlink("." . $employeeData["head_img"]);
+        }
+
+        if(Db::name($this->tableEmployee)->where("id = $post[id]")->delete()){
+            return json(["status"=>1]);
+        }else{
+            return json(["status"=>0,"error"=>Db::name($this->tableEmployee)->getLastSql()]);
+        }
+    }
     public function selectJobTitle(){
        $data=Db::name($this->tableJobTitle)->order("department_id asc")->select();
        return json($data);

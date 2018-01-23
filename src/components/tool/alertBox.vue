@@ -9,25 +9,27 @@
             <main>
                 <form id="form">
                 <div class="inputGroup" style="display:flex;height: 250px">
-                    <div style="position: relative;padding-left: 100px;margin: auto;">
-                        <input placeholder="姓名" name="name" :value="name"><span class="tips" v-show="form['name']">姓名不能为空！</span><br>
-                        <select name="title">
+                    <div style="position: relative;padding-left: 100px;margin: auto;height:165px">
+                        <input placeholder="姓名" name="name" v-model="name">
+                        <span class="tips" v-show="isEmpty(this.name)">姓名不能为空！</span>
+                        <br>
+                        <select name="title" @change="changeJobTitle($event)">
                             <option value="0">职称</option>
                             <option v-for="value in selectJobTitle"
                                     :value="value['id']" :selected="jobTitle==value['id']">
                                 {{value['title']}}
                             </option>
                         </select>
-                        <span class="tips" v-show="form['title']">职称不能为空！</span>
+                        <span class="tips" v-show="isEmpty(this.jobTitle)">职称不能为空！</span>
                         <br>
-                        <select name="department">
+                        <select name="department" @change="changeDepartment($event)">
                             <option value="0">所属部门</option>
                             <option v-for="value in selectDepartment"
                                     :value="value['id']" :selected="departmentId==value['id']">
                                 {{value['name']}}
                             </option>
                         </select>
-                        <span class="tips" v-show="form['department']">部门不能为空！</span>
+                        <span class="tips" v-show="isEmpty(this.departmentId)">部门不能为空！</span>
                         <div class="pic_btn_div" id="pic_btn_div" :style="head_img_url">点击上传头像</div>
                         <input class="pic_btn" type="file" name="head_img"
                                 @change="changePic($event,'pic_btn_div')">
@@ -57,11 +59,6 @@
                departmentId:"",
                selectJobTitle:null,
                selectDepartment:null,
-               form:{
-                   "name":false,
-                   "department":false,
-                   "title":false
-               },
             }
         },
         methods:{
@@ -101,19 +98,20 @@
                   }
               }
           },
-          submit:function (node) {
+          changeDepartment:function (node) {
+              this.departmentId=node.currentTarget.value;
+          },
+          changeJobTitle:function (node) {
+              this.jobTitle=node.currentTarget.value;
+          },
+          submit:function () {
               //ljj 清空alterMessage,防止alter和alert的显示混淆（用的都是这个单页面组件）
               this.$store.state.alterMessage=null;
-
               var _self=this;
               //ljj 检查是否为空
-              var checkName=document.querySelectorAll("input[name='name']")[0].value;
-              var checkTitle=document.querySelectorAll("select[name='title']")[0].value;
-              var checkDepartment=document.querySelectorAll("select[name='department']")[0].value;
-              this.form["name"]=checkName==""?true:false;
-              this.form["title"]=checkTitle==0?true:false;
-              this.form["department"]=checkDepartment==0?true:false;
-              if(this.form["name"] || this.form["title"] || this.form["department"]){
+              if(this.isEmpty(this.name) ||
+                  this.isEmpty(this.jobTitle) ||
+                  this.isEmpty(this.departmentId)){
                   return false;
               }
               //ljj url生成
@@ -144,11 +142,19 @@
                   .catch(function (error) {
                       console.log(error);
                   });
+          },
+          isEmpty:function (a) {
+                if(a!=0 && a!=''){
+                    console.log("a="+a+" return false")
+                    return false;
+                }else{
+                    console.log("b="+a+" return true")
+                    return true;
+                }
           }
         },
         computed:{
           head_img_url:function () {
-              console.log("computed   head_img="+this.head_img)
               return {"background-image":"url("+this.head_img+")"};
           }
         },
@@ -182,9 +188,6 @@
                this.head_img=store.src;
                this.departmentId=store.department_id;
            }
-        },
-        mounted:function () {
-            console.log("mounted   head_img="+this.head_img)
         },
         props:["title"]
 
@@ -222,7 +225,7 @@
         opacity: 1;
         font-size: 12px;
         top: auto;
-        bottom: 0;
+        bottom: 20px;
         left: -5px;
         height: 30px;
         line-height: 30px;
@@ -261,17 +264,16 @@
     input:not([type=file]){
         outline: none;
         border: 1px solid #008ecc;
-        border-radius: 5px;
         padding: 10px 15px;
         display: block;
         margin: auto;
     }
     select{
         border: 1px solid #008ecc;
-        border-radius: 5px;
         padding: 5px 10px;
         height: 37px;
         background-color: white;
+        display: block;
         width: 100%;
     }
 
