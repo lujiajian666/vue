@@ -8,7 +8,7 @@ import contentDiv from '@/components/indexContent';
 import Background from '@/components/background/Background';
 import BackgroundIndex from '@/components/background/BackgroundIndex';
 import B_First from '@/components/background/B_First';
-import B_Second from '@/components/background/B_Second';
+import Article from '@/components/background/Article';
 import News from '@/components/news';
 
 Vue.use(Router)
@@ -35,9 +35,9 @@ export default new Router({
                     component: B_First
                 },
                 {
-                    path: 'second',
-                    name:'B_Second',
-                    component: B_Second
+                    path: 'article',
+                    name:'article',
+                    component: Article
                 }
             ]
         }

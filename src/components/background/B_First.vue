@@ -1,10 +1,9 @@
 <template>
     <div id="B_First">
       <div class="title">
-         <span>研发部</span>&nbsp;&nbsp;&nbsp;
-         <span class="add" @click="add">
-             添加<i class="fa fa-plus-circle" style="text-indent: 0"></i>
-         </span>
+         <span>{{$route.query.departmentName}}</span>&nbsp;&nbsp;&nbsp;
+         <el-button type="primary" icon="el-icon-edit"
+                    class="add" @click="add"></el-button>
       </div>
       <div class="content">
          <ul v-if="people">
@@ -190,7 +189,7 @@
     .title{
         position: fixed;
         top:50px;left: 200px;right: 0;
-        line-height: 2;
+        line-height: 50px;
         text-align: left;
         text-indent: 2em;
         color:#007fcf;
@@ -199,7 +198,7 @@
     }
     .content{
         position: fixed;
-        top:100px;left: 200px;right: 0;bottom: 0;
+        top:110px;left: 200px;right: 0;bottom: 0;
         overflow: auto;
     }
     .person{
@@ -234,8 +233,7 @@
         }
     }
     .add{
-        float: right;margin-right: 30px;text-indent: 0;
-        margin-top: 1px;
-        .button(white, #e555be,60px,inherit);
+        float: right;
+        margin: 5px 10px;
     }
 </style>

@@ -20,7 +20,8 @@
                         <li class="hideUl" v-show="hideUl[0]">
                             <ul>
                                 <router-link v-for="value in selectDepartment" tag="li"
-                                             :to="{name:'B_First',query:{department:value['id']}}">
+                                             :to="{name:'B_First',
+                                             query:{department:value['id'],departmentName:value['name']}}">
                                     {{value['name']}}
                                 </router-link>
                             </ul>
@@ -51,13 +52,11 @@
                         </li>
                         <li class="hideUl" v-show="hideUl[2]">
                             <ul>
-                                <li>热点服务</li>
-                                <li>今日关注</li>
-                                <li>活动新闻</li>
-                                <li>常见问题</li>
-                                <li>新手指南</li>
-                                <li>本站声明</li>
-                                <li>关于我们</li>
+                                <router-link v-for="value in article" tag="li"
+                                             :to="{name:'article',
+                                             query:{id:value['id'],name:value['name']}}">
+                                    {{value['name']}}
+                                </router-link>
                             </ul>
                         </li>
                     </ul>
@@ -77,7 +76,16 @@
             return {
                 hideUl: [true, false, false, false],
                 select: [true, false, false],
-                selectDepartment: null
+                selectDepartment: null,
+                article:[
+                    {id:1,name:'热点服务'},
+                    {id:2,name:'今日关注'},
+                    {id:3,name:'活动新闻'},
+                    {id:4,name:'常见问题'},
+                    {id:5,name:'新手指南'},
+                    {id:6,name:'本站声明'},
+                    {id:7,name:'关于我们'}
+                ]
             }
         },
         components: {},

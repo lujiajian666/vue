@@ -6,7 +6,10 @@ import router from './router'
 import echarts from 'echarts'
 import axios from "axios"
 import Vuex from 'vuex'
+import ElementUI from 'element-ui'
+import 'element-ui/lib/theme-chalk/index.css'
 
+Vue.use(ElementUI);
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
@@ -27,5 +30,5 @@ new Vue({
   router,
   store,
   template: '<App/>',
-  components: { App }
+  components: { App },
 })
