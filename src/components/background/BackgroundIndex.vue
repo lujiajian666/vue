@@ -54,8 +54,9 @@
                             <ul>
                                 <router-link v-for="value in article" tag="li"
                                              :to="{name:'article',
-                                             query:{id:value['id'],name:value['name']}}">
-                                    {{value['name']}}
+                                             query:{id:value['article_type_id'],
+                                             name:value['type_name']}}">
+                                    {{value['type_name']}}
                                 </router-link>
                             </ul>
                         </li>
@@ -77,15 +78,7 @@
                 hideUl: [true, false, false, false],
                 select: [true, false, false],
                 selectDepartment: null,
-                article:[
-                    {id:1,name:'热点服务'},
-                    {id:2,name:'今日关注'},
-                    {id:3,name:'活动新闻'},
-                    {id:4,name:'常见问题'},
-                    {id:5,name:'新手指南'},
-                    {id:6,name:'本站声明'},
-                    {id:7,name:'关于我们'}
-                ]
+                article:[]
             }
         },
         components: {},
@@ -125,6 +118,16 @@
                 .then(function (response) {
                     var data = response.data;
                     _self.selectDepartment = data;
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+            //ljj 文章类别获取
+            this.$axios.post(this.$store.state.phpUrl + 'admin/article/getArticleType')
+                .then(function (response) {
+                    var data = response.data;
+                    _self.article = data;
+                    console.log(data)
                 })
                 .catch(function (error) {
                     console.log(error);

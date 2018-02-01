@@ -9,7 +9,11 @@
         </div>
         <div class="content">
             <div id="show" v-show="select==1">
-                <div class="div">
+                <div v-if="!tableData.length">
+                    <img  src="/static/image/no_data.jpeg" style="vertical-align: middle;">
+                    啥都没有
+                </div>
+                <div v-if="tableData.length" class="div">
                     <table>
                         <tbody>
                         <tr>
@@ -29,10 +33,9 @@
                         </tbody>
                     </table>
                 </div>
-                <div style="position: absolute;bottom: 30px;left: 0">
+                <div v-if="tableData.length" style="position: absolute;bottom: 30px;left: 0">
                     <el-pagination background layout="prev, pager, next" :total="totalPage"></el-pagination>
                 </div>
-
             </div>
             <div id="edit" v-show="select==2"></div>
             <div id="add" v-show="select==3">
@@ -45,11 +48,11 @@
                                 <el-radio-button label="top">顶部对齐</el-radio-button>
                             </el-radio-group>
                         </el-form-item>
-                        <el-form-item label="文章名称">
-                            <el-input v-model="form.name"></el-input>
+                        <el-form-item label="文章">
+                            <el-input v-model="form.title"></el-input>
                         </el-form-item>
                         <el-form-item label="排序">
-                            <el-input-number v-model="num1" @change="handleChange" :min="1" :max="10" label="描述文字">
+                            <el-input-number v-model="form.sort" @change="handleChange" :min="1" :max="10" label="描述文字">
                             </el-input-number>
                         </el-form-item>
                         <el-form-item label="文章内容">
@@ -73,70 +76,56 @@
                 totalPage:100,
                 select: 1,
                 labelPosition: "right",
-                num1: 1,
                 form: {
-                    name: '',
-                    date1: '',
-                    date2: '',
+                    title: '',
+                    sort:1,
                     desc: ''
                 },
-                tableData: [
-                    {
-                        title: "文章一",
-                        content: "adfasdfasfasdffdf"
-                    },
-                    {
-                        title: "文章一",
-                        content: "adfasdfasfasdffdf"
-                    },
-                    {
-                        title: "文章一",
-                        content: "adfasdfasfasdffdf"
-                    },
-                    {
-                        title: "文章一",
-                        content: "adfasdfasfasdffdf"
-                    },
-                    {
-                        title: "文章一",
-                        content: "adfasdfasfasdffdf"
-                    },
-                    {
-                        title: "文章一",
-                        content: "adfasdfasfasdffdf"
-                    },
-                    {
-                        title: "文章一",
-                        content: "adfasdfasfasdffdf"
-                    },
-                    {
-                        title: "文章一",
-                        content: "adfasdfasfasdffdf"
-                    },
-                    {
-                        title: "文章一",
-                        content: "adfasdfasfasdffdf"
-                    },
-                    {
-                        title: "文章一",
-                        content: "adfasdfasfasdffdf"
-                    },
-                    {
-                        title: "文章一",
-                        content: "adfasdfasfasdffdf"
-                    },
-                    {
-                        title: "文章一",
-                        content: "adfasdfasfasdffdf"
-                    },
-                ]
+                tableData:[]
             }
 
-        }
-        ,
+        },
         methods: {
             onSubmit() {
-                console.log('submit!');
+                var _self=this;
+                var message="";
+                if(this.form.title=="") message="标题不能为空";
+                if(this.form.desc=="")  message="内容不能为空";
+                if(message!=""){
+                    this.$alert(message, '!!!', {
+                        confirmButtonText: '确定',
+                        callback: action => {
+                            this.$message({
+                                type: 'info',
+                                message: '提交已取消'
+                            });
+                        }
+                    });
+                    return ;
+                }
+                var data=new FormData();
+                data.append("title",this.form["title"]);
+                data.append("sort",this.form["sort"]);
+                data.append("content",this.form["desc"]);
+                data.append("type",this.$route.query.id);
+                this.$axios.post(this.$store.state.phpUrl + 'admin/article/addArticle'
+                    ,data)
+                    .then(function (response) {
+                        var data = response.data;
+                        if(data.status==1){
+                            _self.$message({
+                                type: 'success',
+                                message: '添加成功'
+                            });
+                            _self.select=1;
+                            _self.getArticle()
+                        }else{
+                            _self.$message.error('添加失败')
+                        }
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
             }
             ,
             handleChange(value) {
@@ -150,7 +139,31 @@
             },
             handleDelete(index, row) {
                 console.log(index, row);
+            },
+            getArticle(){
+                var _self=this;
+                var type=this.$route.query.id;
+                var data=new FormData();
+                data.append("type",type);
+                this.$axios.post(this.$store.state.phpUrl + 'admin/article/getArticle'
+                    ,data)
+                    .then(function (response) {
+                        var data = response.data;
+                        _self.tableData=data;
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
             }
+        },
+        watch:{
+            '$route' (to,from){
+                var index=this.$route.query.id;
+                this.getArticle()
+            }
+        },
+        created(){
+           this.getArticle();
         }
 
     }
