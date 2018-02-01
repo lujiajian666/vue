@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.7.20, for Linux (x86_64)
+-- MySQL dump 10.13  Distrib 5.7.21, for Linux (x86_64)
 --
 -- Host: localhost    Database: graduation_project
 -- ------------------------------------------------------
--- Server version	5.7.20-0ubuntu0.16.04.1
+-- Server version	5.7.21-0ubuntu0.16.04.1
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -14,6 +14,59 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `article`
+--
+
+DROP TABLE IF EXISTS `article`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `article` (
+  `article_id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(50) DEFAULT NULL,
+  `sort` int(11) DEFAULT NULL,
+  `content` text,
+  `type` int(11) DEFAULT NULL,
+  PRIMARY KEY (`article_id`),
+  KEY `type` (`type`),
+  CONSTRAINT `article_ibfk_1` FOREIGN KEY (`type`) REFERENCES `article_type` (`article_type_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `article`
+--
+
+LOCK TABLES `article` WRITE;
+/*!40000 ALTER TABLE `article` DISABLE KEYS */;
+INSERT INTO `article` VALUES (1,'5',1,'55',5),(2,'热点服务',1,'热点服务热点服务',1),(3,'热点服务2',1,'热点服务2热点服务2热点服务2',1);
+/*!40000 ALTER TABLE `article` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `article_type`
+--
+
+DROP TABLE IF EXISTS `article_type`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `article_type` (
+  `article_type_id` int(11) NOT NULL AUTO_INCREMENT,
+  `type_name` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`article_type_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `article_type`
+--
+
+LOCK TABLES `article_type` WRITE;
+/*!40000 ALTER TABLE `article_type` DISABLE KEYS */;
+INSERT INTO `article_type` VALUES (1,'热点服务'),(2,'今日关注'),(3,'活动新闻'),(4,'常见问题'),(5,'新手指南'),(6,'本站声明'),(7,'关于我们');
+/*!40000 ALTER TABLE `article_type` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `department`
@@ -54,7 +107,7 @@ CREATE TABLE `employee` (
   `time` int(11) DEFAULT '0',
   `department_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -63,7 +116,7 @@ CREATE TABLE `employee` (
 
 LOCK TABLES `employee` WRITE;
 /*!40000 ALTER TABLE `employee` DISABLE KEYS */;
-INSERT INTO `employee` VALUES (1,'陆家键',1,'/pic/20180116/81bb4c1274c509f7c325b5fc82c6fa68.jpg',1514608125,1),(2,'陆家键2',2,'',1515998695,1),(3,'lujiajian3',1,'',1516025261,2);
+INSERT INTO `employee` VALUES (2,'陆家键2',2,'',1515998695,1),(3,'lujiajian3',1,'',1516025261,2),(6,'行政1',1,'',1516628988,4),(7,'陆家键',1,'',1516629128,3),(9,'陆家键',1,'',1516632874,1);
 /*!40000 ALTER TABLE `employee` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -131,4 +184,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-01-17 12:13:37
+-- Dump completed on 2018-02-01 22:41:38

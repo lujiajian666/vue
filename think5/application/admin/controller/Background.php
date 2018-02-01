@@ -14,6 +14,7 @@ class Background extends Controller
     private $tableEmployee="employee";
     private $tableDepartment="department";
     private $tableJobTitle="jobTitle";
+    private $tableArticleType='article_type';
     public function index()
     {
         $post=$this->request->post();
