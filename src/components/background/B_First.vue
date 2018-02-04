@@ -158,7 +158,9 @@
             }
         },
         created:function () {
-            this.getAllEmployee(this.$route.query.department);
+            if(this.$route.query.department!=""){
+                this.getAllEmployee(this.$route.query.department);
+            }
         },
         watch:{
             '$route' (to,from){

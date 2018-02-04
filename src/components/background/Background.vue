@@ -6,15 +6,15 @@
             <h2>用户登录</h2>
             <div class="inputGroup">
               <label>用户名/username</label><br>
-              <input  name="username"><br>
+              <input  name="username" id="username"><br>
             </div>
             <div class="inputGroup">
               <label>密码/password</label><br>
-              <input name="password" type="password">
+              <input name="password" id="password" type="password" @keydown.enter="login">
               <span>忘记密码</span><br>
             </div>
             <div class="inputGroup">
-              <input type="checkbox"/>
+              <input type="checkbox" name="remember" id="remember" value="yes"/>
               <span>记住用户名和密码</span>
             </div>
             <div class="inputGroup">
@@ -30,6 +30,7 @@
 </template>
 
 <script>
+    import { cookieHandle } from '../../lib/utils.js';
     export default {
         data() {
             return {
@@ -48,16 +49,61 @@
                     .then(function (response) {
                         var data=response.data;
                         if(data.status==1){
-                            alert("登录成功")
-                            _self.$store.state.username=data.username;
-                            _self.$router.push({path: '/backgroundIndex'})
+                            //                记住密码
+                            var isRemember =document.getElementById("remember");
+                            var username=document.getElementById("username").value
+                            var password=document.getElementById("password").value
+                            if(isRemember.checked){
+                                cookieHandle.setCookie("username",username,7);
+                                cookieHandle.setCookie("password",password,7);
+                            }
+                            _self.$alert("登录成功", '欢迎您，'+username, {
+                                confirmButtonText: '确定',
+                                callback: action => {
+                                    _self.$store.state.username=data.username;
+                                    _self.$router.push({path: '/backgroundIndex'})
+                                }
+                            });
                         }else{
-                            alert("账号或密码错误")
+                            _self.$alert("账号或密码错误", '！！！', {
+                                confirmButtonText: '确定'
+                            });
                         }
                     })
                     .catch(function (error) {
                         console.log(error);
                     });
+            },
+            loginWithCookie:function (username,password) {
+                var _self=this;
+                var data=new FormData();
+                data.append("username",username);
+                data.append("password",password);
+                this.$axios.post('http://localhost/vue-project-one/think5/public/index.php?s=admin/background/index.html',
+                    data)
+                    .then(function (response) {
+                        var data=response.data;
+                        if(data.status==1){
+                            cookieHandle.setCookie("username",username,7);
+                            cookieHandle.setCookie("password",password,7);
+                            _self.$store.state.username=data.username;
+                            _self.$router.push({path: '/backgroundIndex'})
+                        }else{
+                            cookieHandle.checkCookie("username");
+                            cookieHandle.checkCookie("password");
+                        }
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            }
+        },
+        created:function(){
+            const username=cookieHandle.getCookie("username");
+            const password=cookieHandle.getCookie("password");
+            const isRemember=username!="" && password!="";
+            if(isRemember){
+                this.loginWithCookie(username,password)
             }
         }
 
