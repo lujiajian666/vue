@@ -42,7 +42,10 @@
       </div>
       <div id="edit" v-show="select==2">
         <div class="form-contain">
-          <el-form ref="form" :model="form" label-width="80px" :label-position="labelPosition">
+          <el-form ref="form"
+                   :model="form" label-width="80px"
+                   :label-position="labelPosition"
+                   v-loading="wait">
             <el-form-item label="对齐方式">
               <el-radio-group v-model="labelPosition" size="small">
                 <el-radio-button label="left">左对齐</el-radio-button>
@@ -69,7 +72,10 @@
       </div>
       <div id="add" v-show="select==3">
         <div class="form-contain">
-          <el-form ref="form" :model="form" label-width="80px" :label-position="labelPosition">
+          <el-form ref="form"
+                   :model="form" label-width="80px"
+                   :label-position="labelPosition"
+                   v-loading="wait">
             <el-form-item label="对齐方式">
               <el-radio-group v-model="labelPosition" size="small">
                 <el-radio-button label="left">左对齐</el-radio-button>
@@ -115,7 +121,7 @@
 
         },
         tableData: [],
-        wait:true
+        wait:false
       }
 
     },
@@ -142,6 +148,7 @@
           });
           return;
         }
+          _self.wait=true;
         var data = new FormData();
         if(type=="add"){
           data.append("title", this.form["title"]);
@@ -170,9 +177,11 @@
             } else {
               _self.$message.error('操作失败')
             }
+              _self.wait=false;
           })
           .catch(function (error) {
             console.log(error);
+              _self.wait=false;
           });
       },
       handleChange(value) {
@@ -194,10 +203,12 @@
           })
           .catch(function (error) {
             console.log(error);
+              _self.wait=false;
           });
       },
       deleteArticle(id) {
         var _self = this;
+          _self.wait=true;
         var data = new FormData();
         data.append("article_id", id);
         this.$axios.post(this.$store.state.phpUrl + 'admin/article/deleteArticle'
@@ -219,12 +230,14 @@
                 message: '删除失败'
               });
             }
+              _self.wait=false;
           })
           .catch(function (error) {
             _self.$message({
               type: 'warning',
               message: '网络错误'
             });
+              _self.wait=false;
           });
       },
       editArticle(id) {

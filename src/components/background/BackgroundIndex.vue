@@ -62,6 +62,22 @@
                         </li>
                     </ul>
                 </li>
+                <li>
+                    <ul>
+                        <li @click="show(3)" :class="{isselsct:select[3]}">
+                            <i class="fa fa-save"></i>
+                            休假申请
+                        </li>
+                        <li class="hideUl" v-show="hideUl[3]">
+                            <ul>
+                                <router-link v-for="value in apply" tag="li"
+                                             :to="{name:value['type']}">
+                                    {{value['name']}}
+                                </router-link>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
             </ul>
         </div>
         <div class="right">
@@ -76,9 +92,13 @@
         data() {
             return {
                 hideUl: [true, false, false, false],
-                select: [true, false, false],
+                select: [true, false, false, false],
                 selectDepartment: null,
-                article:[]
+                article:[],
+                apply:[
+                    {name:"休假申请",type:"vacationApply"},
+                    {name:"查看考勤",type:"workAttendance"}
+                ]
             }
         },
         components: {},
