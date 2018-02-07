@@ -61,7 +61,7 @@
               </el-input-number>
             </el-form-item>
             <el-form-item label="文章内容">
-              <el-input type="textarea" v-model="edit.content" rows=10></el-input>
+              <el-input type="textarea" v-model="edit.content" :rows="10"></el-input>
             </el-form-item>
             <el-form-item>
               <el-button type="primary" @click="onSubmit('edit')" >立即修改</el-button>
@@ -91,7 +91,7 @@
               </el-input-number>
             </el-form-item>
             <el-form-item label="文章内容">
-              <el-input type="textarea" v-model="form.desc" rows=10></el-input>
+              <el-input type="textarea" v-model="form.desc" :rows="10"></el-input>
             </el-form-item>
             <el-form-item>
               <el-button type="primary" @click="onSubmit('add')">立即创建</el-button>

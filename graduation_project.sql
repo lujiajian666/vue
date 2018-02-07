@@ -31,7 +31,7 @@ CREATE TABLE `article` (
   PRIMARY KEY (`article_id`),
   KEY `type` (`type`),
   CONSTRAINT `article_ibfk_1` FOREIGN KEY (`type`) REFERENCES `article_type` (`article_type_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -40,7 +40,7 @@ CREATE TABLE `article` (
 
 LOCK TABLES `article` WRITE;
 /*!40000 ALTER TABLE `article` DISABLE KEYS */;
-INSERT INTO `article` VALUES (1,'5',1,'55',5),(2,'热点服务',1,'热点服务热点服务',1),(3,'热点服务2',1,'热点服务2热点服务2热点服务2',1);
+INSERT INTO `article` VALUES (2,'热点服务',1,'热点服务热点服务12',1),(4,'今日关注',3,'今日关注今日光柱',2),(7,'今日关注2   ',1,'今日关注2今日关注2   今日关注2   ',2),(8,'热点服务1231',1,'热点服务1231热点服务1231热点服务1231热点服务1231',1);
 /*!40000 ALTER TABLE `article` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -174,6 +174,35 @@ LOCK TABLES `member` WRITE;
 INSERT INTO `member` VALUES (1,'lujiajian','lujiajian',11111111,111111);
 /*!40000 ALTER TABLE `member` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `vacation`
+--
+
+DROP TABLE IF EXISTS `vacation`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `vacation` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `begin_time` int(11) NOT NULL,
+  `end_time` int(11) NOT NULL,
+  `time` int(11) NOT NULL,
+  `reason` varchar(100) NOT NULL,
+  `status` varchar(1) DEFAULT '0',
+  `username` varchar(64) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `vacation`
+--
+
+LOCK TABLES `vacation` WRITE;
+/*!40000 ALTER TABLE `vacation` DISABLE KEYS */;
+INSERT INTO `vacation` VALUES (3,1517414400,1517587200,1518040039,'阿斯蒂芬','0','lujiajian');
+/*!40000 ALTER TABLE `vacation` ENABLE KEYS */;
+UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -184,4 +213,3 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-02-01 22:41:38

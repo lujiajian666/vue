@@ -1,10 +1,35 @@
 <template>
     <div id="vacationApply">
-        <el-collapse v-model="activeName" accordion>
-            <el-collapse-item title="请假日期" name="1">
+        <el-collapse v-model="activeName" accordion v-loading="loading">
+            <el-collapse-item title="请假记录" name="1">
+                <el-table
+                        :data="tableData"
+                        border
+                        style="width: 90%;margin: 10px auto">
+                    <el-table-column
+                            prop="time"
+                            label="申请日期"
+                            width="180">
+                    </el-table-column>
+                    <el-table-column
+                            prop="begin_time"
+                            label="开始时间"
+                            width="180">
+                    </el-table-column>
+                    <el-table-column
+                            prop="end_time"
+                            label="结束时间">
+                    </el-table-column>
+                    <el-table-column
+                            prop="status"
+                            label="结果">
+                    </el-table-column>
+                </el-table>
+            </el-collapse-item>
+            <el-collapse-item title="请假日期" name="2">
                 <div class="block">
                     <el-date-picker
-                            v-model="value7"
+                            v-model="time"
                             type="daterange"
                             align="right"
                             unlink-panels
@@ -15,28 +40,28 @@
                     </el-date-picker>
                 </div>
             </el-collapse-item>
-            <el-collapse-item title="请假原因" name="2">
+            <el-collapse-item title="请假原因" name="3">
                 <div style="padding:10px 30px">
                     <el-input
                             type="textarea"
                             :rows="10"
                             placeholder="请输入内容"
-                            v-model="textarea">
+                            v-model="reason">
                     </el-input>
                 </div>
 
             </el-collapse-item>
-            <el-collapse-item title="统计" name="3">
+            <el-collapse-item title="统计" name="4">
                 <div>你已经累计休假 10 天</div>
                 <div>年假剩余 0 天</div>
                 <el-switch
-                        v-model="value3"
+                        v-model="hasRead"
                         inactive-text="我已阅读">
                 </el-switch>
             </el-collapse-item>
         </el-collapse>
         <br><br><br><br>
-        <el-button type="primary" :disabled="disable">确认申请</el-button>
+        <el-button type="primary" :disabled="disable" @click="submit">确认申请</el-button>
     </div>
 </template>
 
@@ -44,9 +69,11 @@
     export default {
         data() {
             return {
-                disable:true,
-                value3: false,
-                textarea: '',
+                tableData:[],
+                allVacationTime:0,
+                loading:false,
+                hasRead: false,
+                reason: '',
                 activeName: '1',
                 pickerOptions2: {
                     shortcuts: [{
@@ -75,22 +102,77 @@
                         }
                     }]
                 },
-                value6: '',
-                value7: ''
+                time: ''
             }
         },
         components:{
         },
-        methods:{
-        },
-        created:function () {
+        computed:{
+          disable(){
+              if(this.hasRead && this.reason!="" && this.time!=""){
+                  return false;
+              }else{
+                  return true;
+              }
+          }
         },
         watch:{
-            '$route' (to,from){
-            }
+          time(current,old){
+            console.log(current[0])
+          }
+        },
+        methods:{
+          submit(){
+            var _self=this;
+            _self.loading=true;
+            var data=new FormData();
+            var begin_time=new Date(this.time[0]).getTime()/1000;
+            var end_time=new Date(this.time[1]).getTime()/1000;
+            data.append("reason",this.reason);
+            data.append("begin_time",begin_time);
+            data.append("end_time",end_time);
+            data.append("username",this.$store.state.username);
+            this.$axios.post(this.$store.state.phpUrl + 'admin/vacation/addVacation'
+              , data)
+              .then(function (response) {
+                if (response.data.status == 1) {
+                  _self.$message({
+                    type: 'success',
+                    message: '申请成功'
+                  });
+                } else {
+                  _self.$message({
+                    type: 'error',
+                    message: '申请失败'
+                  });
+                }
+                _self.loading=false;
+              })
+              .catch(function (error) {
+                _self.$message({
+                  type: 'warning',
+                  message: '网络错误'
+                });
+                _self.loading=false;
+              });
+          }
+        },
+        created:function () {
+            var _self=this;
+            _self.loading=true;
+            var data=new FormData();
+            data.append("username",_self.$store.state.username);
+            this.$axios.post(this.$store.state.phpUrl + 'admin/vacation/getVacation',
+            data)
+                .then(function (response) {
+                    var data=response.data;
+                    _self.tableData=data
+                    _self.loading=false;
+                    _self.allVacationTime=data.reduce(function(prev,cur,index,array){
+                        return (prev.end_time-prev.begin_time)+(cur.end_time-cur.begin_time);
+                    })
+                })
         }
-
-
     }
 </script>
 
