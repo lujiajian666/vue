@@ -158,7 +158,7 @@
             }
         },
         created:function () {
-            if(this.$route.query.department!=""){
+            if(this.$route.query.department!=undefined){
                 this.getAllEmployee(this.$route.query.department);
             }
         },

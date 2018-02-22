@@ -5,16 +5,14 @@
                 <el-table
                         :data="tableData"
                         border
-                        style="width: 90%;margin: 10px auto">
+                        style="width: 98%;margin: 10px auto;text-align: left">
                     <el-table-column
                             prop="time"
-                            label="申请日期"
-                            width="180">
+                            label="申请日期">
                     </el-table-column>
                     <el-table-column
                             prop="begin_time"
-                            label="开始时间"
-                            width="180">
+                            label="开始时间">
                     </el-table-column>
                     <el-table-column
                             prop="end_time"
@@ -52,8 +50,8 @@
 
             </el-collapse-item>
             <el-collapse-item title="统计" name="4">
-                <div>你已经累计休假 10 天</div>
-                <div>年假剩余 0 天</div>
+                <div>你已经累计休假 {{allVacationTime}} 天</div>
+                <div>年假剩余 {{10-allVacationTime}} 天</div>
                 <el-switch
                         v-model="hasRead"
                         inactive-text="我已阅读">
@@ -66,6 +64,7 @@
 </template>
 
 <script>
+    import { vuexHandle } from "../../lib/utils.js"
     export default {
         data() {
             return {
@@ -161,16 +160,14 @@
             var _self=this;
             _self.loading=true;
             var data=new FormData();
-            data.append("username",_self.$store.state.username);
+            data.append("username",vuexHandle.getVuex(_self,"username"));
             this.$axios.post(this.$store.state.phpUrl + 'admin/vacation/getVacation',
             data)
                 .then(function (response) {
-                    var data=response.data;
+                    var data=response.data.data;
                     _self.tableData=data
                     _self.loading=false;
-                    _self.allVacationTime=data.reduce(function(prev,cur,index,array){
-                        return (prev.end_time-prev.begin_time)+(cur.end_time-cur.begin_time);
-                    })
+                    _self.allVacationTime=response.data.allTime/86400;
                 })
         }
     }

@@ -1,34 +1,100 @@
 <template>
     <div id="WorkAttendance">
-        <el-tabs v-model="activeName" @tab-click="handleClick">
+        <el-tabs v-model="activeName" @tab-click="handleClick" v-loading="loading">
             <el-tab-pane label="考勤记录" name="first">
-                <work-attendance-form></work-attendance-form>
+                <full-calendar :events="fcEvents"></full-calendar>
             </el-tab-pane>
-            <el-tab-pane label="考勤统计" name="second">配置管理</el-tab-pane>
+            <el-tab-pane label="签到" name="second">
+                <div id="clock">
+                    <p class="date">{{ date.date }}</p>
+                    <p class="time">{{ date.time }}</p>
+                    <p class="text">
+                        <el-button type="warning" @click="checkIn">签到/签退</el-button>
+                    </p>
+                </div>
+
+            </el-tab-pane>
         </el-tabs>
     </div>
 </template>
 
 <script>
-    import workAttendanceForm from "../tool/canlender"
+    import fullCalendar from 'vue-fullcalendar'
+    import { vuexHandle } from "../../lib/utils.js"
     export default {
         data() {
             return {
-                activeName: 'second'
+                loading:false,
+                week:['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'],
+                date: {
+                    time: '',
+                    date:
+                        ''
+                }
+                ,
+                activeName: 'first',
+                fcEvents:[
+                    {
+                        title: '迟到',
+                        start: '2018-02-20',
+                        end: '2018-02-20'
+                    }
+                ]
             }
         },
-        components:{
-            "work-attendance-form":workAttendanceForm
+        components: {
+            "full-calendar": fullCalendar
         },
-        methods:{
+        methods: {
             handleClick(tab, event) {
                 console.log(tab, event);
+            },
+            updateTime() {
+                var cd = new Date();
+                this.date.time = this.zeroPadding(cd.getHours(), 2) + ':' +
+                                 this.zeroPadding(cd.getMinutes(), 2) + ':' +
+                                 this.zeroPadding(cd.getSeconds(), 2);
+                this.date.date = this.zeroPadding(cd.getFullYear(), 4) + '-' +
+                                 this.zeroPadding(cd.getMonth() + 1, 2) + '-' +
+                                 this.zeroPadding(cd.getDate(), 2) + ' ' +
+                                 this.week[cd.getDay()];
+            },
+            zeroPadding(num, digit) {
+                var zero = '';
+                for (var i = 0; i < digit; i++) {
+                    zero += '0';
+                }
+                return (zero + num).slice(-digit);
+            },
+            checkIn(){
+                var _self=this;
+                _self.loading=true;
+                var data=new FormData();
+                data.append("username",vuexHandle.getVuex(this,"username"))
+                this.$axios.post(this.$store.state.phpUrl + 'admin/vacation/addAttendance',
+                data).then(function (response) {
+                    var data=response.data;
+                    if(data.status==1){
+                        _self.$message({
+                            type: 'success',
+                            message: data.txt
+                        });
+                    }else{
+                        _self.$message({
+                            type: 'error',
+                            message: data.txt
+                        });
+                    }
+                    _self.loading=false;
+                })
             }
         },
-        created:function () {
+        created: function () {
+            setInterval(this.updateTime, 1000);
+            this.updateTime();
         },
-        watch:{
-            '$route' (to,from){
+        watch: {
+            '$route'(to, from) {
             }
         }
 
@@ -38,7 +104,34 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="less">
-   #WorkAttendance{
-       padding: 10px;
-   }
+    #WorkAttendance {
+        padding: 10px;
+    }
+    p {
+        margin: 0;
+        padding: 0;
+    }
+
+    #clock {
+        overflow: hidden;
+        font-family: 'Microsoft YaHei','Lantinghei SC','Open Sans',Arial,'Hiragino Sans GB','STHeiti','WenQuanYi Micro Hei','SimSun',sans-serif;
+        text-align: center;
+        color: rgba(0,0,0,0.4);
+        text-shadow: 0 0 20px rgba(0,0,0,0.8), 0 0 20px black;
+    }
+    #clock .time {
+        letter-spacing: 0.05em;
+        font-size: 80px;
+        padding: 5px 0;
+    }
+    #clock .date {
+        margin-top: 200px;
+        letter-spacing: 0.1em;
+        font-size: 24px;
+    }
+    #clock .text {
+        letter-spacing: 0.1em;
+        font-size: 12px;
+        padding: 20px 0 0;
+    }
 </style>

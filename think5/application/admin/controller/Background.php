@@ -10,7 +10,7 @@ header('Access-Control-Allow-Headers:x-requested-with,content-type');// 响应�
 class Background extends Controller
 {
     
-    private $tableMember="member";
+    private $tableMember="employee";
     private $tableEmployee="employee";
     private $tableDepartment="department";
     private $tableJobTitle="jobTitle";
@@ -38,7 +38,8 @@ class Background extends Controller
             "job_title_id"=>$post["title"],
             "head_img"=>$pic,
             "time"=>time(),
-            "department_id"=>$post["department"]
+            "department_id"=>$post["department"],
+            "username"=>$post["name"]
         );
         if(Db::name($this->tableEmployee)->insert($arr)){
             return json(["status"=>1]);
@@ -58,6 +59,7 @@ class Background extends Controller
 
         $arr=array(
             "name"=>$post["name"],
+            "username"=>$post["name"],
             "job_title_id"=>$post["title"],
             "department_id"=>$post["department"]
         );

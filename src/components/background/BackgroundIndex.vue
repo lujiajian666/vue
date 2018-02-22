@@ -2,7 +2,7 @@
     <div id="BackgroundIndex">
         <div class="head">
             <div style="background-color:#006591;">中小企业政务管理系统后台</div>
-            <div style="float: right;margin-right: 50px">&nbsp;{{$store.state.username}}</div>
+            <div style="float: right;margin-right: 50px">&nbsp;{{username}}</div>
             <div style="float: right">
                 <span v-html="today"></span>
                 &nbsp;&nbsp;&nbsp;&nbsp;
@@ -66,7 +66,7 @@
                     <ul>
                         <li @click="show(3)" :class="{isselsct:select[3]}">
                             <i class="fa fa-save"></i>
-                            休假申请
+                            考勤
                         </li>
                         <li class="hideUl" v-show="hideUl[3]">
                             <ul>
@@ -88,6 +88,7 @@
 </template>
 
 <script>
+    import { vuexHandle } from "../../lib/utils.js"
     export default {
         data() {
             return {
@@ -129,6 +130,10 @@
                 var weekday = time.getDay();
                 var arr = ["星期天", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"];
                 return year + "年" + month + "月" + day + "日&nbsp;&nbsp;" + arr[weekday];
+            },
+            username:function(){
+
+                return vuexHandle.getVuex(this,"username")
             }
         },
         created: function () {
@@ -219,7 +224,9 @@
         top: @headHeight;
         left: 200px;
         bottom: 0;
-        right: 0;
+        right: 0 ;
+        overflow: auto;
+
     }
     .isselsct {
         background-color: @headColor;

@@ -19,19 +19,22 @@ const cookieHandle={
     //清除cookie
     clearCookie: function () {
         this.setCookie("username", "", -1);
+    }
+}
+const vuexHandle={
+    setVuex:function (self,name,value,type=true) {
+        self.$store.state[name]=value;
+        if(type){
+            sessionStorage.setItem(name,value);
+        }
     },
-    checkCookie: function () {
-        var user = this.getCookie("username");
-        if (user != "") {
-            alert("Welcome again " + user);
-        } else {
-            user = prompt("Please enter your name:", "");
-            if (user != "" && user != null) {
-                this.setCookie("username", user, 365);
-            }
+    getVuex:function (self,name,type=true) {
+        if(type){
+            var res=self.$store.state[name]==""?sessionStorage.getItem(name):self.$store.state[name];
+            return res;
+        }else{
+            return self.$store.state[name];
         }
     }
 }
-const sb=1
-
-export { cookieHandle, sb };
+export { cookieHandle,vuexHandle };

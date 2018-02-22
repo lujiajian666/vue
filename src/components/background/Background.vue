@@ -30,7 +30,7 @@
 </template>
 
 <script>
-    import { cookieHandle } from '../../lib/utils.js';
+    import { cookieHandle,vuexHandle } from '../../lib/utils.js';
     export default {
         data() {
             return {
@@ -49,7 +49,6 @@
                     .then(function (response) {
                         var data=response.data;
                         if(data.status==1){
-                            //                记住密码
                             var isRemember =document.getElementById("remember");
                             var username=document.getElementById("username").value
                             var password=document.getElementById("password").value
@@ -60,7 +59,7 @@
                             _self.$alert("登录成功", '欢迎您，'+username, {
                                 confirmButtonText: '确定',
                                 callback: action => {
-                                    _self.$store.state.username=data.username;
+                                    vuexHandle.setVuex(_self,"username",data.username)
                                     _self.$router.push({path: '/backgroundIndex'})
                                 }
                             });
@@ -86,11 +85,11 @@
                         if(data.status==1){
                             cookieHandle.setCookie("username",username,7);
                             cookieHandle.setCookie("password",password,7);
-                            _self.$store.state.username=data.username;
+                            vuexHandle.setVuex(_self,"username",data.username);
                             _self.$router.push({path: '/backgroundIndex'})
                         }else{
-                            cookieHandle.checkCookie("username");
-                            cookieHandle.checkCookie("password");
+                            cookieHandle.clearCookie("username");
+                            cookieHandle.clearCookie("password");
                         }
                     })
                     .catch(function (error) {
