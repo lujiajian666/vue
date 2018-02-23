@@ -98,7 +98,8 @@
                 article:[],
                 apply:[
                     {name:"休假申请",type:"vacationApply"},
-                    {name:"查看考勤",type:"workAttendance"}
+                    {name:"查看考勤",type:"workAttendance"},
+                    {name:"休假审核",type:"applyVerify"}
                 ]
             }
         },
@@ -152,7 +153,6 @@
                 .then(function (response) {
                     var data = response.data;
                     _self.article = data;
-                    console.log(data)
                 })
                 .catch(function (error) {
                     console.log(error);

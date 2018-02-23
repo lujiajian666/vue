@@ -71,12 +71,34 @@ class Vacation extends Controller
            $data["begin_work"]=time();
            $data["username"]=$post["username"];
            if($table->insert($data)){
-               return json(["status"=>1,"签到成功"]);
+               return json(["status"=>1,"txt"=>"签到成功"]);
            }else{
-               return json(["status"=>0,"签到失败"]);
+               return json(["status"=>0,"txt"=>"签到失败"]);
            }
        }
 
 
+   }
+   public function getAttendance(){
+       $Db=Db::name($this->tableWorkattendance);
+       $post=$this->request->post();
+       $data=$Db->where(["username"=>$post["username"]])->select();
+       $newData=[];
+       foreach ($data as $k=>$v){
+           $arr=[];
+           $arr["start"]=date("Y-m-d",$v["begin_work"]);
+           $arr["end"]=date("Y-m-d",$v["end_work"]);
+           $arr["title"]="";
+           if($v["begin_work"]>strtotime($arr["start"]."+9hours")){
+               $arr["title"]="迟到";
+               array_push($newData,$arr);
+           }
+           if($v["end_work"]<strtotime($arr["end"]."+18hours")){
+               $arr["title"]="早退";
+               array_push($newData,$arr);
+           }
+
+       }
+       return json(["data"=>$newData,"status"=>1]);
    }
 }

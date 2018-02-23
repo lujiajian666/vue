@@ -2,7 +2,7 @@
     <div id="WorkAttendance">
         <el-tabs v-model="activeName" @tab-click="handleClick" v-loading="loading">
             <el-tab-pane label="考勤记录" name="first">
-                <full-calendar :events="fcEvents"></full-calendar>
+                <full-calendar :events="fcEvents" v-if="fcEvents.length>0"></full-calendar>
             </el-tab-pane>
             <el-tab-pane label="签到" name="second">
                 <div id="clock">
@@ -28,18 +28,10 @@
                 week:['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'],
                 date: {
                     time: '',
-                    date:
-                        ''
-                }
-                ,
+                    date: ''
+                },
                 activeName: 'first',
-                fcEvents:[
-                    {
-                        title: '迟到',
-                        start: '2018-02-20',
-                        end: '2018-02-20'
-                    }
-                ]
+                fcEvents:[]
             }
         },
         components: {
@@ -92,6 +84,18 @@
         created: function () {
             setInterval(this.updateTime, 1000);
             this.updateTime();
+            var _self=this;
+            var data=new FormData();
+            data.append("username",vuexHandle.getVuex(this,"username"));
+            _self.loading=true;
+            this.$axios.post(this.$store.state.phpUrl + 'admin/vacation/getAttendance',
+                data).then(function (response) {
+                var data=response.data;
+                if(data.status==1){
+                    _self.fcEvents=data.data;
+                }
+                _self.loading=false;
+            })
         },
         watch: {
             '$route'(to, from) {
