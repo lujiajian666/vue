@@ -12,13 +12,16 @@
                      <img :src="p.src" style="float: left">
                      <div>
                          <p>
-                             姓名:{{p.name}}&nbsp;&nbsp;&nbsp;
-                             职称:{{p.jobTitle}}&nbsp;&nbsp;&nbsp;
-                             ID:{{p.id}}
+                             <span style="display: inline-block;width: 120px">ID：{{p.id}}</span>
+                             <span style="display: inline-block;width: 100px">账号：{{p.username}}</span>
                          </p>
                          <p>
-                             入职时间:{{p.time}}&nbsp;&nbsp;&nbsp;
-                             工资:{{p.salary}}
+                             <span style="display: inline-block;width: 120px">姓名：{{p.name}}</span>
+                             <span style="display: inline-block;width: 200px">职称：{{p.jobTitle}}</span>
+                         </p>
+                         <p>
+                             <span style="display: inline-block;width: 120px">工资：{{p.salary}}</span>
+                             <span style="display: inline-block;width: 200px">入职：{{timeHandle.format("Y年m月d日",p.time)}}</span>
                          </p>
                      </div>
                      <div class="button1" @click="changeAlter($event)" :data-id="p.id">
@@ -46,9 +49,11 @@
     import search_div from '@/components/searchDiv';
     import alertBox from '@/components/tool/alertBox';
     import alterBox from '@/components/tool/alertBox';
+    import { timeHandle } from "../../lib/utils.js"
     export default {
         data() {
             return {
+                timeHandle:timeHandle,
                 people:[],
                 alert:false,
                 alter:false,
@@ -77,7 +82,6 @@
             getEmployee:function (id) {
                 var data=new FormData();
                 var _self=this;
-                var returnData;
                 data.append("id",id);
 
                 this.$axios.post(this.$store.state.phpUrl +'admin/background/getEmployeeById',

@@ -89,16 +89,43 @@ class Vacation extends Controller
            $arr["start"]=date("Y-m-d",$v["begin_work"]);
            $arr["end"]=date("Y-m-d",$v["end_work"]);
            $arr["title"]="";
-           if($v["begin_work"]>strtotime($arr["start"]."+9hours")){
-               $arr["title"]="迟到";
-               array_push($newData,$arr);
-           }
            if($v["end_work"]<strtotime($arr["end"]."+18hours")){
                $arr["title"]="早退";
                array_push($newData,$arr);
            }
+           if($v["begin_work"]>strtotime($arr["start"]."+9hours")){
+               $arr["title"]="迟到";
+               array_push($newData,$arr);
+           }
+
 
        }
        return json(["data"=>$newData,"status"=>1]);
+   }
+   public function applyVerify(){
+       $Db=Db::name($this->tableVacation);
+       $data=$Db->where(["status"=>0])->order("time desc")->select();
+       foreach ($data as &$v){
+           $v["begin_time"]=date("Y-m-d",$v["begin_time"]);
+           $v["end_time"]=date("Y-m-d",$v["end_time"]);
+       }
+       return json($data);
+   }
+   public function applyHandle(){
+       $Db=Db::name($this->tableVacation);
+       $post=$this->request->post();
+       if($post["type"]=="ban"){
+           $res=$Db->where(["id"=>$post["id"]])->update(["status"=>2]);
+       }
+       else{
+           $res=$Db->where(["id"=>$post["id"]])->update(["status"=>1]);
+       }
+
+       if($res){
+           return json(['status'=>1]);
+       }else{
+           return json(['status'=>0]);
+       }
+
    }
 }

@@ -99,7 +99,7 @@
                 apply:[
                     {name:"休假申请",type:"vacationApply"},
                     {name:"查看考勤",type:"workAttendance"},
-                    {name:"休假审核",type:"applyVerify"}
+                    {name:"休假审核",type:"attendanceVerify"}
                 ]
             }
         },

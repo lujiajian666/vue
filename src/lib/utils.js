@@ -37,4 +37,17 @@ const vuexHandle={
         }
     }
 }
-export { cookieHandle,vuexHandle };
+const timeHandle={
+    format(str,timestamp){
+       var date=new Date(timestamp*1000);
+       var year=date.getFullYear();
+       var month=date.getMonth()+1;
+       var day=date.getDay();
+       var weekDay=date.getDate();
+        str=str.replace(/Y/,year)
+        str=str.replace(/m/,month)
+        str=str.replace(/d/,day)
+        return str;
+    }
+}
+export { cookieHandle,vuexHandle,timeHandle };

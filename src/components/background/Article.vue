@@ -14,24 +14,27 @@
           啥都没有
         </div>
         <div v-if="tableData.length" class="div">
-          <table>
-            <tbody>
-            <tr>
-              <th style="width: 30%;text-align: center">标题</th>
-              <th style="width: 40%;text-align: center">内容</th>
-              <th style="width: 30%;text-align: center;">操作</th>
-            </tr>
-            <tr v-for="val in tableData">
-              <td style="text-align: center">{{val['title']}}</td>
-              <td>{{val['content']}}</td>
-              <td style="text-align: center">
-                <i class="el-icon-edit" @click="editArticle(val['article_id'])"></i>
-                &nbsp;&nbsp;&nbsp;
-                <i class="el-icon-delete" @click="deleteArticle(val['article_id'])"></i>
-              </td>
-            </tr>
-            </tbody>
-          </table>
+          <el-table
+                  :data="tableData"
+                  border
+                  style="width: 98%;margin: 10px auto;text-align: left">
+            <el-table-column
+                    prop="title"
+                    label="标题">
+            </el-table-column>
+            <el-table-column
+                    prop="content"
+                    label="内容">
+            </el-table-column>
+            <el-table-column
+                    label="操作"
+                    width="100">
+              <template slot-scope="scope">
+                <el-button type="text" size="small" @click="deleteArticle(val['article_id'])">删除</el-button>
+                <el-button type="text" size="small" @click="editArticle(val['article_id'])">编辑</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
         </div>
         <div v-if="tableData.length" style="position: absolute;bottom: 30px;left: 0">
           <el-pagination
