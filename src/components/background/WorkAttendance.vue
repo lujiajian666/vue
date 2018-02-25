@@ -2,7 +2,7 @@
     <div id="WorkAttendance">
         <el-tabs v-model="activeName" @tab-click="handleClick" v-loading="loading">
             <el-tab-pane label="考勤记录" name="first">
-                <full-calendar :events="fcEvents" v-if="fcEvents.length>0"></full-calendar>
+                <full-calendar :events="fcEvents" @changeMonth="changeMonth"></full-calendar>
             </el-tab-pane>
             <el-tab-pane label="签到" name="second">
                 <div id="clock">
@@ -79,6 +79,9 @@
                     }
                     _self.loading=false;
                 })
+            },
+            changeMonth(start, end, current){
+                console.log(current)
             }
         },
         created: function () {
@@ -87,6 +90,7 @@
             var _self=this;
             var data=new FormData();
             data.append("username",vuexHandle.getVuex(this,"username"));
+            data.append("currentTime",Math.floor(new Date().getTime()/1000));
             _self.loading=true;
             this.$axios.post(this.$store.state.phpUrl + 'admin/vacation/getAttendance',
                 data).then(function (response) {
@@ -107,7 +111,7 @@
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="less">
+<style  lang="less">
     #WorkAttendance {
         padding: 10px;
     }
@@ -137,5 +141,21 @@
         letter-spacing: 0.1em;
         font-size: 12px;
         padding: 20px 0 0;
+    }
+    .late{
+        background-color: orange !important;
+        color: white !important;
+    }
+    .normal{
+        background-color: green !important;
+        color: white !important;
+    }
+    .leaveEarly{
+        background-color: rgba(54, 99, 255, 0.53) !important;
+        color: white !important;
+    }
+    .absent{
+        background-color: red !important;
+        color: white !important;
     }
 </style>

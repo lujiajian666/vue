@@ -11,6 +11,16 @@ class Vacation extends Controller
 {
    private $tableVacation='vacation';
    private $tableWorkattendance="workattendance";
+   private function getMonthTimeStamp($timestamp){
+       $nowMonth=date("m",$timestamp);
+       $nowYear=date("Y",$timestamp);
+       $nextMonth=($nowMonth+1)>12?1:($nowMonth+1);
+       $nextYear=$nextMonth==1?$nowYear+1:$nowYear;
+       $startDate=strtotime(date("Y-m",$timestamp));
+       $endDate =strtotime($nextYear."-".$nextMonth);
+       $endDate =$endDate>strtotime(date("Y-m-d",time())."+1day")?strtotime(date("Y-m-d",time())."+1day"):$endDate;
+       return array("start"=>$startDate,"end"=>$endDate);
+   }
    public function addVacation(){
      $post=$this->request->post();
      $arr=array(
@@ -82,24 +92,65 @@ class Vacation extends Controller
    public function getAttendance(){
        $Db=Db::name($this->tableWorkattendance);
        $post=$this->request->post();
-       $data=$Db->where(["username"=>$post["username"]])->select();
        $newData=[];
+       //ljj 这个月的开始和结束
+       $month=$this->getMonthTimeStamp($post["currentTime"]);
+       $start=$month["start"];
+       $end=$month["end"];
+       //ljj 生成这个月的每日
+       for($i=$start;$i<$end;$i+=86400){
+           $arr=[];
+           $arr["start"]=$arr["end"]=date("Y-m-d",$i);
+           $arr["title"]="旷工";
+           $arr['cssClass']="absent";
+           array_push($newData,$arr);
+       }
+       $data=$Db->where(
+           "username=$post[username] and ".
+                  "begin_work>=$start and ".
+                  "begin_work<=$end"
+       )->select();
+       //ljj 正常，迟到，早退
+       $add=[];
        foreach ($data as $k=>$v){
            $arr=[];
-           $arr["start"]=date("Y-m-d",$v["begin_work"]);
-           $arr["end"]=date("Y-m-d",$v["end_work"]);
-           $arr["title"]="";
-           if($v["end_work"]<strtotime($arr["end"]."+18hours")){
-               $arr["title"]="早退";
-               array_push($newData,$arr);
+           $arr["start"]=$arr["end"]=date("Y-m-d",$v["today_time"]);
+           if($v["end_work"]<strtotime($arr["end"]."+18hours") && $v["end_work"]!=""){
+               for($i=$k;$i<count($newData);$i++){
+                   if($newData[$i]["start"]==$arr["start"]){
+                       $newData[$i]["title"]="早退";
+                       $newData[$i]["cssClass"]="leaveEarly";
+                       break;
+                   }
+               }
            }
            if($v["begin_work"]>strtotime($arr["start"]."+9hours")){
-               $arr["title"]="迟到";
-               array_push($newData,$arr);
+               for($i=$k;$i<count($newData);$i++){
+                   if($newData[$i]["start"]==$arr["start"]){
+                       if($newData[$i]["title"]!="旷工"){
+                           $arr["title"]="迟到";
+                           $arr["cssClass"]="late";
+                           array_push($add,$arr);
+                       }else{
+                           $newData[$i]["title"]="迟到";
+                           $newData[$i]["cssClass"]="late";
+                       }
+                       break;
+                   }
+               }
            }
-
-
+           if(!$v["begin_work"]>strtotime($arr["start"]."+9hours") &&
+              !$v["end_work"]<strtotime($arr["end"]."+18hours")){
+               for($i=$k;$i<count($newData);$i++){
+                   if($newData[$i]["start"]==$arr["start"]){
+                       $newData[$i]["title"]="正常";
+                       $newData[$i]["cssClass"]="normal";
+                       break;
+                   }
+               }
+           }
        }
+       $newData=array_merge($newData,$add);
        return json(["data"=>$newData,"status"=>1]);
    }
    public function applyVerify(){
