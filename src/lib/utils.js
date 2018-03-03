@@ -1,3 +1,4 @@
+import axios from "axios";
 const cookieHandle={
     setCookie: function (cname, cvalue, exdays) {
         var d = new Date();
@@ -50,4 +51,9 @@ const timeHandle={
         return str;
     }
 }
-export { cookieHandle,vuexHandle,timeHandle };
+const axiosHandle={
+    post(url,data){
+        return axios.post("http://localhost/vue-project-one/think5/public/index.php?s=" + url,data)
+    }
+}
+export { cookieHandle,vuexHandle,timeHandle,axiosHandle };

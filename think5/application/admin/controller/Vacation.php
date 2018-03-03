@@ -99,11 +99,13 @@ class Vacation extends Controller
        $end=$month["end"];
        //ljj 生成这个月的每日
        for($i=$start;$i<$end;$i+=86400){
-           $arr=[];
-           $arr["start"]=$arr["end"]=date("Y-m-d",$i);
-           $arr["title"]="旷工";
-           $arr['cssClass']="absent";
-           array_push($newData,$arr);
+           if(date("w",$i)!=0 && date("w",$i)!=6){
+               $arr=[];
+               $arr["start"]=$arr["end"]=date("Y-m-d",$i);
+               $arr["title"]="旷工";
+               $arr['cssClass']="absent";
+               array_push($newData,$arr);
+           }
        }
        $data=$Db->where(
            "username=$post[username] and ".
@@ -153,6 +155,7 @@ class Vacation extends Controller
        $newData=array_merge($newData,$add);
        return json(["data"=>$newData,"status"=>1]);
    }
+   //ljj 休假审核显示数据
    public function applyVerify(){
        $Db=Db::name($this->tableVacation);
        $data=$Db->where(["status"=>0])->order("time desc")->select();
@@ -162,6 +165,7 @@ class Vacation extends Controller
        }
        return json($data);
    }
+   //ljj休假审核处理
    public function applyHandle(){
        $Db=Db::name($this->tableVacation);
        $post=$this->request->post();
@@ -179,4 +183,13 @@ class Vacation extends Controller
        }
 
    }
+   public static function authority(){
+       return array(
+           array(
+               "name"=>"休假管理-休假申请审核",
+               "controller"=>"Vacation",
+               "action"    =>"applyHandle"
+           )
+       );
+    }
 }

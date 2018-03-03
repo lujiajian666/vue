@@ -10,9 +10,11 @@ import BackgroundIndex from '@/components/background/BackgroundIndex';
 import B_First from '@/components/background/B_First';
 import Article from '@/components/background/Article';
 import News from '@/components/news';
-import VacationApply from '@/components/background/VacationApply'
-import WorkAttendance from '@/components/background/WorkAttendance'
-import AttendanceVerify from '@/components/background/AttendanceVerify'
+import VacationApply from '@/components/background/VacationApply';
+import WorkAttendance from '@/components/background/WorkAttendance';
+import AttendanceVerify from '@/components/background/AttendanceVerify';
+import Role from '@/components/background/Role';
+import Authority from '@/components/background/Authority'
 Vue.use(Router)
 
 export default new Router({
@@ -55,6 +57,16 @@ export default new Router({
                     path:'attendanceVerify',
                     name:'attendanceVerify',
                     component: AttendanceVerify
+                },
+                {
+                    path:'role',
+                    name:'role',
+                    component:Role
+                },
+                {
+                    path:'authority',
+                    name:'authority',
+                    component:Authority
                 }
             ]
         }

@@ -145,10 +145,8 @@
           },
           isEmpty:function (a) {
                 if(a!=0 && a!=''){
-                    console.log("a="+a+" return false")
                     return false;
                 }else{
-                    console.log("b="+a+" return true")
                     return true;
                 }
           }

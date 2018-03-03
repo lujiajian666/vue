@@ -81,7 +81,19 @@
                 })
             },
             changeMonth(start, end, current){
-                console.log(current)
+                var _self=this;
+                var data=new FormData();
+                data.append("username",vuexHandle.getVuex(this,"username"));
+                data.append("currentTime",Math.floor(new Date(current).getTime()/1000));
+                _self.loading=true;
+                this.$axios.post(this.$store.state.phpUrl + 'admin/vacation/getAttendance',
+                    data).then(function (response) {
+                    var data=response.data;
+                    if(data.status==1){
+                        _self.fcEvents=data.data;
+                    }
+                    _self.loading=false;
+                })
             }
         },
         created: function () {

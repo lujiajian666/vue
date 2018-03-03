@@ -32,7 +32,6 @@ class Background extends Controller
             return json(["status" => 0]);
         }
     }
-
     public function addEmployee()
     {
         $post = $this->request->post();
@@ -54,7 +53,6 @@ class Background extends Controller
         }
 
     }
-
     public function editEmployee()
     {
         $post = $this->request->post();
@@ -87,7 +85,6 @@ class Background extends Controller
         }
 
     }
-
     public function getEmployee()
     {
         $post = $this->request->post();
@@ -102,7 +99,6 @@ class Background extends Controller
             return json(["status" => 0, "error" => Db::name($this->tableEmployee)->getLastSql()]);
         }
     }
-
     public function getEmployeeById()
     {
         $post = $this->request->post();
@@ -121,7 +117,6 @@ class Background extends Controller
             return json(["status" => 0, "error" => Db::name($this->tableEmployee)->getLastSql()]);
         }
     }
-
     public function deleteEmployeeById()
     {
         $post = $this->request->post();
@@ -136,16 +131,40 @@ class Background extends Controller
             return json(["status" => 0, "error" => Db::name($this->tableEmployee)->getLastSql()]);
         }
     }
-
     public function selectJobTitle()
     {
         $data = Db::name($this->tableJobTitle)->order("department_id asc")->select();
         return json($data);
     }
-
     public function selectDepartment()
     {
         $data = Db::name($this->tableDepartment)->order("id asc")->select();
         return json($data);
+    }
+    public static function authority(){
+        return array(
+            array(
+                "name"=>"人事管理-添加",
+                "controller"=>"Background",
+                "action"=>"addEmployee",
+
+            ),
+            array(
+                "name"=>"人事管理-查看",
+                "controller"=>"Background",
+                "action"=>"index",
+
+            ),
+            array(
+                "name"=>"人事管理-删除",
+                "controller"=>"Background",
+                "action"=>"deleteEmployeeById"
+            ),
+            array(
+                "name"=>"人事管理-编辑",
+                "controller"=>"Background",
+                "action"=>"editEmployee"
+            )
+        );
     }
 }

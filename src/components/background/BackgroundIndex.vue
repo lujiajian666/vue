@@ -36,10 +36,10 @@
                         </li>
                         <li class="hideUl" v-show="hideUl[1]">
                             <ul>
-                                <li>部门1</li>
-                                <li>部门2</li>
-                                <li>部门3</li>
-                                <li>部门4</li>
+                                <router-link v-for="value in authority" tag="li"
+                                             :to="{name:value['type']}">
+                                    {{value['name']}}
+                                </router-link>
                             </ul>
                         </li>
                     </ul>
@@ -100,6 +100,10 @@
                     {name:"休假申请",type:"vacationApply"},
                     {name:"查看考勤",type:"workAttendance"},
                     {name:"休假审核",type:"attendanceVerify"}
+                ],
+                authority:[
+                    {name:"角色管理",type:"role"},
+                    {name:"基本权限",type:"authority"}
                 ]
             }
         },

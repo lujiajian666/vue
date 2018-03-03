@@ -67,4 +67,28 @@ class Article extends Controller
            return json(["status"=>0]);
         }
     }
+    public static function authority(){
+        return array(
+            array(
+                "name"=>"文章管理-添加",
+                "controller"=>"Article",
+                "action"    =>"addArticle"
+            ),
+            array(
+                "name"=>"文章管理-查看",
+                "controller"=>"Article",
+                "action"=>"getArticle"
+            ),
+            array(
+                "name"=>"文章管理-删除",
+                "controller"=>"Article",
+                "action"=>"deleteArticle"
+            ),
+            array(
+                "name"=>"文章管理-编辑",
+                "controller"=>"Article",
+                "action"=>"editArticle"
+            )
+        );
+    }
 }
