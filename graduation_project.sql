@@ -69,6 +69,33 @@ INSERT INTO `article_type` VALUES (1,'热点服务'),(2,'今日关注'),(3,'活�
 UNLOCK TABLES;
 
 --
+-- Table structure for table `authority_item`
+--
+
+DROP TABLE IF EXISTS `authority_item`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `authority_item` (
+  `controller` varchar(100) DEFAULT NULL,
+  `action` varchar(100) DEFAULT NULL,
+  `awaken` tinyint(4) DEFAULT NULL,
+  `id` int(11) NOT NULL,
+  `name` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `authority_item`
+--
+
+LOCK TABLES `authority_item` WRITE;
+/*!40000 ALTER TABLE `authority_item` DISABLE KEYS */;
+INSERT INTO `authority_item` VALUES ('Article','addArticle',NULL,0,'文章管理-添加'),('Article','getArticle',NULL,1,'文章管理-查看'),('Article','deleteArticle',NULL,2,'文章管理-删除'),('Authority','editRole',NULL,13,'权限管理-角色管理配置'),('Vacation','applyHandle',NULL,14,'休假管理-休假申请审核');
+/*!40000 ALTER TABLE `authority_item` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `department`
 --
 
@@ -106,8 +133,14 @@ CREATE TABLE `employee` (
   `head_img` varchar(80) DEFAULT NULL,
   `time` int(11) DEFAULT '0',
   `department_id` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+  `username` varchar(64) DEFAULT NULL,
+  `password` varchar(64) NOT NULL DEFAULT 'admin',
+  `role` int(11) DEFAULT '0',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `username` (`username`),
+  UNIQUE KEY `username_2` (`username`),
+  UNIQUE KEY `username_3` (`username`)
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -116,7 +149,7 @@ CREATE TABLE `employee` (
 
 LOCK TABLES `employee` WRITE;
 /*!40000 ALTER TABLE `employee` DISABLE KEYS */;
-INSERT INTO `employee` VALUES (2,'陆家键2',2,'',1515998695,1),(3,'lujiajian3',1,'',1516025261,2),(6,'行政1',1,'',1516628988,4),(7,'陆家键',1,'',1516629128,3),(9,'陆家键',1,'',1516632874,1);
+INSERT INTO `employee` VALUES (11,'陆家键',1,'',1519454329,1,'54329','admin',7),(12,'陆家键2',1,'',1520078942,1,'78942','admin',7),(13,'何佩瑜',1,'',1520078970,2,'78970','admin',6),(14,'黄子豪',1,'',1520078995,3,'78995','admin',0),(15,'莫晚晴',1,'',1520079131,2,'79131','admin',6),(16,'刘锡明',1,'',1520079144,3,'79144','admin',0),(17,'刘玉栋',1,'',1520079160,2,'79160','admin',6);
 /*!40000 ALTER TABLE `employee` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -149,30 +182,53 @@ INSERT INTO `job_title` VALUES (1,'高级软件工程师',10000,1);
 UNLOCK TABLES;
 
 --
--- Table structure for table `member`
+-- Table structure for table `role`
 --
 
-DROP TABLE IF EXISTS `member`;
+DROP TABLE IF EXISTS `role`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `member` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `username` varchar(64) NOT NULL,
-  `password` varchar(64) NOT NULL,
-  `last_login_time` int(11) NOT NULL,
-  `this_login_time` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+CREATE TABLE `role` (
+  `name` varchar(100) DEFAULT NULL,
+  `role_id` int(11) NOT NULL AUTO_INCREMENT,
+  `detail` varchar(100) NOT NULL,
+  PRIMARY KEY (`role_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `member`
+-- Dumping data for table `role`
 --
 
-LOCK TABLES `member` WRITE;
-/*!40000 ALTER TABLE `member` DISABLE KEYS */;
-INSERT INTO `member` VALUES (1,'lujiajian','lujiajian',11111111,111111);
-/*!40000 ALTER TABLE `member` ENABLE KEYS */;
+LOCK TABLES `role` WRITE;
+/*!40000 ALTER TABLE `role` DISABLE KEYS */;
+INSERT INTO `role` VALUES ('超级管理员',6,'123'),('adf',7,'dsaffd');
+/*!40000 ALTER TABLE `role` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `role_item`
+--
+
+DROP TABLE IF EXISTS `role_item`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `role_item` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `role_id` int(11) DEFAULT NULL,
+  `authority_item_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `role_item`
+--
+
+LOCK TABLES `role_item` WRITE;
+/*!40000 ALTER TABLE `role_item` DISABLE KEYS */;
+INSERT INTO `role_item` VALUES (6,1,2),(7,1,13),(10,4,0);
+/*!40000 ALTER TABLE `role_item` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -191,7 +247,7 @@ CREATE TABLE `vacation` (
   `status` varchar(1) DEFAULT '0',
   `username` varchar(64) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -200,8 +256,35 @@ CREATE TABLE `vacation` (
 
 LOCK TABLES `vacation` WRITE;
 /*!40000 ALTER TABLE `vacation` DISABLE KEYS */;
-INSERT INTO `vacation` VALUES (3,1517414400,1517587200,1518040039,'阿斯蒂芬','0','lujiajian');
+INSERT INTO `vacation` VALUES (3,1517414400,1517587200,1518040039,'阿斯蒂芬','1','lujiajian'),(4,1517587200,1520092800,1518945203,'回家生孩子','2','lujiajian');
 /*!40000 ALTER TABLE `vacation` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `workattendance`
+--
+
+DROP TABLE IF EXISTS `workattendance`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `workattendance` (
+  `begin_work` int(11) NOT NULL,
+  `end_work` int(11) DEFAULT NULL,
+  `today_time` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(64) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `workattendance`
+--
+
+LOCK TABLES `workattendance` WRITE;
+/*!40000 ALTER TABLE `workattendance` DISABLE KEYS */;
+INSERT INTO `workattendance` VALUES (1519521968,1519529599,1519488000,4,'54329'),(1519610288,NULL,1519574400,5,'54329'),(1519801283,1519801287,1519747200,6,'54329');
+/*!40000 ALTER TABLE `workattendance` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -213,3 +296,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
+-- Dump completed on 2018-03-03 21:20:20
