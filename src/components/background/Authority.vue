@@ -89,6 +89,7 @@
         },
         created(){
             var _self=this;
+            axiosHandle.setThis(this);
             //ljj 获取所有基本权限项
             axiosHandle.post("admin/authority/getAuthority",[])
                 .then(function (response) {

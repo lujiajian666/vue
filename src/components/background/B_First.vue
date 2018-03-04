@@ -13,15 +13,18 @@
                      <div>
                          <p>
                              <span style="display: inline-block;width: 120px">ID：{{p.id}}</span>
-                             <span style="display: inline-block;width: 100px">账号：{{p.username}}</span>
+                             <span style="display: inline-block;">账号：{{p.username}}</span>
                          </p>
                          <p>
                              <span style="display: inline-block;width: 120px">姓名：{{p.name}}</span>
-                             <span style="display: inline-block;width: 200px">职称：{{p.jobTitle}}</span>
+                             <span style="display: inline-block;">职称：{{p.jobTitle}}</span>
                          </p>
                          <p>
                              <span style="display: inline-block;width: 120px">工资：{{p.salary}}</span>
-                             <span style="display: inline-block;width: 200px">入职：{{timeHandle.format("Y年m月d日",p.time)}}</span>
+                             <span style="display: inline-block;">入职：{{timeHandle.format("Y年m月d日",p.time)}}</span>
+                         </p>
+                         <p>
+                             权限id:{{p.role}}
                          </p>
                      </div>
                      <div class="button1" @click="changeAlter($event)" :data-id="p.id">
@@ -49,7 +52,7 @@
     import search_div from '@/components/searchDiv';
     import alertBox from '@/components/tool/alertBox';
     import alterBox from '@/components/tool/alertBox';
-    import { timeHandle } from "../../lib/utils.js"
+    import { timeHandle,axiosHandle } from "../../lib/utils.js"
     export default {
         data() {
             return {
@@ -84,8 +87,7 @@
                 var _self=this;
                 data.append("id",id);
 
-                this.$axios.post(this.$store.state.phpUrl +'admin/background/getEmployeeById',
-                    data)
+                axiosHandle.post('admin/background/getEmployeeById', data)
                     .then(function (response) {
                         var data=response.data;
                         if(data.status==1){
@@ -112,8 +114,7 @@
                 data.append("department",department);
 
 
-                this.$axios.post(this.$store.state.phpUrl +'admin/background/getEmployee',
-                    data)
+                axiosHandle.post('admin/background/getEmployee', data)
                     .then(function (response) {
                         var data=response.data;
                         if(data.status==1){
@@ -139,8 +140,7 @@
                 var data=new FormData();
                 data.append("id",id);
                 //ljj 根据id删除员工
-                this.$axios.post(this.$store.state.phpUrl +'admin/background/deleteEmployeeById',
-                    data)
+                axiosHandle.post('admin/background/deleteEmployeeById', data)
                     .then(function (response) {
                         var data=response.data;
                         if(data.status==1){
@@ -162,6 +162,7 @@
             }
         },
         created:function () {
+            axiosHandle.setThis(this);
             if(this.$route.query.department!=undefined){
                 this.getAllEmployee(this.$route.query.department);
             }

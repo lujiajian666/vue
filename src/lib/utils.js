@@ -1,4 +1,5 @@
 import axios from "axios";
+
 const cookieHandle={
     setCookie: function (cname, cvalue, exdays) {
         var d = new Date();
@@ -52,8 +53,23 @@ const timeHandle={
     }
 }
 const axiosHandle={
+    _self:'',
+    setThis(_self){
+        this._self=_self;
+    },
     post(url,data){
         return axios.post("http://localhost/vue-project-one/think5/public/index.php?s=" + url,data)
-    }
+               .then((res,reject)=>{
+                   if(res.data=="no_permit"){
+                       this._self.$alert('您的权限不足', '警告', {
+                           confirmButtonText: '确定',
+                       });
+                       reject();
+                   }else{
+                       return res;
+                   }
+               })
+    },
+
 }
 export { cookieHandle,vuexHandle,timeHandle,axiosHandle };

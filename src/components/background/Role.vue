@@ -197,6 +197,14 @@
                 axiosHandle.post("admin/Authority/getRole")
                     .then(function(res){
                         _self.tableData=res.data
+                        //ljj 获取所有配置为可用的基本权限
+                        var data=new FormData();
+                        data.append("type","role")
+                        axiosHandle.post("admin/Authority/getAuthority",data)
+                            .then(function (res) {
+                                _self.allData=res.data;
+                                _self.data=_self.generateData(res.data);
+                            })
                     })
             },
             deleteRole(index,row){
@@ -335,16 +343,10 @@
         },
         created(){
             var _self=this;
+            //ljj 设置指针
+            axiosHandle.setThis(this)
             //ljj 获取角色
             this.getRole(_self);
-            //ljj 获取所有配置为可用的基本权限
-            var data=new FormData();
-            data.append("type","role")
-            axiosHandle.post("admin/Authority/getAuthority",data)
-                .then(function (res) {
-                    _self.allData=res.data;
-                    _self.data=_self.generateData(res.data);
-                })
             //ljj 获取所有部门
             axiosHandle.post('admin/background/selectDepartment',[])
                 .then(function (response) {

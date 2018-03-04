@@ -6,10 +6,11 @@ use think\Controller;
 use think\Db;
 
 header('content-type:application:json;charset=utf8');
-header('Access-Control-Allow-Origin:*');   // 指定允许其他域名访问
+header('Access-Control-Allow-Credentials: true');
+header('Access-Control-Allow-Origin:http://127.0.0.1:20000');   // 指定允许其他域名访问
 header('Access-Control-Allow-Headers:x-requested-with,content-type');// 响应头设置
 
-class Background extends Controller
+class Background extends Base
 {
 
     private $tableMember = "employee";
@@ -27,6 +28,23 @@ class Background extends Controller
         $data = $db->where("username", $post["username"])->
         where("password", $post["password"])->find();
         if ($data != null) {
+            //ljj 找出用户的权限,存入session
+            $db_role_item=Db::name("role_item");
+            $role_item_arr=$db_role_item->where("role_id = $data[role]")->select();
+            $role_item=[];
+            foreach ($role_item_arr as $value){
+                $role_item[]=$value["authority_item_id"];
+            };unset($value);
+            $db_authority=Db::name("authority_item");
+            $authority=$db_authority->where("id","in",$role_item)->select();
+            $sesson_authority=[];
+            foreach ($authority as $value){
+                if(empty($sesson_authority[$value["controller"]])){
+                    $sesson_authority[$value["controller"]]=[];
+                }
+                $sesson_authority[$value["controller"]][strtolower($value["action"])]=$value["name"];
+            }
+            setcookie("authority", serialize($sesson_authority),time()+3600);
             return json(["status" => 1, "username" => $post["username"]]);
         } else {
             return json(["status" => 0]);
@@ -34,6 +52,7 @@ class Background extends Controller
     }
     public function addEmployee()
     {
+        $this->authorityVerify();
         $post = $this->request->post();
         $picRes = upload("head_img");
         $pic = ($picRes[1] == 1) ? $picRes[0] : "";
@@ -53,8 +72,8 @@ class Background extends Controller
         }
 
     }
-    public function editEmployee()
-    {
+    public function editEmployee(){
+        $this->authorityVerify();
         $post = $this->request->post();
         //ljj先记录原来的信息
         $manData = Db::name($this->tableEmployee)->where("id=$post[id]")->find();
@@ -64,7 +83,6 @@ class Background extends Controller
 
         $arr = array(
             "name" => $post["name"],
-            "username" => $post["name"],
             "job_title_id" => $post["title"],
             "department_id" => $post["department"]
         );
@@ -87,10 +105,11 @@ class Background extends Controller
     }
     public function getEmployee()
     {
+        $this->authorityVerify();
         $post = $this->request->post();
         $employeeData = Db::name($this->tableEmployee)->alias("a")
             ->join("job_title b", "a.job_title_id = b.id")
-            ->field("a.username,a.head_img as src,a.name,a.time,b.title as jobTitle,a.id,b.salary")
+            ->field("a.role,a.username,a.head_img as src,a.name,a.time,b.title as jobTitle,a.id,b.salary")
             ->where("a.department_id=$post[department]")->select();
 
         if ($employeeData != null) {
@@ -117,8 +136,8 @@ class Background extends Controller
             return json(["status" => 0, "error" => Db::name($this->tableEmployee)->getLastSql()]);
         }
     }
-    public function deleteEmployeeById()
-    {
+    public function deleteEmployeeById(){
+        $this->authorityVerify();
         $post = $this->request->post();
         $employeeData = Db::name($this->tableEmployee)->where("id = $post[id]")->find();
         if ($employeeData["head_img"] != "") {
@@ -152,7 +171,7 @@ class Background extends Controller
             array(
                 "name"=>"人事管理-查看",
                 "controller"=>"Background",
-                "action"=>"index",
+                "action"=>"getEmployee",
 
             ),
             array(

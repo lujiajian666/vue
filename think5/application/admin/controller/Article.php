@@ -3,11 +3,13 @@ namespace app\admin\controller;
 use think\Controller;
 use think\Db;
 
+
 header('content-type:application:json;charset=utf8');
-header('Access-Control-Allow-Origin:*');   // 指定允许其他域名访问
+header('Access-Control-Allow-Credentials: true');
+header('Access-Control-Allow-Origin:http://127.0.0.1:20000');   // 指定允许其他域名访问
 header('Access-Control-Allow-Headers:x-requested-with,content-type');// 响应头设置
 
-class Article extends Controller
+class Article extends Base
 {
 
     private $tableMember="member";
@@ -21,6 +23,7 @@ class Article extends Controller
         return json($article_type);
     }
     public function addArticle(){
+        $this->authorityVerify();
         $article=Db::name($this->tableArticle);
         $post=$this->request->post();
         $data=array(
@@ -37,11 +40,13 @@ class Article extends Controller
         }
     }
     public function getArticle(){
+        $this->authorityVerify();
         $post=$this->request->post();
         $arr=Db::name($this->tableArticle)->where("type=$post[type]")->order("sort desc")->select();
         return json($arr);
     }
     public function deleteArticle(){
+        $this->authorityVerify();
         $post=$this->request->post();
         $arr=Db::name($this->tableArticle)->where("article_id=$post[article_id]")->delete();
         if($arr){
@@ -52,6 +57,7 @@ class Article extends Controller
 
     }
     public function editArticle(){
+        $this->authorityVerify();
         $article=Db::name($this->tableArticle);
         $post=$this->request->post();
         $data=array(
@@ -70,14 +76,14 @@ class Article extends Controller
     public static function authority(){
         return array(
             array(
-                "name"=>"文章管理-添加",
-                "controller"=>"Article",
-                "action"    =>"addArticle"
-            ),
-            array(
                 "name"=>"文章管理-查看",
                 "controller"=>"Article",
                 "action"=>"getArticle"
+            ),
+            array(
+                "name"=>"文章管理-添加",
+                "controller"=>"Article",
+                "action"    =>"addArticle"
             ),
             array(
                 "name"=>"文章管理-删除",

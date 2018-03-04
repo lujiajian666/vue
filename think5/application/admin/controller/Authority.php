@@ -4,15 +4,17 @@ use think\Controller;
 use think\Db;
 
 header('content-type:application:json;charset=utf8');
-header('Access-Control-Allow-Origin:*');   // 指定允许其他域名访问
+header('Access-Control-Allow-Credentials: true');
+header('Access-Control-Allow-Origin:http://127.0.0.1:20000');   // 指定允许其他域名访问
 header('Access-Control-Allow-Headers:x-requested-with,content-type');// 响应头设置
 
-class Authority extends Controller
+class Authority extends Base
 {
    private $tableAuthorityItem="authority_item";
    private $tableRole="role";
    private $tableRoleItem="role_item";
    public function getAuthority(){
+       $this->authorityVerify();
       if($this->request->post("type")=="role"){
           $Db=Db::name($this->tableAuthorityItem);
           $arr=$Db->select();
@@ -40,6 +42,7 @@ class Authority extends Controller
 
    }
    public function saveAuthority(){
+       $this->authorityVerify();
       $post=$this->request->post();
       $arr=array();
 
@@ -61,10 +64,12 @@ class Authority extends Controller
       }
    }
    public function getRole(){
+       $this->authorityVerify();
        $db=Db::name($this->tableRole);
        return json($db->select());
    }
    public function addRole(){
+       $this->authorityVerify();
        $post=$this->request->post();
        $db=Db::name($this->tableRole);
        $data=array(
@@ -78,6 +83,7 @@ class Authority extends Controller
        }
    }
    public function deleteRole(){
+       $this->authorityVerify();
        $post=$this->request->post();
        $Db=Db::name($this->tableRole);
        if($Db->where("role_id = $post[role_id]")->delete()){
@@ -87,6 +93,7 @@ class Authority extends Controller
        }
    }
    public function editRole(){
+       $this->authorityVerify();
        $post=$this->request->post();
        $db=Db::name($this->tableRoleItem);
        $res=$db->where("role_id = $post[role_id]")->select();
@@ -102,6 +109,7 @@ class Authority extends Controller
 
    }
    public function saveRoleItem(){
+       $this->authorityVerify();
        $post=$this->request->post();
        $arr=array();
        $role_id=$post["role_id"];

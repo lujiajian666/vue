@@ -17,7 +17,7 @@
           <el-table
                   :data="tableData"
                   border
-                  style="width: 98%;margin: 10px auto;text-align: left">
+                  style=";text-align: left">
             <el-table-column
                     prop="title"
                     label="标题">
@@ -30,8 +30,8 @@
                     label="操作"
                     width="100">
               <template slot-scope="scope">
-                <el-button type="text" size="small" @click="deleteArticle(val['article_id'])">删除</el-button>
-                <el-button type="text" size="small" @click="editArticle(val['article_id'])">编辑</el-button>
+                <el-button type="text" size="small" @click="deleteArticle(scope.row.article_id)">删除</el-button>
+                <el-button type="text" size="small" @click="editArticle(scope.row.article_id)">编辑</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -108,6 +108,7 @@
 </template>
 
 <script>
+  import { axiosHandle } from "../../lib/utils";
   import { Loading } from 'element-ui';
   export default {
     data() {
@@ -157,17 +158,17 @@
           data.append("title", this.form["title"]);
           data.append("sort", this.form["sort"]);
           data.append("content", this.form["desc"]);
-          data.append("type", this.$route.query.id)
-          var phpUrl=this.$store.state.phpUrl + 'admin/article/addArticle'
+          data.append("type", this.$route.query.id);
+          var phpUrl='admin/article/addArticle';
         }else{
           data.append("title", this.edit["title"]);
           data.append("sort", this.edit["sort"]);
           data.append("content", this.edit["content"]);
           data.append("article_id", this.edit["article_id"]);
-          data.append("type", this.$route.query.id)
-          var phpUrl=this.$store.state.phpUrl + 'admin/article/editArticle'
+          data.append("type", this.$route.query.id);
+          var phpUrl='admin/article/editArticle';
         }
-        this.$axios.post(phpUrl,data)
+        axiosHandle.post(phpUrl,data)
           .then(function (response) {
             var data = response.data;
             if (data.status == 1) {
@@ -198,8 +199,7 @@
         var type = this.$route.query.id;
         var data = new FormData();
         data.append("type", type);
-        this.$axios.post(this.$store.state.phpUrl + 'admin/article/getArticle'
-          , data)
+        axiosHandle.post('admin/article/getArticle', data)
           .then(function (response) {
             var data = response.data;
             _self.tableData = data;
@@ -214,8 +214,7 @@
           _self.wait=true;
         var data = new FormData();
         data.append("article_id", id);
-        this.$axios.post(this.$store.state.phpUrl + 'admin/article/deleteArticle'
-          , data)
+        axiosHandle.post('admin/article/deleteArticle', data)
           .then(function (response) {
             if (response.data.status == 1) {
               _self.$message({
@@ -269,6 +268,7 @@
     },
     created() {
       this.getArticle();
+      axiosHandle.setThis(this);
     }
 
   }
@@ -331,7 +331,7 @@
   }
 
   .div {
-    padding: 10px 5%;
+    padding: 10px 1%;
     height: 450px;
     overflow: auto;
   }

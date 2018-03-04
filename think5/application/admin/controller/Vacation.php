@@ -4,10 +4,11 @@ use think\Controller;
 use think\Db;
 
 header('content-type:application:json;charset=utf8');
-header('Access-Control-Allow-Origin:*');   // 指定允许其他域名访问
+header('Access-Control-Allow-Credentials: true');
+header('Access-Control-Allow-Origin:http://127.0.0.1:20000');   // 指定允许其他域名访问
 header('Access-Control-Allow-Headers:x-requested-with,content-type');// 响应头设置
 
-class Vacation extends Controller
+class Vacation extends Base
 {
    private $tableVacation='vacation';
    private $tableWorkattendance="workattendance";
@@ -157,6 +158,7 @@ class Vacation extends Controller
    }
    //ljj 休假审核显示数据
    public function applyVerify(){
+       $this->authorityVerify();
        $Db=Db::name($this->tableVacation);
        $data=$Db->where(["status"=>0])->order("time desc")->select();
        foreach ($data as &$v){
@@ -188,7 +190,7 @@ class Vacation extends Controller
            array(
                "name"=>"休假管理-休假申请审核",
                "controller"=>"Vacation",
-               "action"    =>"applyHandle"
+               "action"    =>"applyVerify"
            )
        );
     }

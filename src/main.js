@@ -8,6 +8,7 @@ import axios from "axios"
 import Vuex from 'vuex'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
+axios.defaults.withCredentials = true
 
 Vue.use(ElementUI);
 Vue.use(Vuex);

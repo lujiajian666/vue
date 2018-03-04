@@ -20,7 +20,7 @@
 
 <script>
     import fullCalendar from 'vue-fullcalendar'
-    import { vuexHandle } from "../../lib/utils.js"
+    import { vuexHandle,axiosHandle } from "../../lib/utils.js"
     export default {
         data() {
             return {
@@ -63,10 +63,10 @@
                 _self.loading=true;
                 var data=new FormData();
                 data.append("username",vuexHandle.getVuex(this,"username"))
-                this.$axios.post(this.$store.state.phpUrl + 'admin/vacation/addAttendance',
-                data).then(function (response) {
-                    var data=response.data;
-                    if(data.status==1){
+                axiosHandle.post('admin/vacation/addAttendance', data)
+                    .then(function (response) {
+                        var data=response.data;
+                        if(data.status==1){
                         _self.$message({
                             type: 'success',
                             message: data.txt
@@ -86,10 +86,10 @@
                 data.append("username",vuexHandle.getVuex(this,"username"));
                 data.append("currentTime",Math.floor(new Date(current).getTime()/1000));
                 _self.loading=true;
-                this.$axios.post(this.$store.state.phpUrl + 'admin/vacation/getAttendance',
-                    data).then(function (response) {
-                    var data=response.data;
-                    if(data.status==1){
+                axiosHandle.post('admin/vacation/getAttendance', data)
+                    .then(function (response) {
+                       var data=response.data;
+                       if(data.status==1){
                         _self.fcEvents=data.data;
                     }
                     _self.loading=false;
@@ -97,6 +97,7 @@
             }
         },
         created: function () {
+            axiosHandle.setThis(this);
             setInterval(this.updateTime, 1000);
             this.updateTime();
             var _self=this;
@@ -104,10 +105,10 @@
             data.append("username",vuexHandle.getVuex(this,"username"));
             data.append("currentTime",Math.floor(new Date().getTime()/1000));
             _self.loading=true;
-            this.$axios.post(this.$store.state.phpUrl + 'admin/vacation/getAttendance',
-                data).then(function (response) {
-                var data=response.data;
-                if(data.status==1){
+            axiosHandle.post('admin/vacation/getAttendance', data)
+                .then(function (response) {
+                    var data=response.data;
+                    if(data.status==1){
                     _self.fcEvents=data.data;
                 }
                 _self.loading=false;

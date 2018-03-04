@@ -30,7 +30,7 @@
 </template>
 
 <script>
-    import { cookieHandle,vuexHandle } from '../../lib/utils.js';
+    import { cookieHandle,vuexHandle,axiosHandle } from '../../lib/utils.js';
     export default {
         data() {
             return {
@@ -44,8 +44,7 @@
             login:function () {
                 var data=new FormData(document.getElementById("form"))
                 var _self=this;
-                this.$axios.post('http://localhost/vue-project-one/think5/public/index.php?s=admin/background/index.html',
-                  data)
+                axiosHandle.post('admin/background/index.html',data)
                     .then(function (response) {
                         var data=response.data;
                         if(data.status==1){
@@ -78,8 +77,7 @@
                 var data=new FormData();
                 data.append("username",username);
                 data.append("password",password);
-                this.$axios.post('http://localhost/vue-project-one/think5/public/index.php?s=admin/background/index.html',
-                    data)
+                axiosHandle.post('admin/background/index.html', data)
                     .then(function (response) {
                         var data=response.data;
                         if(data.status==1){
@@ -98,6 +96,7 @@
             }
         },
         created:function(){
+            axiosHandle.setThis(this);
             const username=cookieHandle.getCookie("username");
             const password=cookieHandle.getCookie("password");
             const isRemember=username!="" && password!="";

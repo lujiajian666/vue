@@ -64,7 +64,7 @@
 </template>
 
 <script>
-    import { vuexHandle } from "../../lib/utils.js"
+    import { vuexHandle,axiosHandle } from "../../lib/utils.js"
     export default {
         data() {
             return {
@@ -130,9 +130,8 @@
             data.append("reason",this.reason);
             data.append("begin_time",begin_time);
             data.append("end_time",end_time);
-            data.append("username",this.$store.state.username);
-            this.$axios.post(this.$store.state.phpUrl + 'admin/vacation/addVacation'
-              , data)
+            data.append("username",vuexHandle.getVuex(this,"username"));
+            axiosHandle.post('admin/vacation/addVacation', data)
               .then(function (response) {
                 if (response.data.status == 1) {
                   _self.$message({
@@ -158,10 +157,11 @@
         },
         created:function () {
             var _self=this;
+            axiosHandle.setThis(this);
             _self.loading=true;
             var data=new FormData();
             data.append("username",vuexHandle.getVuex(_self,"username"));
-            this.$axios.post(this.$store.state.phpUrl + 'admin/vacation/getVacation',
+            axiosHandle.post('admin/vacation/getVacation',
             data)
                 .then(function (response) {
                     var data=response.data.data;

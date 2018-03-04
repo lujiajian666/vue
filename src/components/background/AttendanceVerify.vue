@@ -42,7 +42,7 @@
 </template>
 
 <script>
-    import {vuexHandle} from "../../lib/utils.js"
+    import {vuexHandle,axiosHandle } from "../../lib/utils.js"
 
     export default {
         data() {
@@ -70,8 +70,8 @@
                 var data=new FormData();
                 data.append("type",type);
                 data.append("id",this.id);
-                this.$axios.post(this.$store.state.phpUrl + 'admin/Vacation/applyHandle',
-                    data).then(function (response) {
+                axiosHandle.post('admin/Vacation/applyHandle',data)
+                    .then(function (response) {
                         var data = response.data;
                         if(data.status==1){
                             _self.tableData.splice(_self.index,1);
@@ -93,7 +93,8 @@
         },
         created: function () {
             var _self = this;
-            this.$axios.post(this.$store.state.phpUrl + 'admin/Vacation/applyVerify')
+            axiosHandle.setThis(this);
+            axiosHandle.post('admin/Vacation/applyVerify')
                 .then(function (response) {
                     var data = response.data;
                     _self.tableData = data;

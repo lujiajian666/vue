@@ -88,7 +88,7 @@
 </template>
 
 <script>
-    import { vuexHandle } from "../../lib/utils.js"
+    import { vuexHandle,axiosHandle } from "../../lib/utils.js"
     export default {
         data() {
             return {
@@ -144,7 +144,8 @@
         created: function () {
             //ljj 部门选项生成
             var _self = this;
-            this.$axios.post(this.$store.state.phpUrl + 'admin/background/selectDepartment')
+            axiosHandle.setThis(this);
+            axiosHandle.post('admin/background/selectDepartment')
                 .then(function (response) {
                     var data = response.data;
                     _self.selectDepartment = data;
@@ -153,7 +154,7 @@
                     console.log(error);
                 });
             //ljj 文章类别获取
-            this.$axios.post(this.$store.state.phpUrl + 'admin/article/getArticleType')
+            axiosHandle.post('admin/article/getArticleType')
                 .then(function (response) {
                     var data = response.data;
                     _self.article = data;

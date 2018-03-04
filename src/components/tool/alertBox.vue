@@ -48,6 +48,7 @@
 </template>
 
 <script>
+    import { axiosHandle } from '../../lib/utils';
     export default {
         data() {
             return {
@@ -115,16 +116,16 @@
                   return false;
               }
               //ljj url生成
-              var url=this.$store.state.phpUrl;
+              var url="";
               var data=new FormData(document.getElementById("form"));
 
               if(this.id!=""){//ljj 修改
-                 url=url+'admin/background/editEmployee';
+                 url='admin/background/editEmployee';
                  data.append("id",this.id);
               }else{//ljj 上传
-                 url=url+'admin/background/addEmployee'
+                 url='admin/background/addEmployee'
               }
-              this.$axios.post(url,data)
+              axiosHandle.post(url,data)
                   .then(function (response) {
                       var data=response.data;
                       if(data.status==1) {
@@ -134,7 +135,7 @@
                       }else if(data.status==2){
                           alert("修改成功")
                           _self.close();
-                          location.$emit("change")
+                          _self.$emit("change")
                       }else{
                           alert("操作失败")
                       }
@@ -158,8 +159,9 @@
         },
         created:function () {
             var _self=this;
+            axiosHandle.setThis(this);
            //ljj 部门选项生成
-            this.$axios.post(this.$store.state.phpUrl +'admin/background/selectDepartment')
+            axiosHandle.post('admin/background/selectDepartment')
                 .then(function (response) {
                     var data=response.data;
                     _self.selectDepartment=data;
@@ -168,7 +170,7 @@
                     console.log(error);
                 });
             //ljj 职称选项生成
-            this.$axios.post(this.$store.state.phpUrl +'admin/background/selectJobTitle')
+            axiosHandle.post('admin/background/selectJobTitle')
                 .then(function (response) {
                     var data=response.data;
                     _self.selectJobTitle=data;
