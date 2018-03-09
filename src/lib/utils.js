@@ -60,11 +60,19 @@ const axiosHandle={
     post(url,data){
         return axios.post("http://localhost/vue-project-one/think5/public/index.php?s=" + url,data)
                .then((res,reject)=>{
-                   if(res.data=="no_permit"){
+                   if(res.data=="no_permit") {
                        this._self.$alert('您的权限不足', '警告', {
                            confirmButtonText: '确定',
                        });
-                       reject();
+                       throw "no_permit";
+                   }else if(res.data=="no_login"){
+                       this._self.$alert('请先登录', '警告', {
+                           confirmButtonText: '确定',
+                           callback:() => {
+                               this._self.$router.push({path: '/background'})
+                           }
+                       });
+                       throw "no_login";
                    }else{
                        return res;
                    }

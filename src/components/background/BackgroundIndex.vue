@@ -137,7 +137,6 @@
                 return year + "年" + month + "月" + day + "日&nbsp;&nbsp;" + arr[weekday];
             },
             username:function(){
-
                 return vuexHandle.getVuex(this,"username")
             }
         },

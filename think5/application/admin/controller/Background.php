@@ -7,7 +7,7 @@ use think\Db;
 
 header('content-type:application:json;charset=utf8');
 header('Access-Control-Allow-Credentials: true');
-header('Access-Control-Allow-Origin:http://127.0.0.1:20000');   // 指定允许其他域名访问
+header('Access-Control-Allow-Origin:http://127.0.0.1:20000');
 header('Access-Control-Allow-Headers:x-requested-with,content-type');// 响应头设置
 
 class Background extends Base
@@ -44,7 +44,8 @@ class Background extends Base
                 }
                 $sesson_authority[$value["controller"]][strtolower($value["action"])]=$value["name"];
             }
-            setcookie("authority", serialize($sesson_authority),time()+3600);
+            $_SESSION["authority"]=serialize($sesson_authority);
+            $_SESSION["username"]=$post["username"];
             return json(["status" => 1, "username" => $post["username"]]);
         } else {
             return json(["status" => 0]);

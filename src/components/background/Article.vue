@@ -113,7 +113,6 @@
   export default {
     data() {
       return {
-        totalPage: 100,
         select: 1,
         labelPosition: "right",
         form: {

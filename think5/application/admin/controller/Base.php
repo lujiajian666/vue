@@ -2,11 +2,32 @@
 namespace app\admin\controller;
 use think\Controller;
 use think\Db;
-use think\Request;
+
 
 
 class Base extends Controller
 {
+    public function __construct()
+    {
+        session_start();
+        if($_SERVER['REQUEST_METHOD'] == 'OPTIONS'){
+            exit;
+        }
+        parent::__construct();
+        //ljj 用户名认证
+        $controller=strtolower($this->request->controller());
+        $action=strtolower($this->request->action());
+        if($controller=="background" && $action=="index"){
+                ;
+        }else{
+//            dump($_SESSION["username"]);
+            $user=isset($_SESSION["username"]) && !empty($_SESSION["username"]);
+            if(!$user){
+               die("no_login");
+            }
+        }
+    }
+
     public function authorityVerify(){
         if($_SERVER['REQUEST_METHOD'] == 'OPTIONS'){
             exit;
@@ -22,7 +43,7 @@ class Base extends Controller
             $verify[$value["controller"]][strtolower($value["action"])]=$value["name"];
         }
       //  dump($_COOKIE);
-        $session_authority=unserialize($_COOKIE["authority"]);
+        $session_authority=unserialize($_SESSION["authority"]);
         //dump($session_authority);
         $controller=$this->request->controller();
         $action=$this->request->action();
