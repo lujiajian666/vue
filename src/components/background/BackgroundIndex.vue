@@ -78,6 +78,22 @@
                         </li>
                     </ul>
                 </li>
+                <li>
+                    <ul>
+                        <li @click="show(4)" :class="{isselsct:select[4]}">
+                            <i class="fa fa-home"></i>
+                            部门管理
+                        </li>
+                        <li class="hideUl" v-show="hideUl[4]">
+                            <ul>
+                                <router-link v-for="value in department" tag="li"
+                                             :to="{name:value['type']}">
+                                    {{value['name']}}
+                                </router-link>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
             </ul>
         </div>
         <div class="right">
@@ -92,8 +108,8 @@
     export default {
         data() {
             return {
-                hideUl: [true, false, false, false],
-                select: [true, false, false, false],
+                hideUl: [true, false, false, false,false],
+                select: [true, false, false, false,false],
                 selectDepartment: null,
                 article:[],
                 apply:[
@@ -104,6 +120,9 @@
                 authority:[
                     {name:"角色管理",type:"role"},
                     {name:"基本权限",type:"authority"}
+                ],
+                department:[
+                    {name:"部门管理",type:"department"}
                 ]
             }
         },
@@ -148,12 +167,9 @@
                 .then(function (response) {
                     var data = response.data;
                     _self.selectDepartment = data;
+                    //ljj 文章类别获取
+                    return axiosHandle.post('admin/article/getArticleType')
                 })
-                .catch(function (error) {
-                    console.log(error);
-                });
-            //ljj 文章类别获取
-            axiosHandle.post('admin/article/getArticleType')
                 .then(function (response) {
                     var data = response.data;
                     _self.article = data;
@@ -161,6 +177,9 @@
                 .catch(function (error) {
                     console.log(error);
                 });
+
+
+
         }
 
     }
