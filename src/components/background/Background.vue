@@ -42,6 +42,7 @@
         },
         methods:{
             login:function () {
+                this.$axios.defaults.withCredentials = true;
                 var data=new FormData(document.getElementById("form"))
                 var _self=this;
                 axiosHandle.post('admin/background/index.html',data)
@@ -73,6 +74,7 @@
                     });
             },
             loginWithCookie:function (username,password) {
+                this.$axios.defaults.withCredentials = true;
                 var _self=this;
                 var data=new FormData();
                 data.append("username",username);

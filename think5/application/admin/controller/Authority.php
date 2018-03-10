@@ -24,8 +24,9 @@ class Authority extends Base
           $AuthorityA=Authority::authority();
           $BackgroundA=Background::authority();
           $VacationA=Vacation::authority();
+          $Department=Department::authority();
           $arr=[];
-          $arr=array_merge($arr,$ArticleA,$BackgroundA,$AuthorityA,$VacationA);
+          $arr=array_merge($arr,$ArticleA,$BackgroundA,$AuthorityA,$VacationA,$Department);
 
           foreach ($arr as $k=>&$value){
               $value["id"]=$k;

@@ -14,6 +14,7 @@ class Department extends Base
    private $tableJobTitle="job_title";
 
    public function addDepartment(){
+       $this->authorityVerify();
        $post=$this->request->post();
        $db=Db::name($this->tableDepartment);
        $data=array(
@@ -27,6 +28,7 @@ class Department extends Base
        }
    }
    public function editDepartment(){
+       $this->authorityVerify();
        $post=$this->request->post();
        $db=Db::name($this->tableDepartment);
        $data=array(
@@ -40,6 +42,7 @@ class Department extends Base
        }
    }
    public function deleteDepartment(){
+       $this->authorityVerify();
        $post=$this->request->post();
        $db=Db::name($this->tableDepartment);
        $res=$db->where(["id"=>$post["id"]])->delete();
@@ -52,6 +55,7 @@ class Department extends Base
    }
 
    public function addJobTitle(){
+       $this->authorityVerify();
        $post=$this->request->post();
        $db=Db::name($this->tableJobTitle);
        $data=array(
@@ -67,6 +71,7 @@ class Department extends Base
        }
    }
    public function editJobTitle(){
+       $this->authorityVerify();
        $post=$this->request->post();
        $db=Db::name($this->tableJobTitle);
        $data=array(
@@ -81,6 +86,7 @@ class Department extends Base
        }
    }
    public function deleteJobTitle(){
+       $this->authorityVerify();
        $post=$this->request->post();
        $db=Db::name($this->tableJobTitle);
        $res=$db->where(["id"=>$post["id"]])->delete();

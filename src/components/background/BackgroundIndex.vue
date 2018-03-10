@@ -2,7 +2,21 @@
     <div id="BackgroundIndex">
         <div class="head">
             <div style="background-color:#006591;">中小企业政务管理系统后台</div>
-            <div style="float: right;margin-right: 50px">&nbsp;{{username}}</div>
+            <div style="float: right;margin-right: 50px">
+                <el-dropdown trigger="click">
+                   <span class="el-dropdown-link" style="color: white">
+                   &nbsp;{{username}}<i class="el-icon-caret-bottom el-icon--right"></i>
+                   </span>
+                   <el-dropdown-menu slot="dropdown">
+                        <el-dropdown-item class="clearfix" @click.native="logOut">
+                            退出登录
+                        </el-dropdown-item>
+                        <el-dropdown-item class="clearfix">
+                            取消
+                        </el-dropdown-item>
+                   </el-dropdown-menu>
+                </el-dropdown>
+            </div>
             <div style="float: right">
                 <span v-html="today"></span>
                 &nbsp;&nbsp;&nbsp;&nbsp;
@@ -104,7 +118,7 @@
 </template>
 
 <script>
-    import { vuexHandle,axiosHandle } from "../../lib/utils.js"
+    import { vuexHandle,axiosHandle,cookieHandle } from "../../lib/utils.js"
     export default {
         data() {
             return {
@@ -143,6 +157,10 @@
                         _self.select.splice(index, 1, false);
                     }
                 })
+            },
+            logOut(){
+                this.$axios.defaults.withCredentials = false;
+                this.$router.push({path: '/background'})
             }
         },
         computed: {
@@ -177,9 +195,6 @@
                 .catch(function (error) {
                     console.log(error);
                 });
-
-
-
         }
 
     }

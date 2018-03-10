@@ -20,8 +20,9 @@ const cookieHandle={
     },
     //清除cookie
     clearCookie: function () {
+        this.setCookie("PHPSESSID","",-1);
         this.setCookie("username", "", -1);
-    }
+    },
 }
 const vuexHandle={
     setVuex:function (self,name,value,type=true) {
