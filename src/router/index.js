@@ -16,6 +16,8 @@ import AttendanceVerify from '@/components/background/AttendanceVerify';
 import Role from '@/components/background/Role';
 import Authority from '@/components/background/Authority'
 import Department from '@/components/background/Department'
+import Message from '@/components/background/Message'
+
 Vue.use(Router)
 
 export default new Router({
@@ -73,6 +75,11 @@ export default new Router({
                     path:'department',
                     name:'department',
                     component:Department
+                },
+                {
+                    path:'message',
+                    name:'message',
+                    component:Message
                 }
             ]
         }

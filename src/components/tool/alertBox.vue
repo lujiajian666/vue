@@ -129,15 +129,24 @@
                   .then(function (response) {
                       var data=response.data;
                       if(data.status==1) {
-                          alert("添加成功")
+                          _self.$message({
+                              type:'success',
+                              message:'添加成功'
+                          })
                           _self.close();
                           _self.$emit("change")
                       }else if(data.status==2){
-                          alert("修改成功")
+                          _self.$message({
+                              type:'success',
+                              message:'修改成功'
+                          })
                           _self.close();
                           _self.$emit("change")
                       }else{
-                          alert("操作失败")
+                          _self.$message({
+                              type:'success',
+                              message:'网络错误'
+                          })
                       }
                   })
                   .catch(function (error) {

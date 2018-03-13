@@ -11,6 +11,9 @@
                         <el-dropdown-item class="clearfix" @click.native="logOut">
                             退出登录
                         </el-dropdown-item>
+                        <!--<el-dropdown-item class="clearfix">-->
+                            <!--信息<el-badge class="mark" :value="messageCount" />-->
+                        <!--</el-dropdown-item>-->
                         <el-dropdown-item class="clearfix">
                             取消
                         </el-dropdown-item>
@@ -108,6 +111,22 @@
                         </li>
                     </ul>
                 </li>
+                <!--<li>-->
+                    <!--<ul>-->
+                        <!--<li @click="show(5)" :class="{isselsct:select[5]}">-->
+                            <!--<i class="fa fa-envelope"></i>-->
+                            <!--通告消息-->
+                        <!--</li>-->
+                        <!--<li class="hideUl" v-show="hideUl[5]">-->
+                            <!--<ul>-->
+                                <!--<router-link v-for="value in myMessage" tag="li"-->
+                                             <!--:to="{name:value['type']}">-->
+                                    <!--{{value['name']}}-->
+                                <!--</router-link>-->
+                            <!--</ul>-->
+                        <!--</li>-->
+                    <!--</ul>-->
+                <!--</li>-->
             </ul>
         </div>
         <div class="right">
@@ -122,8 +141,9 @@
     export default {
         data() {
             return {
-                hideUl: [true, false, false, false,false],
-                select: [true, false, false, false,false],
+                messageCount:0,
+                hideUl: [true, false, false, false,false,false],
+                select: [true, false, false, false,false,false],
                 selectDepartment: null,
                 article:[],
                 apply:[
@@ -137,7 +157,10 @@
                 ],
                 department:[
                     {name:"部门管理",type:"department"}
-                ]
+                ],
+//                myMessage:[
+//                    {name:"通告",type:"message"},
+//                ]
             }
         },
         components: {},
@@ -160,7 +183,12 @@
             },
             logOut(){
                 this.$axios.defaults.withCredentials = false;
+                cookieHandle.clearCookie()
                 this.$router.push({path: '/background'})
+            },
+            getMessage(){
+                var _self=this;
+
             }
         },
         computed: {
@@ -191,6 +219,11 @@
                 .then(function (response) {
                     var data = response.data;
                     _self.article = data;
+                    return axiosHandle.post('admin/Message/getMessageCount')
+                })
+                .then(function (response) {
+                    console.log(response.data.count)
+                    _self.messageCount=response.data.count;
                 })
                 .catch(function (error) {
                     console.log(error);

@@ -92,7 +92,7 @@
                         var data=response.data;
                         if(data.status==1){
                             if(data["man"]["src"]=="" || data["man"]["src"] == null){
-                                data["man"]["src"]="/static/image/no_data.jpeg";
+                                data["man"]["src"]="./static/image/no_data.jpeg";
                             }else{
                                 data["man"]["src"]=_self.$store.state.imgUrl+data.man["src"];
                             }
@@ -121,7 +121,7 @@
                             _self.people=data.people;
                             _self.people.forEach(function (value,index,array) {
                                 if(value["src"]=="" || value["src"] == null){
-                                    value["src"]="/static/image/no_data.jpeg";
+                                    value["src"]="./static/image/no_data.jpeg";
                                 }else{
                                     value["src"]=_self.$store.state.imgUrl+value["src"];
                                 }
@@ -153,7 +153,10 @@
                                  return;
                              })
                         }else{
-                            alert("删除失败")
+                            _self.$message({
+                                type:"error",
+                                message:"删除成功"
+                            })
                         }
                     })
                     .catch(function (error) {
