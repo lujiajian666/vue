@@ -8,7 +8,7 @@ import axios from "axios"
 import Vuex from 'vuex'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
-//axios.defaults.withCredentials = true
+axios.defaults.withCredentials = true
 
 Vue.use(ElementUI);
 Vue.use(Vuex);
@@ -16,8 +16,8 @@ Vue.use(Vuex);
 const store = new Vuex.Store({
     state: {
         username:"",
-        phpUrl:"http://localhost/vue-project-one/think5/public/index.php?s=",
-        imgUrl:"http://localhost/vue-project-one/think5/public"
+        phpUrl:"http://localhost/vue/tp5/public/index.php?s=",
+        imgUrl:"http://localhost/vue/tp5/public"
     }
 })
 

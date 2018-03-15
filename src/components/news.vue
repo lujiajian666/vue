@@ -1,19 +1,14 @@
 <template>
   <div id="news">
-    <head-div></head-div>
-    <div id="content">
+    <head-div :backgroundColor="{background:'green'}"></head-div>
+    <div id="content" :style="{ 'background-image':src}">
       <div class="title">
-        <h1>这是公告一</h1>
+        <h1>{{title}}</h1>
       </div>
       <div class="article">
-        这是公告一的内容这是公告一的内容这是公告一的内容这是公告一的内容这是公告一的内容
-        这是公告一的内容这是公告一的内容这是公告一的内容这是公告一的内容这是公告一的内容
-        这是公告一的内容这是公告一的内容这是公告一的内容这是公告一的内容这是公告一的内容
-        这是公告一的内容这是公告一的内容这是公告一的内容这是公告一的内容这是公告一的内容
-        这是公告一的内容这是公告一的内容这是公告一的内容这是公告一的内容这是公告一的内容
-        这是公告一的内容这是公告一的内容这是公告一的内容这是公告一的内容这是公告一的内容
+       {{content}}
       </div>
-      <time>2017年1月1日</time>
+      <time>{{timeHandle.format('Y-m-d',time)}}</time>
     </div>
     <foot-div></foot-div>
   </div>
@@ -22,12 +17,16 @@
 <script>
   import head from "./HeadTop"
   import footDiv from "./foot-div";
-
+  import { axiosHandle,timeHandle } from "../lib/utils";
   export default {
     name: 'news',
     data() {
       return {
-        msg: "data"
+        timeHandle:timeHandle,
+        title:"",
+        content:"",
+        time:"",
+        src:""
       }
     },
     components: {
@@ -36,6 +35,15 @@
     },
     created:function () {
        //ljj 在此根据id查询具体新闻,公告($route.query.id)
+       var data=new FormData();
+       data.append("article_id",this.$route.query.id);
+       axiosHandle.setThis(this);
+       axiosHandle.post("index/News/getNews",data).then(res=>{
+          this.title=res.data.title;
+          this.content=res.data.content;
+          this.time=res.data.time;
+          this.src=res.data.src==""?"url(./static/image/no_data.jpeg)":"url("+this.$store.state.imgUrl+res.data.src+")";
+       })
     }
 
   }
@@ -44,15 +52,16 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="less">
    #content{
-     background:url(/static/image/seal.jpg) no-repeat  center bottom;
-     min-height: 800px;
+     background:no-repeat  center center;
+     background-size: 200px;
+     min-height: 400px;
      position: relative;
      &>.title{
        text-align: center;
        margin:30px auto 50px auto;
      }
      &>.article{
-       width: 90%;
+       width: 70%;
        margin: auto;
        text-align: left;
        text-indent: 2em;
@@ -67,7 +76,7 @@
    time{
       text-align: right;
       display: block;
-      width: 90%;
+      width: 60%;
       margin:50px auto;
    }
 </style>

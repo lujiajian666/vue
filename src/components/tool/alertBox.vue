@@ -15,8 +15,8 @@
                         <br>
                         <select name="title" @change="changeJobTitle($event)">
                             <option value="0">职称</option>
-                            <option v-for="value in selectJobTitle"
-                                    :value="value['id']" :selected="jobTitle==value['id']">
+                            <option v-for="(value,index) in selectJobTitle"
+                                    :key="index" :value="value['id']" :selected="jobTitle==value['id']">
                                 {{value['title']}}
                             </option>
                         </select>
@@ -24,8 +24,8 @@
                         <br>
                         <select name="department" @change="changeDepartment($event)">
                             <option value="0">所属部门</option>
-                            <option v-for="value in selectDepartment"
-                                    :value="value['id']" :selected="departmentId==value['id']">
+                            <option v-for="(value,index) in selectDepartment"
+                                    :key="index" :value="value['id']" :selected="departmentId==value['id']">
                                 {{value['name']}}
                             </option>
                         </select>
@@ -244,7 +244,7 @@
        position: absolute;
        height: 300px;
        width: 500px;
-       border-radius: 10px;
+       border-radius: 3px;
        top: 0;left: 0;right: 0;bottom: 0;
        margin: auto;
        background-color: white;

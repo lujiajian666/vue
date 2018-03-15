@@ -7,7 +7,7 @@ import Contact from '@/components/Contact';
 import ContentDiv from '@/components/indexContent';
 import Background from '@/components/background/Background';
 import BackgroundIndex from '@/components/background/BackgroundIndex';
-import B_First from '@/components/background/B_First';
+import B_First from '@/components/background/Employee';
 import Article from '@/components/background/Article';
 import News from '@/components/news';
 import VacationApply from '@/components/background/VacationApply';

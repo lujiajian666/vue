@@ -1,5 +1,5 @@
 <template>
-    <div id="B_First">
+    <div id="Employee">
       <div class="title">
          <span>{{$route.query.departmentName}}</span>&nbsp;&nbsp;&nbsp;
          <el-button type="primary" icon="el-icon-edit"
@@ -7,7 +7,7 @@
       </div>
       <div class="content">
          <ul v-if="people">
-             <li v-for="p in people">
+             <li v-for="(p,index) in people" :key="index">
                  <div class="person">
                      <img :src="p.src" style="float: left">
                      <div>
@@ -27,23 +27,27 @@
                              权限id:{{p.role}}
                          </p>
                      </div>
+                     <div class="button3" @click="resetPass($event)" :data-id="p.id">
+                         重置密码
+                     </div>
                      <div class="button1" @click="changeAlter($event)" :data-id="p.id">
                          修改
                      </div>
-                     <div class="button2" @click="deleteEmployeeById($event)" :data-id="p.id">删除</div>
+                     <div class="button2" @click="deleteEmployeeById($event)" :data-id="p.id">
+                         删除
+                     </div>
                  </div>
              </li>
          </ul>
          <img v-if="!people" src="/static/image/no_data.jpeg">
       </div>
-
+      
       <alert-box title="添加" v-if="alert" @close="close"
                  @change="getAllEmployee($route.query.department)">
 
       </alert-box>
       <alter-box title="修改" v-if="alter" @close="closeAlter"
                  @change="getAllEmployee($route.query.department)">
-
       </alter-box>
     </div>
 </template>
@@ -162,6 +166,26 @@
                     .catch(function (error) {
                         console.log(error);
                     });
+            },
+            resetPass(node){
+                var id=node.currentTarget.getAttribute("data-id");
+                var _self=this;
+                var data=new FormData();
+                data.append("id",id);
+                axiosHandle.post("admin/background/resetPass",data)
+                .then((res)=>{
+                     if(res.data.status==1){
+                         _self.$message({
+                              type:"success",
+                              message:"重置成功"
+                         })
+                     }else{
+                         _self.$message({
+                              type:"error",
+                              message:"重置失败"
+                         })
+                    }
+                }) 
             }
         },
         created:function () {
@@ -187,7 +211,7 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="less">
     .button(@color:white;@bgColor:orange;@width:100px;@lineHeight:2;@fontSize:15px){
-        border-radius: 5px;
+        border-radius: 2px;
         background-color: @bgColor;
         color: @color;
         width: @width;
@@ -240,6 +264,12 @@
             bottom: 5px;
             right: 80px;
             .button(white,#188aef,60px)
+        }
+        &>.button3{
+            position: absolute;
+            bottom: 5px;
+            right: 150px;
+            .button(white,rgb(54, 179, 172))
         }
     }
     .add{

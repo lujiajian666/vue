@@ -40,7 +40,7 @@
                                         v-for="(item,index) in department"
                                         :label="item.name"
                                         :value="item.id"
-                                        :keys="index">
+                                        :key="index">
                                 </el-option>
                             </el-select>
                         </el-form-item>
@@ -348,7 +348,7 @@
             //ljj 获取角色
             this.getRole(_self);
             //ljj 获取所有部门
-            axiosHandle.post('admin/background/selectDepartment',[])
+            axiosHandle.post('admin/background/selectDepartment')
                 .then(function (response) {
                     var data = response.data;
                     _self.department = data;

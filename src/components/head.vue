@@ -1,5 +1,5 @@
 <template>
-  <div id="head">
+  <div id="headDiv" :style="backgroundColor">
     <head-Top></head-Top>
     <div id="item">
       <div id="itemBar">
@@ -62,13 +62,14 @@
   import HeadTop from '@/components/HeadTop'
 
   export default {
-    name: 'head',
+    name: 'headDiv',
     data() {
       return {
         msg: "data",
         selectNum:2,
       }
     },
+    props:["backgroundColor"],
     components: {
       "head-Top": HeadTop
     },
@@ -111,11 +112,6 @@
     }
     color: orange !important;
   }
-
-  #head {
-
-  }
-
   .fa {
     display: inline-block;
     line-height: 90px;
