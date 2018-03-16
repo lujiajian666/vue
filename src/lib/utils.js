@@ -64,12 +64,13 @@ const axiosHandle={
         return axios.post("http://localhost/vue/tp5/public/index.php?s=" + url,data)
                .then((res,reject)=>{
                    this._self.wait=false;
-                   if(res.data=="no_permit") {
+                   var str=res.data.toString().trim();
+                   if(str=="no_permit") {
                        this._self.$alert('您的权限不足', '警告', {
                            confirmButtonText: '确定',
                        });
                        return Promise.reject("no_permit");
-                   }else if(res.data=="no_login"){
+                   }else if(str=="no_login"){
                        this._self.$alert('请先登录', '警告', {
                            confirmButtonText: '确定',
                            callback:() => {

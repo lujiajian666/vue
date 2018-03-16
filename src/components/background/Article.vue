@@ -171,12 +171,6 @@
               })
               return Promise.reject();
             }
-          }).catch(err => {
-            _self.$message({
-              type: "error",
-              message: "网络错误"
-            })
-            return Promise.reject();
           })
         }
       },
@@ -248,10 +242,6 @@
             }
             _self.wait = false;
           })
-          .catch(function (error) {
-            console.log(error);
-            _self.wait = false;
-          });
       },
       handleChange(value) {
         console.log(value);
@@ -300,13 +290,6 @@
             }
             _self.wait = false;
           })
-          .catch(function (error) {
-            _self.$message({
-              type: 'warning',
-              message: '网络错误'
-            });
-            _self.wait = false;
-          });
       },
       editArticle(id) {
         this.edit = null;

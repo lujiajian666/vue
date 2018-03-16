@@ -110,7 +110,7 @@ class Vacation extends Base
            }
        }
        $data=$Db->where(
-           "username=$post[username] and ".
+           "username='$post[username]' and ".
                   "begin_work>=$start and begin_work<=$end"
                 //  "begin_work<=$end"
        )->select();
@@ -129,7 +129,7 @@ class Vacation extends Base
                }
            }
            if($v["begin_work"]>strtotime($arr["start"]."+9hours") ){
-               if($v["end_work"] != "" || $v["end_work"] != "" && time()<($v["today_time"]+3600*24)){
+               if($v["end_work"] != "" || $v["end_work"] == "" && time()<($v["today_time"]+3600*24)){
                    for($i=$k;$i<count($newData);$i++){
                    if($newData[$i]["start"]==$arr["start"]){
                        if($newData[$i]["title"]!="旷工"){
@@ -146,7 +146,8 @@ class Vacation extends Base
                }
                
            }
-           if(!$v["begin_work"]<=strtotime($arr["start"]."+9hours")){
+           if($v["begin_work"]<=strtotime($arr["start"]."+9hours")){
+              
             if($v["end_work"]>strtotime($arr["end"]."+18hours") || $v["end_work"]<=strtotime($arr["end"]."+18hours") && time()<($v["today_time"]+3600*24)){
                 for($i=$k;$i<count($newData);$i++){
                    if($newData[$i]["start"]==$arr["start"]){
