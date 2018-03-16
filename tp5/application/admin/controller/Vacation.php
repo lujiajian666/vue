@@ -66,6 +66,7 @@ class Vacation extends Base
        );
        $res=$table->where(["username"=>$post["username"],"today_time"=>$data["today_time"]])
            ->count();
+       $table=Db::name($this->tableWorkattendance);
        if($res){
            $res=$table->where(["username"=>$post["username"],"today_time"=>$data["today_time"]])
                ->update(["end_work"=>time()]);
@@ -96,18 +97,22 @@ class Vacation extends Base
        $end=$month["end"];
        //ljj 生成这个月的每日
        for($i=$start;$i<$end;$i+=86400){
+           $arr=[];
+           $arr["start"]=$arr["end"]=date("Y-m-d",$i);
            if(date("w",$i)!=0 && date("w",$i)!=6){
-               $arr=[];
-               $arr["start"]=$arr["end"]=date("Y-m-d",$i);
                $arr["title"]="旷工";
                $arr['cssClass']="absent";
+               array_push($newData,$arr);
+           }else{
+               $arr["title"]="休息";
+               $arr['cssClass']="normal";
                array_push($newData,$arr);
            }
        }
        $data=$Db->where(
            "username=$post[username] and ".
-                  "begin_work>=$start and ".
-                  "begin_work<=$end"
+                  "begin_work>=$start and begin_work<=$end"
+                //  "begin_work<=$end"
        )->select();
        //ljj 正常，迟到，早退
        $add=[];
@@ -123,8 +128,9 @@ class Vacation extends Base
                    }
                }
            }
-           if($v["begin_work"]>strtotime($arr["start"]."+9hours")){
-               for($i=$k;$i<count($newData);$i++){
+           if($v["begin_work"]>strtotime($arr["start"]."+9hours") ){
+               if($v["end_work"] != "" || $v["end_work"] != "" && time()<($v["today_time"]+3600*24)){
+                   for($i=$k;$i<count($newData);$i++){
                    if($newData[$i]["start"]==$arr["start"]){
                        if($newData[$i]["title"]!="旷工"){
                            $arr["title"]="迟到";
@@ -136,17 +142,20 @@ class Vacation extends Base
                        }
                        break;
                    }
+                   }
                }
+               
            }
-           if(!$v["begin_work"]>strtotime($arr["start"]."+9hours") &&
-              !$v["end_work"]<strtotime($arr["end"]."+18hours")){
-               for($i=$k;$i<count($newData);$i++){
+           if(!$v["begin_work"]<=strtotime($arr["start"]."+9hours")){
+            if($v["end_work"]>strtotime($arr["end"]."+18hours") || $v["end_work"]<=strtotime($arr["end"]."+18hours") && time()<($v["today_time"]+3600*24)){
+                for($i=$k;$i<count($newData);$i++){
                    if($newData[$i]["start"]==$arr["start"]){
                        $newData[$i]["title"]="正常";
                        $newData[$i]["cssClass"]="normal";
                        break;
                    }
                }
+            }
            }
        }
        $newData=array_merge($newData,$add);

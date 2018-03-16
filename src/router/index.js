@@ -17,7 +17,7 @@ import Role from '@/components/background/Role';
 import Authority from '@/components/background/Authority'
 import Department from '@/components/background/Department'
 import Message from '@/components/background/Message'
-
+import Advice from '@/components/background/Advice'
 Vue.use(Router)
 
 export default new Router({
@@ -80,6 +80,11 @@ export default new Router({
                     path:'message',
                     name:'message',
                     component:Message
+                },
+                {
+                    path:'advice',
+                    name:'advice',
+                    component:Advice
                 }
             ]
         }

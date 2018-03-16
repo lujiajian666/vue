@@ -125,6 +125,21 @@
             </li>
           </ul>
         </li>
+         <li>
+          <ul>
+            <li @click="show(5)" :class="{isselsct:select[5]}">
+              <i class="fa fa-weixin"></i>
+              投诉建议
+            </li>
+            <li class="hideUl" v-show="hideUl[5]">
+              <ul>
+                <router-link v-for="(value,index) in advice" tag="li" :key="index" :to="{name:value['type']}">
+                  {{value['name']}}
+                </router-link>
+              </ul>
+            </li>
+          </ul>
+        </li>
       </ul>
     </div>
     <div class="right">
@@ -158,8 +173,8 @@
         },
         dialogFormVisible: false,
         messageCount: 0,
-        hideUl: [true, false, false, false, false],
-        select: [true, false, false, false, false],
+        hideUl: [true, false, false, false, false,false],
+        select: [true, false, false, false, false,false],
         selectDepartment: null,
         article: [],
         rules: {
@@ -217,6 +232,10 @@
         department: [{
           name: "部门管理",
           type: "department"
+        }],
+        advice: [{
+          name: "投诉建议",
+          type: "advice"
         }],
       }
     },

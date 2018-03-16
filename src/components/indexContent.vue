@@ -201,7 +201,7 @@
     created(){
         var _self=this;
         axiosHandle.setThis(this);
-        axiosHandle.post("index/Article/getArticle")
+        axiosHandle.post("index/Article/getArticleForIndex")
         .then(res=>{
              _self.todayFocus=res.data.todayFocus.slice(0,3);
              _self.todayFocusAll=res.data.todayFocus;

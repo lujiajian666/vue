@@ -33,10 +33,9 @@ export default {
   created(){
       var _self=this;
         axiosHandle.setThis(this);
-        axiosHandle.post("index/Article/getArticle")
+        axiosHandle.post("index/Article/getArticleForFoot")
         .then(res=>{
            _self.webStatement=res.data.webStatement[0];
-           _self.normalProblem=res.data.normalProblem[0];
            _self.newPlayerDirection=res.data.newPlayerDirection[0];
            _self.aboutUs=res.data.aboutUs[0];
         })

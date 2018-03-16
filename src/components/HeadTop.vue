@@ -1,7 +1,9 @@
 <template>
   <div id="headTop">
     <div style="display: inline-block;text-align: right;line-height: 100px;width: 20%">
-      中小企业政务管理平台
+      <router-link to="/">
+       中小企业政务管理平台
+      </router-link>
     </div><!--
  --><search-div message="请输入你想要的内容"></search-div><!--
  --><div style="display: inline-block;width: 20%;
@@ -39,6 +41,10 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+  a:visited,a:link,a:hover,a:active{
+    text-decoration: none;
+    color: black;
+  }
   #headTop{
     text-align: left;
     height: 100px;

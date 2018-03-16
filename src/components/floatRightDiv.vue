@@ -1,7 +1,7 @@
 <template>
   <div id="floatRigntDiv">
     <ul>
-        <li @mouseenter="show(0)" @mouseleave="hide(0)" >
+      <li @mouseenter="show(0)" @mouseleave="hide(0)">
         <div>
           <i class="fa fa-send"></i>
           <p>写信</p>
@@ -11,59 +11,25 @@
             <router-link tag="li" :to="{name:'contact',query:{anchor:0}}">
               <div class="hiddenSubDiv">
                 <i class="fa fa-exclamation-triangle"></i>
-                <br>
-                投诉
+                <br> 投诉
               </div>
             </router-link>
             <router-link tag="li" :to="{name:'contact',query:{anchor:1}}">
               <div class="hiddenSubDiv">
                 <i class="fa fa-envelope-open-o"></i>
-                <br>
-                建议
+                <br> 建议
               </div>
             </router-link>
           </ul>
         </div>
       </li>
-        <li @mouseenter="show(1)" @mouseleave="hide(1)" >
-        <div>
+      <li @mouseenter="show(1)" @mouseleave="hide(1)">
+        <router-link tag="div" :to="{name:'news',query:{id:normalProblem.article_id}}">
           <i class="fa fa-question"></i>
           <p>常见问题</p>
-        </div>
-        <div class="hidden" v-show="hiddenDiv[1]">
-          <ul>
-            <li>
-              <div class="hiddenSubDiv">
-                  <i class="fa fa-question-circle"></i>
-                  <br>
-                  <span class="textOverflow">为什么我没钱</span>
-              </div>
-            </li>
-            <li>
-              <div class="hiddenSubDiv">
-                <i class="fa fa-question-circle"></i>
-                <br>
-                <span class="textOverflow">为什么我没女朋友</span>
-              </div>
-            </li>
-            <li>
-              <div class="hiddenSubDiv">
-                <i class="fa fa-question-circle"></i>
-                <br>
-                <span class="textOverflow">为什么我没房子</span>
-              </div>
-            </li>
-            <li>
-              <div class="hiddenSubDiv">
-                <i class="fa fa-question-circle"></i>
-                <br>
-                <span class="textOverflow">为什么我没车</span>
-              </div>
-            </li>
-          </ul>
-        </div>
+        </router-link>
       </li>
-        <li @mouseenter="show(2)" @mouseleave="hide(2)" >
+      <li @mouseenter="show(2)" @mouseleave="hide(2)">
         <div>
           <i class="fa fa-android"></i>
           <p>AI客服</p>
@@ -72,9 +38,9 @@
           <ul>
             <li>
               <div class="hiddenSubDiv">
-                 <i class="fa fa-meh-o"></i>
-                 <br>
-                 <span class="textOverflow">AI 小兰</span>
+                <i class="fa fa-meh-o"></i>
+                <br>
+                <span class="textOverflow">AI 小兰</span>
               </div>
             </li>
             <li>
@@ -87,13 +53,13 @@
           </ul>
         </div>
       </li>
-        <li @click="top" >
+      <li @click="top">
         <div style="border-bottom: none">
           <i class="fa  fa-chevron-up"></i>
           <p>回到顶部</p>
         </div>
       </li>
-        <li>
+      <li>
         <div style="background-color: #188be9;color: white;transition:1s" :class="pClass" @click="putAway">
           <p>{{pWord}}</p>
         </div>
@@ -103,14 +69,22 @@
 </template>
 
 <script>
+  import {
+    axiosHandle,
+    timeHandle
+  } from "../lib/utils";
   export default {
     name: 'floatRigntDiv',
     data() {
       return {
-        msg: "data",
-        hiddenDiv: {"0": false, "1": false, "2": false},
-        pClass:"lay_out",
-        pWord:"收起"
+        normalProblem: "",
+        hiddenDiv: {
+          "0": false,
+          "1": false,
+          "2": false
+        },
+        pClass: "lay_out",
+        pWord: "收起"
       }
     },
     methods: {
@@ -125,51 +99,65 @@
       "top": function () {
         window.scrollTo(0, 0)
       },
-      putAway:function () {
-         if(this.pClass=="lay_out"){
-            this.pWord="展开";
-            this.pClass="put_away";
+      putAway: function () {
+        if (this.pClass == "lay_out") {
+          this.pWord = "展开";
+          this.pClass = "put_away";
 
-            //ljj 前四个li上滑
-           console.log( $("#floatRigntDiv"))
-           $("#floatRigntDiv>ul>li:not(:last-of-type)").animate({height:0},1000,function () {
-               $(this).css("overflow","hidden")
-           })
-         }else{
-           this.pWord="收起";
-           this.pClass="lay_out";
-           $("#floatRigntDiv>ul>li:not(:last-of-type)").animate({height:"80px"},1000,function () {
-             $(this).css("overflow","visible")
-           })
-         }
+          //ljj 前四个li上滑
+          console.log($("#floatRigntDiv"))
+          $("#floatRigntDiv>ul>li:not(:last-of-type)").animate({
+            height: 0
+          }, 1000, function () {
+            $(this).css("overflow", "hidden")
+          })
+        } else {
+          this.pWord = "收起";
+          this.pClass = "lay_out";
+          $("#floatRigntDiv>ul>li:not(:last-of-type)").animate({
+            height: "80px"
+          }, 1000, function () {
+            $(this).css("overflow", "visible")
+          })
+        }
       }
+    },
+    created() {
+      var _self = this;
+      axiosHandle.setThis(this);
+      axiosHandle.post("index/Article/getNormalProblem")
+        .then(res => {
+          _self.normalProblem = res.data[0]
+        })
     }
 
   }
+
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="less">
-
-
-  .lay_out{
+  .lay_out {
     height: 30px;
     line-height: 30px;
   }
-  .put_away{
-    margin:0 auto;
-    height:60px;
+
+  .put_away {
+    margin: 0 auto;
+    height: 60px;
     line-height: 60px;
-    width:60px;
+    width: 60px;
     border-radius: 50% !important;
   }
-  .textOverflow{
+
+  .textOverflow {
     display: block;
     text-overflow: ellipsis;
     width: 100%;
     white-space: nowrap;
     overflow: hidden;
   }
+
   .fa {
     line-height: 60px;
     font-size: 30px;
@@ -190,11 +178,11 @@
     text-align: center;
   }
 
-  ul > li {
+  ul>li {
     position: relative;
   }
 
-  ul > li > .hidden {
+  ul>li>.hidden {
     position: absolute;
     left: -101px;
     top: 0;
@@ -203,7 +191,7 @@
     border-bottom: none;
   }
 
-  .hidden ul > li  .hiddenSubDiv{
+  .hidden ul>li .hiddenSubDiv {
     background-color: white;
     border: 1px solid #ccc;
     border-bottom: none;
@@ -211,11 +199,12 @@
     width: 80px;
     height: 80px;
   }
-  .hidden ul >li:last-of-type .hiddenSubDiv{
+
+  .hidden ul>li:last-of-type .hiddenSubDiv {
     border-bottom: 1px solid #ccc;
   }
 
-  .hidden ul > li:first-of-type .hiddenSubDiv:after {
+  .hidden ul>li:first-of-type .hiddenSubDiv:after {
     content: '';
     position: absolute;
     top: 50%;
@@ -227,7 +216,7 @@
     border-left-color: white;
   }
 
-  .hidden ul > li:first-of-type .hiddenSubDiv:before {
+  .hidden ul>li:first-of-type .hiddenSubDiv:before {
     content: '';
     position: absolute;
     top: 50%;
@@ -239,7 +228,7 @@
     border-left-color: #ccc;
   }
 
-  ul > li > div {
+  ul>li>div {
     cursor: pointer;
     height: 80px;
     width: 70px;
@@ -247,17 +236,18 @@
     background-color: #f7fbfd;
   }
 
-  ul > li > div:not([class=hidden]):hover {
+  ul>li>div:not([class=hidden]):hover {
     background-color: #188be9;
     color: white;
   }
 
-  ul > li:first-of-type > div {
+  ul>li:first-of-type>div {
     border-radius: 5px 5px 0 0;
   }
 
-  ul > li:last-of-type > div {
+  ul>li:last-of-type>div {
     border-radius: 0 0 5px 5px;
     border-bottom: none;
   }
+
 </style>

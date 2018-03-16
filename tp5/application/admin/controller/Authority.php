@@ -21,8 +21,9 @@ class Authority extends Base
           $BackgroundA=Background::authority();
           $VacationA=Vacation::authority();
           $Department=Department::authority();
+          $Advice=Advice::authority();
           $arr=[];
-          $arr=array_merge($arr,$ArticleA,$BackgroundA,$AuthorityA,$VacationA,$Department);
+          $arr=array_merge($arr,$ArticleA,$BackgroundA,$AuthorityA,$VacationA,$Department,$Advice);
 
           foreach ($arr as $k=>&$value){
               $value["id"]=$k;
@@ -54,7 +55,7 @@ class Authority extends Base
       }
       $Db=Db::name($this->tableAuthorityItem);
       $Db->where("id!=-1")->delete();
-      if($Db->insertAll($arr)){
+      if($Db->insertAll($arr)!==false || count($arr)==0){
           return json(["status"=>1]);
       }else{
           return json(["status"=>0,"reason"=>$Db->getLastSql()]);

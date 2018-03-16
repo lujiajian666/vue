@@ -31,7 +31,7 @@ class Department extends Base
            "name"=>$post["name"]
        );
        $res=$db->where(["id"=>$post["id"]])->update($data);
-       if($res){
+       if($res!==false){
            return json(["status"=>1]);
        }else{
            return json(["status"=>0]);

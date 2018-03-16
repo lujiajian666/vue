@@ -4,11 +4,10 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import echarts from 'echarts'
-import axios from "axios"
 import Vuex from 'vuex'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
-axios.defaults.withCredentials = true
+
 
 Vue.use(ElementUI);
 Vue.use(Vuex);
@@ -21,7 +20,6 @@ const store = new Vuex.Store({
     }
 })
 
-Vue.prototype.$axios=axios;
 Vue.prototype.$echarts=echarts;
 Vue.config.productionTip = false
 

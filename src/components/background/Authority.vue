@@ -1,6 +1,8 @@
 <template>
     <div id="Authority">
         <el-transfer
+                v-loading="wait"
+                lujiajian
                 v-model="value"
                 filterable
                 :titles="['所有权限', '启用权限']"
@@ -22,6 +24,7 @@
     export default {
         data() {
             return {
+                wait:false,
                 arr:[],
                 data: [],
                 value: [],
@@ -108,6 +111,16 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="less">
+    .el-transfer[lujiajian]>.el-transfer-panel{
+        width: 300px;
+        height: 400px;
+        &>.el-transfer-panel__body{
+            height: 346px;
+            &>.el-transfer-panel__list.is-filterable{
+                height:300px
+            }
+        }
+    }
     .el-transfer{
         margin-top: 20px;
         text-align: center;
