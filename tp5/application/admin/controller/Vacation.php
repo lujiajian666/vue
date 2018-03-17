@@ -40,7 +40,7 @@ class Vacation extends Base
        $data=$vacation->where("username='$post[username]'")->select();
        $allTime=0;
        foreach ($data as $key=>&$val){
-           $allTime+=($val['end_time']-$val['begin_time']);
+           $allTime=$val["status"]==1?$allTime+($val['end_time']-$val['begin_time']):$allTime+0;
            $val["begin_time"]=date("y-m-d",$val["begin_time"]);
            $val["end_time"]=date("y-m-d",$val["end_time"]);
            $val["time"]=date("y-m-d",$val["time"]);
@@ -165,8 +165,9 @@ class Vacation extends Base
    //ljj 休假审核显示数据
    public function applyVerify(){
        $this->authorityVerify();
-       $Db=Db::name($this->tableVacation);
-       $data=$Db->where(["status"=>0])->order("time desc")->select();
+       $Db=Db::name($this->tableVacation)->alias("a")->join('employee b','a.username=b.username');
+       $data=$Db->where(["status"=>0])->field("a.begin_time,a.end_time,a.reason,a.status,b.name as username,a.id")
+       ->order("a.time desc")->select();
        foreach ($data as &$v){
            $v["begin_time"]=date("Y-m-d",$v["begin_time"]);
            $v["end_time"]=date("Y-m-d",$v["end_time"]);

@@ -1,6 +1,6 @@
 <template>
   <div id="news">
-    <head-div :backgroundColor="{background:'green'}"></head-div>
+    <head-div :backgroundColor="{background:'white'}"></head-div>
     <div id="content" :style="{ 'background-image':src}">
       <div class="title">
         <h1>{{title}}</h1>

@@ -10,9 +10,9 @@
                        @click.native="scrollTop(1)"
                        to="/employee">
             <i class="fa fa-bank red"></i>
-            <p>人事查看</p>
+            <p>优秀员工</p>
             <i class="fa fa-bank"></i>
-            <p>人事查看 </p>
+            <p>优秀员工</p>
           </router-link>
         </div>
         <div>

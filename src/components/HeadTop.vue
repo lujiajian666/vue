@@ -1,5 +1,5 @@
 <template>
-  <div id="headTop">
+  <div id="headTop" :style="backgroundColor">
     <div style="display: inline-block;text-align: right;line-height: 100px;width: 20%">
       <router-link to="/">
        中小企业政务管理平台
@@ -24,9 +24,9 @@ export default {
 //  name:"HeadTop",
   data () {
     return {
-      msg: "data"
     }
   },
+  props:['backgroundColor'],
   components:{
       "search-div":searchDiv
   },

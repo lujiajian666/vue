@@ -21,7 +21,7 @@ class Base extends Controller
         //ljj 用户名认证
         $controller=strtolower($this->request->controller());
         $action=strtolower($this->request->action());
-        if($controller=="background" && $action=="index"){
+        if($controller=="background" && $action=="index" || $controller=="advice" && $action=="addadvice"){
                 ;
         }else{
 //            dump($_SESSION["username"]);

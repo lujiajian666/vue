@@ -1,6 +1,6 @@
 <template>
   <div id="searchDiv">
-     <div>
+     <div style="background:white">
        <input name="search" :placeholder="message"/>
      </div><!--
   --><div>

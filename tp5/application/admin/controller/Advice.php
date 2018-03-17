@@ -31,6 +31,9 @@ class Advice extends Base
         $total=$db->where(["type"=>"advice"])->count();
         $db=Db::name($this->tableAdvice);
         $advice=$db->where(["type"=>"advice"])->limit(($page-1)*10,10)->select();
+        foreach($advice as &$item){
+            $item["time"]=date("Y-m-d H:m",$item["time"]);
+        }
         return json(["total"=>ceil($total/10),"advice"=>$advice]);
     }
     public function delete(){
@@ -51,6 +54,9 @@ class Advice extends Base
         $total=$db->where(["type"=>"complaint"])->count();
         $db=Db::name($this->tableAdvice);
         $complaint=$db->where(["type"=>"complaint"])->limit(($page-1)*10,10)->select();
+        foreach($complaint as &$item){
+            $item["time"]=date("Y-m-d H:m",$item["time"]);
+        }
         return json(["total"=>ceil($total/10),"complaint"=>$complaint]);
     }
     public static function authority(){

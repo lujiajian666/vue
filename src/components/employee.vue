@@ -2,133 +2,96 @@
   <div id="employee">
     <div id="content_div_left">
       <ul>
-        <li :class="{'select':topList[0]}" @mouseover="select(0)">研发部</li>
-        <li :class="{'select':topList[1]}" @mouseover="select(1)">后勤部</li>
-        <li :class="{'select':topList[2]}" @mouseover="select(2)">行政部</li>
-        <li :class="{'select':topList[3]}" @mouseover="select(3)">人事部</li>
+        <li v-for="(item,index) in peopleInform" :key="index" :class="{'select':topList[index]}" @mouseover="select(index)">
+          {{item.name}}
+        </li>
       </ul>
     </div>
     <div id="content_div_right">
-      <table>
+      <table v-if="peopleInform[position]['total']!=0">
         <tr>
-          <th>id</th>
-          <th>头像</th>
-          <th>职务</th>
-          <th>名称</th>
-          <th>资历</th>
-          <th>工资</th>
+          <th style="width:15%">id</th>
+          <th style="width:15%">头像</th>
+          <th style="width:15%">职务</th>
+          <th style="width:15%">名称</th>
+          <th style="width:15%">资历</th>
+          <th style="width:15%">工资</th>
         </tr>
-        <tr v-for="i in peopleInform[position]">
+        <tr v-for="(i,index) in peopleInform[position]['data']" :key="index">
           <td>{{ i["id"] }}</td>
           <td>
-            <img :src="i['image']" class="headPic">
+            <img :src="i['head_img']==''?'./static/image/no_data.jpeg':$store.state.imgUrl+i['head_img']" class="headPic">
           </td>
-          <td>{{ i["position"] }}</td>
+          <td>{{ i["title"] }}</td>
           <td>{{ i["name"] }}</td>
-          <td>{{ i["experience"] }}</td>
+          <td>{{ i["time"] | curriculum}}</td>
           <td>{{ i["salary"] }}</td>
         </tr>
       </table>
+      <div v-if="peopleInform[position]['total']==0" style="margin-top:100px;height:300px;background:url(/static/image/no_data.jpeg) no-repeat center">
+        <h1>┭┮﹏┭┮没数据啦</h1>
+      </div>
+      
     </div>
   </div>
 </template>
 
 <script>
+  import { axiosHandle } from "../lib/utils";
   export default {
     name: 'employee',
     data() {
       return {
         position:0,
-        topList: [true, false, false, false],
-        peopleInform: [
-          [
-            {
-              "id": "123456", "image": "../../static/image/headPic.jpg", "position": "主任", "name": "陆家键",
-              "experience": "十年", "salary": "10000"
-            },
-            {
-              "id": "123456", "image": "../../static/image/headPic.jpg", "position": "主任", "name": "陆家键",
-              "experience": "十年", "salary": "10000"
-            },
-            {
-              "id": "123456", "image": "../../static/image/headPic.jpg", "position": "主任", "name": "陆家键",
-              "experience": "十年", "salary": "10000"
-            },
-            {
-              "id": "123456", "image": "../../static/image/headPic.jpg", "position": "主任", "name": "陆家键",
-              "experience": "十年", "salary": "10000"
-            }
-          ],
-          [
-            {
-              "id": "123456", "image": "../../static/image/headPic.jpg", "position": "主任", "name": "陆家键2",
-              "experience": "十年", "salary": "10000"
-            },
-            {
-              "id": "123456", "image": "../../static/image/headPic.jpg", "position": "主任", "name": "陆家键2",
-              "experience": "十年", "salary": "10000"
-            },
-            {
-              "id": "123456", "image": "../../static/image/headPic.jpg", "position": "主任", "name": "陆家键2",
-              "experience": "十年", "salary": "10000"
-            },
-            {
-              "id": "123456", "image": "../../static/image/headPic.jpg", "position": "主任", "name": "陆家键2",
-              "experience": "十年", "salary": "10000"
-            }
-          ],
-          [
-            {
-              "id": "123456", "image": "../../static/image/headPic.jpg", "position": "主任", "name": "陆家键3",
-              "experience": "十年", "salary": "10000"
-            },
-            {
-              "id": "123456", "image": "../../static/image/headPic.jpg", "position": "主任", "name": "陆家键3",
-              "experience": "十年", "salary": "10000"
-            },
-            {
-              "id": "123456", "image": "../../static/image/headPic.jpg", "position": "主任", "name": "陆家键3",
-              "experience": "十年", "salary": "10000"
-            },
-            {
-              "id": "123456", "image": "../../static/image/headPic.jpg", "position": "主任", "name": "陆家键3",
-              "experience": "十年", "salary": "10000"
-            }
-          ],
-          [
-            {
-              "id": "123456", "image": "../../static/image/headPic.jpg", "position": "主任", "name": "陆家键4",
-              "experience": "十年", "salary": "10000"
-            },
-            {
-              "id": "123456", "image": "../../static/image/headPic.jpg", "position": "主任", "name": "陆家键4",
-              "experience": "十年", "salary": "10000"
-            },
-            {
-              "id": "123456", "image": "../../static/image/headPic.jpg", "position": "主任", "name": "陆家键4",
-              "experience": "十年", "salary": "10000"
-            },
-            {
-              "id": "123456", "image": "../../static/image/headPic.jpg", "position": "主任", "name": "陆家键4",
-              "experience": "十年", "salary": "10000"
-            }
-          ],
-        ]
-
+        topList: [],
+        peopleInform: []
       }
+    },
+    filters:{
+       curriculum(value){
+          var time=new Date().getTime()/1000;
+          time=Math.ceil(time);
+          var day=parseFloat((time-value)/86400)
+          if(year<30)
+            return Math.floor(day)+"天";
+          else{
+             var month=parseFloat(day/30);
+             if(month<12){
+                return Math.floor(month)+"天";
+             }else{
+                var leftMonth=month%12;
+                var year=Math.floor(month/12);
+                return year+"年零"+leftMonth+"个月"
+             }
+          }  
+       }
     },
     methods: {
-      "select": function (index) {
-        this.topList.splice(0, 4, false, false, false, false);
-        this.topList.splice(index, 1, true);
-        this.position=index
-      }
+     select(index){
+        for(var i in this.topList){
+          this.topList[i]=false;
+        };
+        this.topList.splice(index,1,true);
+        this.position=index;
+     }
     },
-    updated() {
-
-    },
-    mounted() {
-
+    created() {
+      axiosHandle.setThis(this);
+       //ljj获取部门信息和各部门工资最高，资料最深的前5个员工
+      axiosHandle.post("index/Employee/index").then(res=>{
+          this.peopleInform=res.data;
+          console.log(this.peopleInform);
+          var start=0;
+          for(var i in this.peopleInform){
+            if(start==0){
+              this.topList[i]=true;
+              this.position=i;
+            }else{
+              this.topList[i]=false;
+            }
+            start++;
+          }
+      })  
     },
 
 
@@ -163,19 +126,19 @@
   @green: #7be92f;
   #employee {
     width: 95%;
-    margin: auto;
-    display: table;
+    overflow: hidden;
+    margin-bottom: 20px
   }
   .headPic {
     height: 60px;
     width: 60px;
   }
   #content_div_left {
-    display: table-cell;
-    vertical-align: middle;
+    float: left;
+    margin-top: 70px;
     width: 20%;
     ul {
-      margin: 100px auto;
+      margin: 10px auto;
       width: 80px;
       & > li {
         @height: 70px;
@@ -242,11 +205,12 @@
     }
   }
   #content_div_right {
-    display: table-cell;
-    width: 70%;
+    float: left;
+    width: 80%;
+    margin-top: 20px;
     vertical-align: middle;
     table {
-      width: 80%;
+      width: 90%;
       border-collapse: collapse;
     }
     tr > td, tr > th {

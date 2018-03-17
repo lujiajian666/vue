@@ -1,6 +1,6 @@
 <template>
     <div id="vacationApply">
-        <el-collapse v-model="activeName" accordion v-loading="loading">
+        <el-collapse v-model="activeName" accordion v-loading="wait">
             <el-collapse-item title="请假记录" name="1">
                 <el-table
                         :data="tableData"
@@ -70,7 +70,7 @@
             return {
                 tableData:[],
                 allVacationTime:0,
-                loading:false,
+                wait:false,
                 hasRead: false,
                 reason: '',
                 activeName: '1',
@@ -123,7 +123,6 @@
         methods:{
           submit(){
             var _self=this;
-            _self.loading=true;
             var data=new FormData();
             var begin_time=new Date(this.time[0]).getTime()/1000;
             var end_time=new Date(this.time[1]).getTime()/1000;
@@ -144,21 +143,13 @@
                     message: '申请失败'
                   });
                 }
-                _self.loading=false;
               })
-              .catch(function (error) {
-                _self.$message({
-                  type: 'warning',
-                  message: '网络错误'
-                });
-                _self.loading=false;
-              });
           }
         },
         created:function () {
             var _self=this;
             axiosHandle.setThis(this);
-            _self.loading=true;
+            _self.wait=true;
             var data=new FormData();
             data.append("username",vuexHandle.getVuex(_self,"username"));
             axiosHandle.post('admin/vacation/getVacation',
@@ -166,7 +157,6 @@
                 .then(function (response) {
                     var data=response.data.data;
                     _self.tableData=data
-                    _self.loading=false;
                     _self.allVacationTime=response.data.allTime/86400;
                 })
         }
