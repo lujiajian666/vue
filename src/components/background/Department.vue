@@ -3,7 +3,7 @@
     <el-dialog title="新增职务" :visible.sync="dialogFormVisible" :append-to-body=true>
       <el-form :model="form" :rules="rules" ref="ruleFormAdd">
         <el-form-item label="职务名称" :label-width="formLabelWidth" prop="title">
-          <el-input v-model="form.title"  placeholder="请填写职务名称"></el-input>
+          <el-input v-model="form.title" placeholder="请填写职务名称"></el-input>
         </el-form-item>
         <el-form-item label="职务月薪" :label-width="formLabelWidth">
           <el-input v-model="form.salary" placeholder="请填写职务月薪" type="number">
@@ -18,7 +18,7 @@
     <el-dialog title="编辑职务" :visible.sync="dialogFormVisible2" :append-to-body=true>
       <el-form :model="form" :rules="rules" ref="ruleFormEdit">
         <el-form-item label="职务名称" :label-width="formLabelWidth" prop="title">
-          <el-input v-model="form.title"   auto-complete="off" placeholder="请填写职务名称"></el-input>
+          <el-input v-model="form.title" auto-complete="off" placeholder="请填写职务名称"></el-input>
         </el-form-item>
         <el-form-item label="职务月薪" :label-width="formLabelWidth">
           <el-input v-model="form.salary" placeholder="请填写职务月薪" type="number">
@@ -169,25 +169,32 @@
         var departmentId = this.department[this.activeName]["id"];
         var data = new FormData();
         data.append("id", departmentId);
-        axiosHandle.post("admin/Department/deleteDepartment", data)
-          .then(function (res) {
-            if (res.data.status == 1) {
-              _self.department.splice(_self.activeName, 1);
-              _self.$message({
-                type: 'success',
-                message: '删除成功'
-              })
-            } else {
-              _self.$message({
-                type: 'error',
-                message: '删除失败'
-              })
-            }
-          })
+        this.$confirm('此操作将永久删除, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          axiosHandle.post("admin/Department/deleteDepartment", data)
+            .then(function (res) {
+              if (res.data.status == 1) {
+                _self.department.splice(_self.activeName, 1);
+                _self.$message({
+                  type: 'success',
+                  message: '删除成功'
+                })
+              } else {
+                _self.$message({
+                  type: 'error',
+                  message: '删除失败'
+                })
+              }
+            })
+        })
+
       },
 
       addJobTitle() {
-        var _self=this;
+        var _self = this;
         this.$refs['ruleFormAdd'].validate((valid) => {
           if (valid) {
             var _self = this;
@@ -208,10 +215,10 @@
                 }
               })
           } else {
-             this.$message({
-                type: 'error',
-                message: '请按格式填写！'
-              })
+            this.$message({
+              type: 'error',
+              message: '请按格式填写！'
+            })
           }
         });
       },
@@ -220,21 +227,28 @@
         var id = this.jobTitle[itemId][index]["id"];
         var data = new FormData();
         data.append("id", id);
-        axiosHandle.post("admin/Department/deleteJobTitle", data)
-          .then(function (res) {
-            if (res.data.status == 1) {
-              _self.jobTitle[itemId].splice(index, 1);
-              _self.$message({
-                type: 'success',
-                message: '删除成功'
-              })
-            } else {
-              _self.$message({
-                type: 'error',
-                message: '删除失败'
-              })
-            }
-          })
+        this.$confirm('此操作将永久删除, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          axiosHandle.post("admin/Department/deleteJobTitle", data)
+            .then(function (res) {
+              if (res.data.status == 1) {
+                _self.jobTitle[itemId].splice(index, 1);
+                _self.$message({
+                  type: 'success',
+                  message: '删除成功'
+                })
+              } else {
+                _self.$message({
+                  type: 'error',
+                  message: '删除失败'
+                })
+              }
+            })
+        });
+
       },
       editRow(index, itemId) {
         this.dialogFormVisible2 = true;
@@ -263,10 +277,10 @@
                 }
               })
           } else {
-              this.$message({
-                type: 'error',
-                message: '请按格式填写！'
-              })
+            this.$message({
+              type: 'error',
+              message: '请按格式填写！'
+            })
           }
         });
 

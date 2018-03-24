@@ -25,8 +25,7 @@
           </el-table>
         </div>
         <div v-if="tableData.length" style="position: absolute;bottom: 30px;left: 0">
-         <el-pagination background layout="prev, pager, next" :total="allPage*10"
-         @current-change="getArticle" :current-page.sync="nowPage"></el-pagination>
+          <el-pagination background layout="prev, pager, next" :total="allPage*10" @current-change="getArticle" :current-page.sync="nowPage"></el-pagination>
         </div>
       </div>
       <div id="edit" v-show="select==2">
@@ -41,7 +40,7 @@
             </el-form-item>
             <el-form-item label="图片上传">
               <el-upload class="upload-demo" drag :action="url" :file-list="fileList" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload"
-                :before-remove="handleRemove" list-type="picture" >
+                :before-remove="handleRemove" list-type="picture">
                 <i class="el-icon-upload"></i>
                 <div class="el-upload__text">将文件拖到此处，或
                   <em>点击上传</em>
@@ -122,8 +121,8 @@
         fileListUrl: '',
         url: this.$store.state.phpUrl + "admin/Upload/upload",
         select: 1,
-        allPage:1,
-        nowPage:1,
+        allPage: 1,
+        nowPage: 1,
         labelPosition: "right",
         form: {
           title: '',
@@ -149,8 +148,7 @@
         this.fileListUrl = res.pic;
       },
       handleRemove(file, fileList) {
-         console.log("2")
-         
+        console.log("2")
         if (typeof this.fileList[0] != "undefined") {
           var _self = this;
           var data = new FormData();
@@ -161,8 +159,8 @@
                 type: "success",
                 message: "删除成功"
               })
-              _self.fileListUrl="";
-              _self.fileList=[];
+              _self.fileListUrl = "";
+              _self.fileList = [];
               return Promise.resolve();
             } else {
               _self.$message({
@@ -178,7 +176,6 @@
         console.log(file.type)
         const isJPG = file.type === 'image/jpeg' || file.type === 'image/png';
         const isLt2M = file.size / 1024 / 1024 < 2;
-
         if (!isJPG) {
           this.$message.error('上传图片只能是 JPG 或者 PNG 格式!');
         }
@@ -257,12 +254,12 @@
         var type = this.$route.query.id;
         var data = new FormData();
         data.append("type", type);
-        data.append("nowPage",this.nowPage)
+        data.append("nowPage", this.nowPage)
         axiosHandle.post('admin/article/getArticle', data)
           .then(function (response) {
             var data = response.data;
             _self.tableData = data.article;
-            _self.allPage=data.allPage;
+            _self.allPage = data.allPage;
           })
       },
       deleteArticle(id) {
@@ -270,26 +267,32 @@
         _self.wait = true;
         var data = new FormData();
         data.append("article_id", id);
-        axiosHandle.post('admin/article/deleteArticle', data)
-          .then(function (response) {
-            if (response.data.status == 1) {
-              _self.$message({
-                type: 'success',
-                message: '删除成功'
-              });
-              _self.tableData.forEach(function (value, index, arr) {
-                if (value["article_id"] == id) {
-                  arr.splice(index, 1);
-                }
-              })
-            } else {
-              _self.$message({
-                type: 'error',
-                message: '删除失败'
-              });
-            }
-            _self.wait = false;
-          })
+        this.$confirm('此操作将永久删除, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          axiosHandle.post('admin/article/deleteArticle', data)
+            .then(function (response) {
+              if (response.data.status == 1) {
+                _self.$message({
+                  type: 'success',
+                  message: '删除成功'
+                });
+                _self.tableData.forEach(function (value, index, arr) {
+                  if (value["article_id"] == id) {
+                    arr.splice(index, 1);
+                  }
+                })
+              } else {
+                _self.$message({
+                  type: 'error',
+                  message: '删除失败'
+                });
+              }
+            })
+        })
+
       },
       editArticle(id) {
         this.edit = null;

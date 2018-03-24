@@ -39,7 +39,7 @@ export default new Router({
                 {
                     path: '',
                     name:'B_First',
-                    component: B_First
+                    component: B_First,
                 },
                 {
                     path: 'article',

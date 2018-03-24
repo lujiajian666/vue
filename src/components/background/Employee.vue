@@ -1,8 +1,13 @@
 <template>
   <div id="Employee">
     <div class="title">
-      <span>{{$route.query.departmentName}}</span>&nbsp;&nbsp;&nbsp;
+      <span style="float:left">{{$route.query.departmentName}}</span>&nbsp;&nbsp;&nbsp;
       <el-button type="primary" icon="el-icon-edit" class="add" @click="add"></el-button>
+      <div style="float:left;margin-right:20px">
+        <el-input placeholder="请输入姓名" v-model="searchName" @keydown.enter.native="search">
+          <el-button slot="append" icon="el-icon-search" style="margin: 0px 0px 0 -30px;padding:0" @click="search"></el-button>
+        </el-input>
+      </div>
     </div>
     <div class="content">
       <ul v-if="people" style="height:500px;overflow:auto">
@@ -38,8 +43,7 @@
           </div>
         </li>
       </ul>
-      <el-pagination v-if="people" layout="prev, pager, next" :total="total*10"
-      @current-change="getAllEmployee($route.query.department)" :current-page.sync="page" >
+      <el-pagination v-if="people" layout="prev, pager, next" :total="total*10" @current-change="changePage" :current-page.sync="page">
       </el-pagination>
       <img v-if="!people" src="/static/image/no_data.jpeg">
     </div>
@@ -63,12 +67,13 @@
   export default {
     data() {
       return {
+        searchName: "",
         timeHandle: timeHandle,
         people: [],
         alert: false,
         alter: false,
         total: 1,
-        page : 1,
+        page: 1,
       }
     },
     components: {
@@ -95,7 +100,6 @@
         var data = new FormData();
         var _self = this;
         data.append("id", id);
-
         axiosHandle.post('admin/background/getEmployeeById', data)
           .then(function (response) {
             var data = response.data;
@@ -117,18 +121,49 @@
             console.log(error);
           });
       },
+      search(){
+        this.page = 1;    
+        this.getEmployeeByName();
+      },
+      getEmployeeByName() {
+        var _self=this;
+        if (this.searchName != "") {
+          var data = new FormData();
+          data.append("name", this.searchName);
+          data.append("page",this.page);
+          axiosHandle.post('admin/background/getEmployeeByName', data).then(res => {
+            var data = res.data;
+            if (data.status == 1) {
+              _self.people = data.people;
+              _self.total = data.total;
+              _self.people.forEach(function (value, index, array) {
+                if (value["src"] == "" || value["src"] == null) {
+                  value["src"] = "./static/image/no_data.jpeg";
+                } else {
+                  value["src"] = _self.$store.state.imgUrl + value["src"];
+                }
+              })
+            } else {
+              _self.people = null;
+            }
+          });
+        } else {
+          this.getAllEmployee(this.$route.query.department);
+        }
+
+      },
       getAllEmployee: function (department) {
         var _self = this;
         var data = new FormData();
         data.append("department", department);
-        data.append("page",this.page);
+        data.append("page", this.page);
 
         axiosHandle.post('admin/background/getEmployee', data)
           .then(function (response) {
             var data = response.data;
             if (data.status == 1) {
               _self.people = data.people;
-              _self.total  = data.total;
+              _self.total = data.total;
               _self.people.forEach(function (value, index, array) {
                 if (value["src"] == "" || value["src"] == null) {
                   value["src"] = "./static/image/no_data.jpeg";
@@ -140,38 +175,53 @@
               _self.people = null;
             }
           })
-          .catch(function (error) {
-            console.log(error);
-          });
       },
       deleteEmployeeById: function (node) {
         var _self = this;
         var id = node.currentTarget.getAttribute("data-id");
         var data = new FormData();
         data.append("id", id);
-        //ljj 根据id删除员工
-        axiosHandle.post('admin/background/deleteEmployeeById', data)
-          .then(function (response) {
-            var data = response.data;
-            if (data.status == 1) {
-              _self.people.forEach(function (value, index, array) {
-                if (value['id'] == id) {
-                  console.log(array)
-                  array.splice(index, 1);
-                  console.log(array)
-                }
-                return;
-              })
-            } else {
-              _self.$message({
-                type: "error",
-                message: "删除成功"
-              })
-            }
-          })
-          .catch(function (error) {
-            console.log(error);
+        this.$confirm('此操作将永久删除, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          //ljj 根据id删除员工
+          axiosHandle.post('admin/background/deleteEmployeeById', data)
+            .then(function (response) {
+              var data = response.data;
+              if (data.status == 1) {
+                _self.people.forEach(function (value, index, array) {
+                  if (value['id'] == id) {
+                    array.splice(index, 1);
+                  }
+                  return;
+                })
+                _self.$message({
+                  type: "success",
+                  message: "删除成功"
+                })
+              } else {
+                _self.$message({
+                  type: "error",
+                  message: "删除失败！" + data.txt
+                })
+              }
+            })
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
           });
+        });
+      },
+      changePage() {
+        if (this.searchName == '') {
+          this.getAllEmployee(this.$route.query.department)
+        } else {
+          this.getEmployeeByName();
+        }
+
       },
       resetPass(node) {
         var id = node.currentTarget.getAttribute("data-id");
@@ -197,7 +247,28 @@
     created: function () {
       axiosHandle.setThis(this);
       if (this.$route.query.department != undefined) {
-        this.getAllEmployee(this.$route.query.department);
+        var _self = this;
+        var data = new FormData();
+        data.append("department", department);
+        data.append("page", this.page);
+
+        axiosHandle.post('admin/background/getEmployee', data)
+          .then(function (response) {
+            var data = response.data;
+            if (data.status == 1) {
+              _self.people = data.people;
+              _self.total = data.total;
+              _self.people.forEach(function (value, index, array) {
+                if (value["src"] == "" || value["src"] == null) {
+                  value["src"] = "./static/image/no_data.jpeg";
+                } else {
+                  value["src"] = _self.$store.state.imgUrl + value["src"];
+                }
+              })
+            } else {
+              _self.people = null;
+            }
+          })
       }
     },
     watch: {

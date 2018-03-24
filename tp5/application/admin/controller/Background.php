@@ -65,6 +65,7 @@ class Background extends Base
             }
             $_SESSION["authority"]=serialize($sesson_authority);
             $_SESSION["username"]=$post["username"];
+            $_SESSION["id"]=$data["id"];
             return json(["status" => 1, "username" => $post["username"]]);
         } else {
             return json(["status" => 0]);
@@ -110,7 +111,7 @@ class Background extends Base
             $arr["head_img"] = $pic;
         }
 
-        if (Db::name($this->tableEmployee)->where(["id"=>$post["id"]])->update($arr)) {
+        if (Db::name($this->tableEmployee)->where(["id"=>$post["id"]])->update($arr)!==false) {
             //ljj 如果有图片，删除原来的图片
             if ($pic != "") {
                 @unlink("." . $manData["head_img"]);
@@ -143,6 +144,27 @@ class Background extends Base
             return json(["status" => 0, "error" => Db::name($this->tableEmployee)->getLastSql()]);
         }
     }
+    public function getEmployeeByName(){
+        $this->authorityVerify();
+        $post = $this->request->post();
+        $page= $post["page"];
+        $count = Db::name($this->tableEmployee)->alias("a")
+             ->join("job_title b", "a.job_title_id = b.id")
+             ->field("a.role,a.username,a.head_img as src,a.name,a.time,b.title as jobTitle,a.id,b.salary")
+             ->where("a.name like '%$post[name]%'")
+             ->count();  
+        $employeeData = Db::name($this->tableEmployee)->alias("a")
+            ->join("job_title b", "a.job_title_id = b.id")
+            ->field("a.role,a.username,a.head_img as src,a.name,a.time,b.title as jobTitle,a.id,b.salary")
+            ->where("a.name like '%$post[name]%'")
+            ->limit(($page-1)*4,4)->select();
+
+        if ($employeeData != null) {
+            return json(["status" => 1, "total"=>ceil($count/4),"people" => $employeeData]);
+        } else {
+            return json(["status" => 0, "error" => Db::name($this->tableEmployee)->getLastSql()]);
+        }
+    }
     public function getEmployeeById(){
         $post = $this->request->post();
 
@@ -163,6 +185,9 @@ class Background extends Base
     public function deleteEmployeeById(){
         $this->authorityVerify();
         $post = $this->request->post();
+        if($_SESSION["id"]==$post["id"]){
+            return json(["status"=>0,"txt"=>"你不能删除自己！"]);
+        }
         $employeeData = Db::name($this->tableEmployee)->where("id = $post[id]")->find();
         if ($employeeData["head_img"] != "") {
             @unlink("." . $employeeData["head_img"]);
@@ -212,6 +237,11 @@ class Background extends Base
     }
     public static function authority(){
         return array(
+            array(
+                "name"=>"人事管理-搜索",
+                "controller"=>"Background",
+                "action"=>"getEmployeeByName",
+            ),
             array(
                 "name"=>"人事管理-添加",
                 "controller"=>"Background",

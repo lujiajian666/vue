@@ -17,6 +17,7 @@
     "element-ui": "^2.0.11",
     "less": "^2.7.2",
     "less-loader": "^4.0.5",
+    "my-vue-editor": "^1.0.11",
     "vue": "^2.5.2",
     "vue-fullcalendar": "^1.0.9",
     "vue-router": "^2.7.0",

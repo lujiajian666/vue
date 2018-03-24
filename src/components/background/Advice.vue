@@ -82,39 +82,53 @@
       deleteAdvice(index, row) {
         var data = new FormData();
         data.append("id", row.id);
-        axiosHandle.post('admin/Advice/delete', data).then(res => {
-          if (res.data.status == 1) {
-            this.$message({
-              type: "success",
-              message: "删除成功"
-            });
-            this.advice.tableData.splice(index, 1);
-          } else {
-            this.$message({
-              type: "error",
-              message: "网络错误"
-            });
-          }
+        this.$confirm('此操作将永久删除, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          axiosHandle.post('admin/Advice/delete', data).then(res => {
+            if (res.data.status == 1) {
+              this.$message({
+                type: "success",
+                message: "删除成功"
+              });
+              this.advice.tableData.splice(index, 1);
+            } else {
+              this.$message({
+                type: "error",
+                message: "网络错误"
+              });
+            }
+          })
         })
+
 
       },
       deleteComplaint(index, row) {
         var data = new FormData();
         data.append("id", row.id);
-        axiosHandle.post('admin/Advice/delete', data).then(res => {
-          if (res.data.status == 1) {
-            this.$message({
-              type: "success",
-              message: "删除成功"
-            });
-            this.complaint.tableData.splice(index, 1);
-          } else {
-            this.$message({
-              type: "error",
-              message: "网络错误"
-            });
-          }
+        this.$confirm('此操作将永久删除, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          axiosHandle.post('admin/Advice/delete', data).then(res => {
+            if (res.data.status == 1) {
+              this.$message({
+                type: "success",
+                message: "删除成功"
+              });
+              this.complaint.tableData.splice(index, 1);
+            } else {
+              this.$message({
+                type: "error",
+                message: "网络错误"
+              });
+            }
+          })
         })
+
 
       },
       alert(str, title = "具体内容") {
@@ -126,7 +140,7 @@
     created() {
       axiosHandle.setThis(this);
       var data = new FormData();
-      var _self=this;
+      var _self = this;
       data.append("page", this.advice.nowPage);
       axiosHandle.post('admin/Advice/getAdvice', data).then(res => {
         this.advice.tableData = res.data.advice;

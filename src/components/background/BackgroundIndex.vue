@@ -55,8 +55,8 @@
             </li>
             <li class="hideUl" v-show="hideUl[0]">
               <ul>
-                <router-link v-for="(value,index) in selectDepartment" tag="li" :key="index" :to="{name:'B_First',
-                                             query:{department:value['id'],departmentName:value['name']}}">
+                <router-link v-for="(value,index) in selectDepartment" tag="li" :key="index"  :id="'department'+index"
+                :to="{name:'B_First',query:{department:value['id'],departmentName:value['name']}}">
                   {{value['name']}}
                 </router-link>
               </ul>
@@ -312,6 +312,9 @@
         .then(function (response) {
           var data = response.data;
           _self.selectDepartment = data;
+          setTimeout(()=>{
+            document.getElementById("department0").click();
+          },500)
           //ljj 文章类别获取
           return axiosHandle.post('admin/article/getArticleType')
         })
