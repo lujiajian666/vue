@@ -1,12 +1,12 @@
 <template>
   <div id="news">
     <head-div :backgroundColor="{background:'white'}"></head-div>
-    <div id="content" :style="{ 'background-image':src}">
+    <div id="content">
       <div class="title">
         <h1>{{title}}</h1>
       </div>
-      <div class="article">
-        <pre>{{content}}</pre>
+      <div class="ql-editor" style="width:1040px;margin:auto">
+        <div class="article" v-html="content"></div>
       </div>
       <time>{{timeHandle.format('Y-m-d',time)}}</time>
     </div>
@@ -67,6 +67,7 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="less">
+  @import "/static/css/quill/quill.snow.css";
   #content {
     background: no-repeat center center;
     background-size: 200px;

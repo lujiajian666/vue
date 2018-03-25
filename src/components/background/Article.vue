@@ -12,9 +12,15 @@
         </div>
         <div v-if="tableData.length" class="div">
           <el-table :data="tableData" border style=";text-align: left">
+            <el-table-column prop="article_id" label="id">
+            </el-table-column>
             <el-table-column prop="title" label="标题">
             </el-table-column>
-            <el-table-column prop="content" label="内容">
+            <el-table-column label="标题图片">
+              <template slot-scope="scope">
+                <img :src="scope.row.src!=''?$store.state.imgUrl+scope.row.src:'/static/image/no_data.jpeg'" 
+                style="height:50px;width:50px">
+              </template>
             </el-table-column>
             <el-table-column label="操作" width="100">
               <template slot-scope="scope">
@@ -28,7 +34,7 @@
           <el-pagination background layout="prev, pager, next" :total="allPage*10" @current-change="getArticle" :current-page.sync="nowPage"></el-pagination>
         </div>
       </div>
-      <div id="edit" v-show="select==2">
+      <div id="edit" v-if="select==2">
         <div class="form-contain">
           <el-form ref="form" :model="form" label-width="80px" :label-position="labelPosition" v-loading="wait">
             <el-form-item label="对齐方式">
@@ -55,8 +61,9 @@
               <el-input-number v-model="edit.sort" @change="handleChange" :min="1" :max="10" label="描述文字">
               </el-input-number>
             </el-form-item>
-            <el-form-item label="文章内容">
-              <el-input type="textarea" v-model="edit.content" :rows="10"></el-input>
+            <el-form-item label="文章内容" style="height:400px">
+              <vue-editor v-model="edit.content"></vue-editor>
+              <!--<el-input type="textarea" v-model="edit.content" :rows="10"></el-input>-->
             </el-form-item>
             <el-form-item>
               <el-button type="primary" @click="onSubmit('edit')">立即修改</el-button>
@@ -65,7 +72,7 @@
           </el-form>
         </div>
       </div>
-      <div id="add" v-show="select==3">
+      <div id="add" v-if="select==3">
         <div class="form-contain">
           <el-form ref="form" :model="form" label-width="80px" :label-position="labelPosition" v-loading="wait">
             <el-form-item label="对齐方式">
@@ -92,8 +99,8 @@
               <el-input-number v-model="form.sort" @change="handleChange" :min="1" :max="10" label="描述文字">
               </el-input-number>
             </el-form-item>
-            <el-form-item label="文章内容">
-              <el-input type="textarea" v-model="form.desc" :rows="10"></el-input>
+            <el-form-item label="文章内容" style="height:400px">
+             <vue-editor v-model="form.desc"></vue-editor>
             </el-form-item>
             <el-form-item>
               <el-button type="primary" @click="onSubmit('add')">立即创建</el-button>
@@ -114,9 +121,13 @@
     Loading,
     Form
   } from 'element-ui';
+  import { VueEditor } from 'vue2-editor';
   export default {
     data() {
       return {
+        editorOption: {
+          height: '1000px'
+        },
         fileList: [],
         fileListUrl: '',
         url: this.$store.state.phpUrl + "admin/Upload/upload",
@@ -185,6 +196,7 @@
         return isJPG && isLt2M;
       },
       onSubmit(type) {
+        console.log(this.form);
         var _self = this;
         var message = "";
         if (type == "add") {
@@ -244,6 +256,12 @@
         console.log(value);
       },
       to(n) {
+        this.form={
+          title:"",
+          desc:"",
+          sort:1
+        };
+        console.log(this.form);
         this.fileList = [];
         this.fileListUrl = '';
         this.select = n;
@@ -326,6 +344,9 @@
         this.nowPage = 1;
         this.getArticle();
       }
+    },
+    components: {
+      VueEditor
     },
     created() {
       this.getArticle();

@@ -26,7 +26,7 @@ class Article extends Base
         $data=array(
           "title"=>$post["title"],
           "sort"=>$post["sort"],
-          "content"=>$post["content"],
+          "content"=>htmlspecialchars($post["content"]),
           "type"=>$post["type"],
           "src"=>$post["src"],
           "time"=>time()
@@ -44,6 +44,9 @@ class Article extends Base
         $count=ceil(Db::name($this->tableArticle)->where("type=$post[type]")->count()/5);
         $arr=Db::name($this->tableArticle)->where("type=$post[type]")->order("sort desc")->
              limit(($post["nowPage"]-1)*5,5)->select();
+        foreach($arr as &$value){
+            $value["content"]=htmlspecialchars_decode($value["content"]);
+        }
         return json(["article"=>$arr,"allPage"=>$count]);
     }
     public function deleteArticle(){
@@ -72,7 +75,7 @@ class Article extends Base
         $data=array(
            "title"=>$post["title"],
            "sort"=>$post["sort"],
-           "content"=>$post["content"],
+           "content"=>htmlspecialchars($post["content"]),
            "type"=>$post["type"],
            "src"=>$post["src"],     
            

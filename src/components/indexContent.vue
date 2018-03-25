@@ -72,7 +72,7 @@
             <div style="display:flex;content-align:center;width:100%;height: 100px;">
                 <img :src="item.src==''?'./static/image/no_data.jpeg':$store.state.imgUrl+item.src">
             </div>
-              <p>高级职称评审与专技考试</p>
+              <p>{{item.title}}</p>
             </router-link>
           </div>
         </transition>
@@ -83,7 +83,7 @@
              <div style="display:flex;content-align:center;width:100%;height: 100px;">
               <img :src="item.src==''?'./static/image/no_data.jpeg':$store.state.imgUrl+item.src">
              </div>
-              <p>高级职称评审与专技考试</p>
+              <p>{{item.title}}</p>
             </router-link>
           </div>
         </transition>
@@ -94,7 +94,7 @@
              <div style="display:flex;content-align:center;width:100%;height: 100px;">
               <img :src="item.src==''?'./static/image/no_data.jpeg':$store.state.imgUrl+item.src">
              </div>
-              <p>高级职称评审与专技考试</p>
+              <p>{{item.title}}</p>
             </router-link>
           </div>
         </transition>

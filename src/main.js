@@ -7,9 +7,7 @@ import echarts from 'echarts'
 import Vuex from 'vuex'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
-import myVueEditor from 'my-vue-editor'
 
-Vue.use(myVueEditor, options)
 Vue.use(ElementUI);
 Vue.use(Vuex);
 

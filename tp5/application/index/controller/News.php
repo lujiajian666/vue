@@ -10,6 +10,7 @@ class News extends Base
         $db=Db::name($this->tableArticle);
         $post=$this->request->post();
         $res=$db->where(["article_id"=>$post["article_id"]])->find();
+        $res["content"]=html_entity_decode($res["content"]);
         return json($res);
     }
 }
