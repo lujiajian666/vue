@@ -117,7 +117,7 @@
               } else {
                 this.$message({
                   type: 'error',
-                  message: '网络错误'
+                  message: `${res.data.txt}`
                 });
               }
             })
@@ -153,7 +153,7 @@
               } else {
                 this.$message({
                   type: 'error',
-                  message: '网络错误'
+                  message: `${res.data.txt}`
                 });
               }
             })
@@ -210,7 +210,7 @@
                 } else {
                   _self.$message({
                     type: 'error',
-                    message: '添加失败'
+                    message: `${res.data.txt}`
                   })
                 }
               })
@@ -263,6 +263,7 @@
             var data = new FormData();
             data.append("title", this.form.title);
             data.append("salary", this.form.salary);
+            data.append("department_id", this.department[this.activeName]["id"]);
             data.append("id", this.jobTitleId);
             axiosHandle.post('admin/Department/editJobTitle', data)
               .then((res) => {
@@ -272,7 +273,7 @@
                 } else {
                   _self.$message({
                     type: 'error',
-                    message: '网络错误'
+                    message: `${res.data.txt}`
                   })
                 }
               })

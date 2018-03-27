@@ -13,24 +13,34 @@ class Department extends Base
        $this->authorityVerify();
        $post=$this->request->post();
        $db=Db::name($this->tableDepartment);
+       $old=$db->where("name='$post[name]'")->count();
+       if($old>0){
+           return json(["status"=>0,"txt"=>"已有相同部门名"]);
+       }
        $data=array(
          "name"=>$post["name"]
        );
+       $db=Db::name($this->tableDepartment);
        $res=$db->insert($data);
        if($res){
            return json(["status"=>1]);
        }else{
-           return json(["status"=>0]);
+           return json(["status"=>0,"txt"=>"网络错误"]);
        }
    }
    public function editDepartment(){
        $this->authorityVerify();
        $post=$this->request->post();
        $db=Db::name($this->tableDepartment);
+       $old=$db->where("name='$post[name]'")->count();
+       if($old>0){
+           return json(["status"=>0,"txt"=>"已有相同部门名"]);
+       }
        $data=array(
            "name"=>$post["name"]
        );
-       $res=$db->where(["id"=>$post["id"]])->update($data);
+       
+       $res=Db::name($this->tableDepartment)->where(["id"=>$post["id"]])->update($data);
        if($res!==false){
            return json(["status"=>1]);
        }else{
@@ -54,12 +64,16 @@ class Department extends Base
        $this->authorityVerify();
        $post=$this->request->post();
        $db=Db::name($this->tableJobTitle);
+       $old=$db->where("title='$post[title]' and department_id=$post[department_id]")->count();
+       if($old>0){
+           return json(["status"=>0,"txt"=>"该部门下已有相同职务"]);
+       }
        $data=array(
            "salary"=>$post["salary"],
            "title"=>$post["title"],
            "department_id"=>$post["department_id"]
        );
-       $res=$db->insert($data);
+       $res=Db::name($this->tableJobTitle)->insert($data);
        if($res){
            return json(["status"=>1]);
        }else{
@@ -70,11 +84,15 @@ class Department extends Base
        $this->authorityVerify();
        $post=$this->request->post();
        $db=Db::name($this->tableJobTitle);
+       $old=$db->where("title='$post[title]' and department_id=$post[department_id]")->count();
+       if($old>0){
+           return json(["status"=>0,"txt"=>"该部门下已有相同职务"]);
+       }
        $data=array(
            "title"=>$post["title"],
            "salary"=>$post["salary"]
        );
-       $res=$db->where(["id"=>$post["id"]])->update($data);
+       $res=Db::name($this->tableJobTitle)->where(["id"=>$post["id"]])->update($data);
        if($res){
            return json(["status"=>1]);
        }else{

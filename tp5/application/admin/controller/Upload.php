@@ -22,11 +22,8 @@ class Upload extends Controller
         $picName=array_pop($picUrl);
         $picDir=array_pop($picUrl);
         if ($post["picUrl"] != "") {
-            if(unlink("./pic/" . $picDir. "/" .$picName)){
-                return json(["status"=>1]);
-            }else{
-                return json(["status"=>0]);
-            }
+            @unlink("./pic/" . $picDir. "/" .$picName);
+            return json(["status"=>1]);
         }
     }
 }
